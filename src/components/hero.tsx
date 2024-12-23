@@ -4,11 +4,12 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import Image from 'next/image'
 
 const images = [
-  '/hero-1.jpg',
-  '/hero-2.jpg',
-  '/hero-3.jpg',
+  'https://media.istockphoto.com/id/1937068715/photo/view-from-inner-courtyard-on-modern-apartment-house-in-oslo-city-district-modern-cozy.webp?a=1&b=1&s=612x612&w=0&k=20&c=xK0MY8_CYqzHgfjp2BhHLIwRmE1e-58J9wq83yY-1sI=',
+  'https://media.istockphoto.com/id/2152254782/photo/new-modern-apartment-building-with-balconies-and-blue-sky.webp?a=1&b=1&s=612x612&w=0&k=20&c=QfJtr7CmwtHINREWRG9tNC73UBOGW38t1UW7fDSvgGc=',
+  'https://media.istockphoto.com/id/2156129499/photo/atlanta-apartment-life.webp?a=1&b=1&s=612x612&w=0&k=20&c=yXs8ykGIOkiPDTnDif2Ef6q_iZdpNZqDpvMKavIS08w=',
 ]
 
 export function Hero() {
@@ -31,7 +32,7 @@ export function Hero() {
           animate={{ opacity: index === currentImage ? 1 : 0 }}
           transition={{ duration: 1 }}
         >
-          <img src={src} alt={`Hero ${index + 1}`} className="h-full w-full object-cover" />
+          <Image src={src} alt={`Hero ${index + 1}`} width={800} height={800} className="h-full w-full object-cover" />
         </motion.div>
       ))}
       <div className="absolute inset-0 bg-black/50" />

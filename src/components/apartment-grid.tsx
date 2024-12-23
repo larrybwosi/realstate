@@ -70,8 +70,8 @@ export function ApartmentGrid({ apartments }: ApartmentGridProps) {
   }, [apartments, priceRange, bedrooms, category, courtFilter, searchTerm])
 
   return (
-    <section className="bg-gradient-to-b from-background to-muted/50 py-24">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section className="py-24">
+      <div className="mx-auto w-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-4xl font-bold tracking-tight sm:text-5xl mb-8">Find Your Perfect Home</h2>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-5">
           <div>

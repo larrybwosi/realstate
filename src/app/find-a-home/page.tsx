@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { HouseFinder } from '@/components/house-finder'
 import { ApartmentGrid } from '@/components/apartment-grid'
+import HouseFinder from '@/components/house-finder'
 
 export default function FindAHomePage() {
   const [filteredApartments, setFilteredApartments] = useState([])

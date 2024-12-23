@@ -1,22 +1,23 @@
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import Link from 'next/link'
 
 const services = [
   {
     title: "Deep House Cleaning",
     description: "Thorough cleaning of every corner, including hard-to-reach areas, baseboards, and windows.",
-    image: "/images/deep-cleaning.jpg"
+    image: "https://images.pexels.com/photos/48889/cleaning-washing-cleanup-the-ilo-48889.jpeg?auto=compress&cs=tinysrgb&w=400"
   },
   {
     title: "Premium Laundry Care",
     description: "Expert handling of delicate fabrics, stain removal, and precise folding techniques.",
-    image: "/images/laundry.jpg"
+    image: "https://images.pexels.com/photos/6196238/pexels-photo-6196238.jpeg?auto=compress&cs=tinysrgb&w=400"
   },
   {
     title: "Professional Lawn Care",
     description: "Complete landscape maintenance including mowing, edging, and garden bed care.",
-    image: "/images/lawn-care.jpg"
+    image: "https://images.pexels.com/photos/4162011/pexels-photo-4162011.jpeg?auto=compress&cs=tinysrgb&w=400"
   }
 ]
 
@@ -25,19 +26,19 @@ const testimonials = [
     name: "Sarah Johnson",
     location: "New York, NY",
     comment: "The attention to detail is remarkable. My home has never felt cleaner!",
-    avatar: "/images/avatar-1.jpg"
+    avatar: "https://images.pexels.com/photos/6195106/pexels-photo-6195106.jpeg?auto=compress&cs=tinysrgb&w=400"
   },
   {
     name: "Michael Chen",
     location: "San Francisco, CA",
     comment: "Consistent quality and professional service every single time.",
-    avatar: "/images/avatar-2.jpg"
+    avatar: "https://images.pexels.com/photos/4108783/pexels-photo-4108783.jpeg?auto=compress&cs=tinysrgb&w=400"
   },
   {
     name: "Emma Williams",
     location: "Chicago, IL",
     comment: "Their eco-friendly approach and excellent results keep me coming back.",
-    avatar: "/images/avatar-3.jpg"
+    avatar: "https://images.pexels.com/photos/6195206/pexels-photo-6195206.jpeg?auto=compress&cs=tinysrgb&w=400"
   }
 ]
 
@@ -45,7 +46,7 @@ const testimonials = [
 export default function CleaningServicesPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
-      <div className="container mx-auto px-4 py-16 space-y-20">
+      <div className="container mx-auto py-16 space-y-20">
         {/* Hero Section */}
         <div className="relative">
           <div className="absolute inset-0 bg-primary/5 rounded-3xl -z-10" />
@@ -69,7 +70,7 @@ export default function CleaningServicesPage() {
             </div>
             <div className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl">
               <Image
-                src="https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
+                src="https://images.pexels.com/photos/2724749/pexels-photo-2724749.jpeg?auto=compress&cs=tinysrgb&w=600" 
                 alt="Professional cleaning service"
                 fill
                 priority
@@ -151,12 +152,16 @@ export default function CleaningServicesPage() {
               Book your cleaning service today and enjoy a spotless, healthy living environment.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Button size="lg" variant="secondary">
-                Schedule Now
-              </Button>
-              <Button size="lg" variant="outline" className="bg-transparent">
-                Contact Us
-              </Button>
+              <Link href={'/request-cleaning'}>
+                <Button size="lg" variant="secondary">
+                  Schedule Now
+                </Button>
+              </Link>
+              <Link href={'#'}>
+                <Button size="lg" variant="outline" className="bg-transparent">
+                  Contact Us
+                </Button>
+              </Link>
             </div>
           </div>
         </section>
