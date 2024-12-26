@@ -1,5 +1,27 @@
 import { defineType, defineField } from "sanity";
 
+const amenityOptions = [
+  "Air Conditioning",
+  "Balcony",
+  "Dishwasher",
+  "Elevator",
+  "Fitness Center",
+  "Furnished",
+  "Garage",
+  "Garden",
+  "Hardwood Floors",
+  "In-unit Laundry",
+  "Internet",
+  "Parking",
+  "Pet-friendly",
+  "Pool",
+  "Security System",
+  "Storage",
+  "Walk-in Closet",
+  "Washer/Dryer",
+  "Wheelchair Accessible",
+  "Wi-Fi",
+];
 export const apartment = defineType({
   name: "apartment",
   title: "Apartment",
@@ -89,12 +111,6 @@ export const apartment = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "amenities",
-      title: "Amenities",
-      type: "array",
-      of: [{ type: "string" }],
-    }),
-    defineField({
       name: "description",
       title: "Description",
       type: "text",
@@ -120,6 +136,18 @@ export const apartment = defineType({
           { title: "Luxury", value: "luxury" },
           { title: "Student Housing", value: "student" },
         ],
+      },
+    }),
+    defineField({
+      name: "amenities",
+      title: "Amenities",
+      type: "array",
+      of: [{ type: "string" }],
+      options: {
+        list: amenityOptions.map((amenity) => ({
+          title: amenity,
+          value: amenity,
+        })),
       },
     }),
     defineField({

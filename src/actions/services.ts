@@ -11,7 +11,7 @@ const client = createClient({
 // Helper function to handle errors
 const handleSanityError = (error: any) => {
   console.error("Sanity query error:", error);
-  throw new Error("Failed to fetch data from Sanity."); // More generic error for client
+  throw new Error("Failed to fetch data from Sanity."); 
 };
 
 export async function getFeaturedApartments() {

@@ -1,15 +1,15 @@
 'use client'
 
 import Link from 'next/link'
-import { useSession, signOut } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { useState, useEffect } from 'react'
 import { Menu, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { authClient } from '@/lib/authClient'
 
 export function Navigation() {
-  const { data: session } = useSession()
+  const session = authClient.useSession()
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
@@ -26,10 +26,10 @@ export function Navigation() {
     { href: '/apartments', label: 'All Apartments' },
     { href: '/find-a-home', label: 'Find a Home' },
     { href: '/cleaning-services', label: 'Cleaning Services' },
-    ...(session 
+    ...(session
       ? [
           { href: '/dashboard', label: 'Dashboard' },
-          { href: '#', label: 'Sign Out', onClick: () => signOut() }
+          { href: '#', label: 'Sign Out', onClick: () => authClient.signOut() }
         ]
       : [
           { href: '/login', label: 'Login' },

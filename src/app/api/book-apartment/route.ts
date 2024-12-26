@@ -1,9 +1,17 @@
 import { NextResponse } from 'next/server'
 import { client } from '@/sanity/lib/client'
+import { auth } from '@/lib/auth'
+import { headers } from 'next/headers'
 
 export async function POST(req: Request) {
-  if (req.method !== 'POST') {
-    return NextResponse.json({ message: 'Method not allowed' }, { status: 405 })
+  const session = await auth.api.getSession({
+    headers: await headers()
+  })
+  if (session?.session.id) {
+    return NextResponse.json(
+      { message: "Unauthenticated" },
+      { status: 405 }
+    );
   }
 
   try {

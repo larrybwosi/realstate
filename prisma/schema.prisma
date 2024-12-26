@@ -1,0 +1,157 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql" 
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String   @id @default(uuid()) 
+  name           String?
+  email          String?
+  emailVerified  Boolean?
+  image          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  role           String?
+  apartments     Apartment[] @relation("UserApartments")
+  cleaningSkills String[]
+  cleaningJobsRequested CleaningJob[] @relation("RequestedBy")
+  cleaningJobsAssigned CleaningJob[] @relation("AssignedTo")
+  accounts     Account[]
+  sessions     Session[]
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  token     String
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  id                    String   @id @default(uuid())
+  userId                String
+  user                  User     @relation(fields: [userId], references: [id])
+  accountId             String
+  providerId            String
+  accessToken           String?
+  refreshToken          String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+model Verification {
+  id        String   @id @default(uuid())
+  identifier String
+  value     String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Apartment {
+  id              Int      @id @default(autoincrement())
+  title           String
+  slug            String   @unique
+  images          String[]
+  price           Int
+  squareFootage   Int
+  bedrooms        Int
+  bathrooms       Int
+  availableDate   DateTime
+  amenities       String[]
+  description     String?
+  floorPlan       String?
+  virtualTourUrl  String?
+  category        String?
+  featured        Boolean  @default(false)
+  location        Json?
+  parkingSpaces   Int?
+  petsAllowed     Boolean?
+  leaseTerms      String[]
+  nearbyAttractions String[]
+  courtId         Int?
+  court           Court?   @relation(fields: [courtId], references: [id])
+  floorNumber     Int?
+  apartmentNumber String?
+  bookings        Booking[]
+  submissions   ApartmentSubmission[]
+  cleaningJobs    CleaningJob[]
+  users           User[] @relation("UserApartments")
+}
+
+model ApartmentSubmission {
+  id            Int      @id @default(autoincrement())
+  title         String
+  landlordName  String
+  landlordEmail String
+  images        String[]
+  price         Int
+  squareFootage Int
+  bedrooms      Int
+  bathrooms     Int
+  availableDate DateTime
+  amenities     String[]
+  description   String
+  address       String
+  status        String   @default("pending")
+  apartmentId   Int?
+  apartment     Apartment? @relation(fields: [apartmentId], references: [id])
+}
+
+model Booking {
+  id            Int      @id @default(autoincrement())
+  apartmentId   Int
+  apartment     Apartment @relation(fields: [apartmentId], references: [id])
+  startDate     DateTime
+  endDate       DateTime
+  depositAmount Int?
+  totalPrice    Int?
+  status        String   @default("pending")
+}
+
+model CleaningJob {
+  id            Int      @id @default(autoincrement())
+  apartmentId   Int
+  apartment     Apartment @relation(fields: [apartmentId], references: [id])
+  requestedById String?
+  requestedBy   User?     @relation("RequestedBy", fields: [requestedById], references: [id])
+  assignedToId  String?
+  assignedTo    User?     @relation("AssignedTo", fields: [assignedToId], references: [id])
+  status        String   @default("requested")
+  tasks         String[]
+  scheduledDate DateTime?
+  duration      Int?
+  notes         String?
+}
+
+model CleaningService {
+  id          Int      @id @default(autoincrement())
+  name        String?
+  description String?
+  price       Int?
+  image       String?
+}
+
+model Court {
+  id             Int      @id @default(autoincrement())
+  name           String
+  description    String?
+  image          String?
+  address        String?
+  totalFloors    Int?
+  totalApartments Int?
+  apartments     Apartment[]
+}

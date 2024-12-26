@@ -1,10 +1,15 @@
 import { NextResponse } from 'next/server'
 import { client } from '@/sanity/lib/client'
+import { headers } from 'next/headers'
+import { auth } from '@/lib/auth'
 
 export async function PATCH(
   req: Request,
   { params }: { params: { id: string } }
 ) {
+  const session = await auth.api.getSession({
+    headers: await headers()
+  })
   if (req.method !== 'PATCH') {
     return NextResponse.json({ message: 'Method not allowed' }, { status: 405 })
   }

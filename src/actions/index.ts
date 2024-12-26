@@ -9,11 +9,12 @@ export const client = createClient({
 });
 
 export async function getApartments() {
-  return await sanityFetch({
+  const res = await sanityFetch({
     query: `*[_type == "apartment"] {
     _id,
     title,
     slug,
+    mainImage,
     images,
     price,
     squareFootage,
@@ -28,9 +29,11 @@ export async function getApartments() {
       name
     },
     floorNumber,
-    apartmentNumber
+    apartmentNumber,
+    rating
   }`,
   });
+  return res.data
 }
 
 export async function getApartment(slug: string) {
@@ -39,6 +42,7 @@ export async function getApartment(slug: string) {
       _id,
       title,
       slug,
+      mainImage,
       images,
       price,
       squareFootage,
@@ -73,6 +77,7 @@ export async function getSimilarApartments(slug: string, category: string) {
       _id,
       title,
       slug,
+      mainImage,
       images,
       price,
       squareFootage,
@@ -114,6 +119,7 @@ export async function getCourtWithApartments(id: string) {
         _id,
         title,
         slug,
+        mainImage,
         images,
         price,
         squareFootage,

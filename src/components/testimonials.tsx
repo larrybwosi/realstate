@@ -1,98 +1,56 @@
 'use client'
 
-import { useState } from 'react'
-import Image from 'next/image'
-import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, ChevronRight, Quote } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
+  import { AnimatedTestimonials } from "@/components/ui/animated-testimonials";
 
-const testimonials = [
-  {
-    id: 1,
-    name: 'Sarah Johnson',
-    role: 'Tenant',
-    image: '/testimonials/sarah.jpg',
-    quote: 'I found my dream apartment through this website. The process was smooth, and the apartment exceeded my expectations!',
-  },
-  {
-    id: 2,
-    name: 'Michael Chen',
-    role: 'Landlord',
-    image: '/testimonials/michael.jpg',
-    quote: 'As a landlord, I appreciate how easy it is to list my properties. The quality of tenants I\'ve found has been excellent.',
-  },
-  {
-    id: 3,
-    name: 'Emily Rodriguez',
-    role: 'Tenant',
-    image: '/testimonials/emily.jpg',
-    quote: 'The virtual tours and detailed descriptions helped me find the perfect apartment without even visiting in person. Highly recommended!',
-  },
-]
+
+function AnimatedTestimonialsDemo() {
+    const testimonials = [
+      {
+        quote:
+          "I found my dream apartment through this website. The process was smooth, and the apartment exceeded my expectations!",
+        name: "Sarah Chen",
+        designation: "Product Manager at TechFlow",
+        src: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=3560&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      },
+      {
+        quote:
+          "As a landlord, I appreciate how easy it is to list my properties. The quality of tenants I\'ve found has been excellent.",
+        name: "Michael Rodriguez",
+        designation: "CTO at InnovateSphere",
+        src: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      },
+      {
+        quote:
+          "The virtual tours and detailed descriptions helped me find the perfect apartment without even visiting in person. Highly recommended!",
+        name: "Emily Watson",
+        designation: "Operations Director at CloudScale",
+        src: "https://images.unsplash.com/photo-1623582854588-d60de57fa33f?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      },
+      {
+        quote:
+          "Outstanding support and robust features. It's rare to find a product that delivers on all its promises.",
+        name: "James Kim",
+        designation: "Engineering Lead at DataPro",
+        src: "https://images.unsplash.com/photo-1636041293178-808a6762ab39?q=80&w=3464&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      },
+      {
+        quote:
+          "The scalability and performance have been game-changing for our organization. Highly recommend to any growing business.",
+        name: "Lisa Thompson",
+        designation: "VP of Technology at FutureNet",
+        src: "https://images.unsplash.com/photo-1624561172888-ac93c696e10c?q=80&w=2592&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      },
+    ];
+    return <AnimatedTestimonials testimonials={testimonials} />;
+  }
 
 export function Testimonials() {
-  const [currentIndex, setCurrentIndex] = useState(0)
-
-  const nextTestimonial = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonials.length)
-  }
-
-  const prevTestimonial = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + testimonials.length) % testimonials.length)
-  }
 
   return (
     <section className="bg-gradient-to-r from-primary-50 to-secondary-50 py-24">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-center mb-12">What Our Clients Say</h2>
-        <div className="relative max-w-4xl mx-auto">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentIndex}
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -50 }}
-              transition={{ duration: 0.5 }}
-            >
-              <Card className="bg-white shadow-lg">
-                <CardContent className="p-8">
-                  <Quote className="h-12 w-12 text-primary mb-6" />
-                  <p className="text-lg mb-6">{testimonials[currentIndex].quote}</p>
-                  <div className="flex items-center">
-                    <Image
-                      src={testimonials[currentIndex].image}
-                      alt={testimonials[currentIndex].name}
-                      width={64}
-                      height={64}
-                      className="rounded-full mr-4"
-                    />
-                    <div>
-                      <h3 className="font-semibold">{testimonials[currentIndex].name}</h3>
-                      <p className="text-sm text-muted-foreground">{testimonials[currentIndex].role}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          </AnimatePresence>
-          <Button
-            variant="outline"
-            size="icon"
-            className="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-1/2"
-            onClick={prevTestimonial}
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            className="absolute top-1/2 right-0 -translate-y-1/2 translate-x-1/2"
-            onClick={nextTestimonial}
-          >
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </div>
+        <AnimatedTestimonialsDemo/>
       </div>
     </section>
   )

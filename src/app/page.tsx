@@ -14,10 +14,10 @@ export default async function Page() {
     <main className="min-h-screen">
       <Hero />
       <Benefits />
-      <FeaturedApartments apartments={[]} />
+      <FeaturedApartments apartments={apartments} />
       <Testimonials />
       <Newsletter />
-      <LocationMap apartments={apartments.data} />
+      {/* <LocationMap apartments={apartments.data} /> */}
     </main>
   )
 }
