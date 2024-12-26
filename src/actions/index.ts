@@ -1,5 +1,4 @@
-'use server'
-"use cache";
+"use server";
 
 import { sanityFetch } from "@/sanity/lib/live";
 

@@ -1,5 +1,4 @@
 import { client } from '@/sanity/lib/client'
-import { Apartment } from '@/types/apartment'
 
 export async function getApartments(params: {
   location?: string

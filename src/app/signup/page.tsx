@@ -1,49 +1,48 @@
-import Image from 'next/image'
-import { SignUpForm } from '@/components/signup-form'
+"use client"
+
+import { BackgroundImage } from '@/components/BackgroundImage';
+import { SignUpForm } from '@/components/SignUpForm';
+import { Button } from '@/components/ui/button';
+import { useTheme } from 'next-themes';
 
 export default function SignUpPage() {
+  const { theme, setTheme } = useTheme();
+
   return (
-    <div className="container relative hidden h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
-      <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
-        <div className="absolute inset-0 bg-zinc-900" />
-        <div className="relative z-20 flex items-center text-lg font-medium">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="mr-2 h-6 w-6"
-          >
-            <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
-          </svg>
-          ApartmentFinder
-        </div>
-        <div className="relative z-20 mt-auto">
-          <blockquote className="space-y-2">
-            <p className="text-lg">
-              &ldquo;Joining ApartmentFinder was the best decision I made for my property search. It's comprehensive and easy to use.&rdquo;
-            </p>
-            <footer className="text-sm">Alex Johnson</footer>
-          </blockquote>
+    <div className="flex min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
+      <div className="hidden lg:block lg:w-1/2 relative overflow-hidden">
+        <BackgroundImage />
+        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="text-white text-center p-8">
+            <h1 className="text-4xl font-bold mb-4">Welcome to ApartmentFinder</h1>
+            <p className="text-xl mb-8">Find your perfect home or tenant today!</p>
+          </div>
         </div>
       </div>
-      <div className="lg:p-8">
-        <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-          <div className="flex flex-col space-y-2 text-center">
-            <h1 className="text-2xl font-semibold tracking-tight">
-              Create an account
-            </h1>
-            <p className="text-sm text-muted-foreground">
-              Enter your details below to create your account
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-8 overflow-y-auto">
+        <div className="w-full max-w-md">
+          <h2 className="text-3xl font-bold mb-6 text-center dark:text-white">Sign Up</h2>
+          <SignUpForm />
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Already have an account?{" "}
+              <a href="/login" className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300">
+                Log in
+              </a>
             </p>
           </div>
-          <SignUpForm />
+          <div className="mt-4 lg:hidden">
+            <Button 
+              variant="outline" 
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className="w-full"
+            >
+              Toggle {theme === 'dark' ? 'Light' : 'Dark'} Mode
+            </Button>
+          </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
 

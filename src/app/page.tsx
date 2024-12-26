@@ -3,7 +3,7 @@ import { Benefits } from '@/components/benefits'
 import { FeaturedApartments } from '@/components/featured-apartments'
 import { Testimonials } from '@/components/testimonials'
 import { Newsletter } from '@/components/newsletter'
-import { LocationMap } from '@/components/location-map'
+// import { LocationMap } from '@/components/location-map'
 import { getApartments } from '@/actions'
 
 export default async function Page() { 

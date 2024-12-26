@@ -1,12 +1,11 @@
-'use client'
+"use client";
 
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as z from 'zod'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Calendar } from '@/components/ui/calendar'
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Form,
   FormControl,
@@ -15,18 +14,25 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { cn } from '@/lib/utils'
-import { format } from 'date-fns'
-import { CalendarIcon, DollarSign, SquareIcon, Bed, Bath } from 'lucide-react'
+} from "@/components/ui/form";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { CalendarIcon, DollarSign, SquareIcon, Bed, Bath } from "lucide-react";
 
 const formSchema = z.object({
-  title: z.string().min(2, {
-    message: "Title must be at least 2 characters.",
-  }).max(100, {
-    message: "Title must not exceed 100 characters.",
-  }),
+  title: z
+    .string()
+    .min(2, {
+      message: "Title must be at least 2 characters.",
+    })
+    .max(100, {
+      message: "Title must not exceed 100 characters.",
+    }),
   price: z.number().positive({
     message: "Price must be a positive number.",
   }),
@@ -42,9 +48,17 @@ const formSchema = z.object({
   availableDate: z.date({
     required_error: "Available date is required.",
   }),
-})
+});
 
-export function BasicInfo({ onNext, initialData }: { onNext: (data: any) => void, initialData: any }) {
+export function BasicInfo({
+  onNext,
+  onBack,
+  initialData,
+}: {
+  onNext: (data: any) => void;
+  onBack: () => void;
+  initialData: any;
+}) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
@@ -55,10 +69,10 @@ export function BasicInfo({ onNext, initialData }: { onNext: (data: any) => void
       bathrooms: 1,
       availableDate: new Date(),
     },
-  })
+  });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    onNext(values)
+    onNext(values);
   }
 
   return (
@@ -71,10 +85,15 @@ export function BasicInfo({ onNext, initialData }: { onNext: (data: any) => void
             <FormItem>
               <FormLabel>Apartment Title</FormLabel>
               <FormControl>
-                <Input placeholder="Enter a catchy title for your listing" {...field} className="bg-gray-50" />
+                <Input
+                  placeholder="Enter a catchy title for your listing"
+                  {...field}
+                  className="bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                />
               </FormControl>
               <FormDescription>
-                Create an attractive title that highlights the best features of your apartment.
+                Create an attractive title that highlights the best features of
+                your apartment.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -91,7 +110,15 @@ export function BasicInfo({ onNext, initialData }: { onNext: (data: any) => void
                 <FormControl>
                   <div className="relative">
                     <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
-                    <Input type="number" className="pl-8 bg-gray-50" placeholder="0" {...field} onChange={e => field.onChange(parseFloat(e.target.value))} />
+                    <Input
+                      type="number"
+                      className="pl-8 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                      placeholder="0"
+                      {...field}
+                      onChange={(e) =>
+                        field.onChange(parseFloat(e.target.value))
+                      }
+                    />
                   </div>
                 </FormControl>
                 <FormDescription>
@@ -111,7 +138,15 @@ export function BasicInfo({ onNext, initialData }: { onNext: (data: any) => void
                 <FormControl>
                   <div className="relative">
                     <SquareIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
-                    <Input type="number" className="pl-8 bg-gray-50" placeholder="0" {...field} onChange={e => field.onChange(parseFloat(e.target.value))} />
+                    <Input
+                      type="number"
+                      className="pl-8 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                      placeholder="0"
+                      {...field}
+                      onChange={(e) =>
+                        field.onChange(parseFloat(e.target.value))
+                      }
+                    />
                   </div>
                 </FormControl>
                 <FormDescription>
@@ -133,7 +168,15 @@ export function BasicInfo({ onNext, initialData }: { onNext: (data: any) => void
                 <FormControl>
                   <div className="relative">
                     <Bed className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
-                    <Input type="number" className="pl-8 bg-gray-50" placeholder="1" {...field} onChange={e => field.onChange(parseFloat(e.target.value))} />
+                    <Input
+                      type="number"
+                      className="pl-8 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                      placeholder="1"
+                      {...field}
+                      onChange={(e) =>
+                        field.onChange(parseFloat(e.target.value))
+                      }
+                    />
                   </div>
                 </FormControl>
                 <FormDescription>
@@ -153,7 +196,15 @@ export function BasicInfo({ onNext, initialData }: { onNext: (data: any) => void
                 <FormControl>
                   <div className="relative">
                     <Bath className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
-                    <Input type="number" className="pl-8 bg-gray-50" placeholder="1" {...field} onChange={e => field.onChange(parseFloat(e.target.value))} />
+                    <Input
+                      type="number"
+                      className="pl-8 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                      placeholder="1"
+                      {...field}
+                      onChange={(e) =>
+                        field.onChange(parseFloat(e.target.value))
+                      }
+                    />
                   </div>
                 </FormControl>
                 <FormDescription>
@@ -177,7 +228,7 @@ export function BasicInfo({ onNext, initialData }: { onNext: (data: any) => void
                     <Button
                       variant={"outline"}
                       className={cn(
-                        "w-full pl-3 text-left font-normal bg-gray-50",
+                        "w-full pl-3 text-left font-normal bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100",
                         !field.value && "text-muted-foreground"
                       )}
                     >
@@ -195,24 +246,38 @@ export function BasicInfo({ onNext, initialData }: { onNext: (data: any) => void
                     mode="single"
                     selected={field.value}
                     onSelect={field.onChange}
-                    disabled={(date) =>
-                      date < new Date()
-                    }
+                    disabled={(date) => date < new Date()}
                     initialFocus
+                    className="rounded-md border dark:border-gray-700"
                   />
                 </PopoverContent>
               </Popover>
               <FormDescription>
-                Select the date from which the apartment will be available for move-in.
+                Select the date from which the apartment will be available for
+                move-in.
               </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-600 text-white">Next: Apartment Details</Button>
+        <div className="flex justify-between mt-6">
+          <Button
+            type="button"
+            onClick={onBack}
+            variant="outline"
+            className="w-24"
+          >
+            Back
+          </Button>
+          <Button
+            type="submit"
+            className="w-32 bg-blue-500 hover:bg-blue-600 text-white dark:bg-blue-600 dark:hover:bg-blue-700"
+          >
+            Next
+          </Button>
+        </div>
       </form>
     </Form>
-  )
+  );
 }
-

@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Shield, Zap, Heart, Map } from 'lucide-react'
+import { Meteors } from './ui/meteors'
 
 const benefits = [
   {
@@ -27,6 +28,7 @@ const benefits = [
   },
 ]
 
+
 export function Benefits() {
   return (
     <section className="bg-background py-24">
@@ -35,27 +37,32 @@ export function Benefits() {
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           {benefits.map((benefit, index) => (
             <motion.div
-              key={benefit.title}
+              key={index}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              transition={{ delay: index * 0.2 }}
             >
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <benefit.icon className="h-6 w-6 text-primary" />
-                    {benefit.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p>{benefit.description}</p>
-                </CardContent>
-              </Card>
+              <div className="relative w-full">
+                <div className="absolute inset-0 h-full w-full bg-gradient-to-r from-blue-500 to-teal-500 transform scale-[0.80] rounded-full blur-3xl opacity-20" />
+                <Card className="relative shadow-xl bg-gray-900/50 border border-gray-800 overflow-hidden">
+                  <CardHeader className="space-y-1">
+                    <div className="h-12 w-12 rounded-full border flex items-center justify-center mb-4 border-gray-500">
+                      {<benefit.icon className="h-6 w-6 text-gray-300" />}
+                    </div>
+                    <CardTitle className="text-xl font-bold text-white">
+                      {benefit.title}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-400">{benefit.description}</p>
+                  </CardContent>
+                  <Meteors number={10} />
+                </Card>
+              </div>
             </motion.div>
           ))}
         </div>
       </div>
     </section>
-  )
+  );
 }
-

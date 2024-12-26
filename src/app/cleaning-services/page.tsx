@@ -14,7 +14,8 @@ const services = [
   {
     title: "Premium Laundry Care",
     description: "Expert handling of delicate fabrics, stain removal, and precise folding techniques.",
-    image: "https://images.pexels.com/photos/6196238/pexels-photo-6196238.jpeg?auto=compress&cs=tinysrgb&w=400"
+    // image: "https://images.pexels.com/photos/6196238/pexels-photo-6196238.jpeg?auto=compress&cs=tinysrgb&w=400"
+    image: "https://images.pexels.com/photos/8774643/pexels-photo-8774643.jpeg?auto=compress&cs=tinysrgb&w=400"
   },
   {
     title: "Professional Lawn Care",
@@ -119,7 +120,7 @@ export default async function CleaningServicesPage() {
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900">
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-200">
                     {service.title}
                   </h3>
                   <p className="text-gray-600">{service.description}</p>
@@ -185,7 +186,7 @@ export default async function CleaningServicesPage() {
               living environment.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Link href={"/request-cleaning"}>
+              <Link href={"/cleaning-services/book"}>
                 <Button size="lg" variant="secondary">
                   Schedule Now
                 </Button>
