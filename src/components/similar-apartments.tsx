@@ -4,6 +4,7 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Bed, Bath, Expand } from 'lucide-react'
+import { urlFor } from '@/sanity/lib/image'
 
 export function SimilarApartments({ apartments }: { apartments: any[] }) {
   return (
@@ -14,7 +15,10 @@ export function SimilarApartments({ apartments }: { apartments: any[] }) {
           <Card key={apartment._id} className="overflow-hidden">
             <div className="aspect-[16/9] relative">
               <Image
-                src={apartment.images[0].asset.url}
+                src={urlFor(apartment.mainImage)
+                  .width(300)
+                  .format("webp")
+                  .url()}
                 alt={apartment.title}
                 fill
                 className="object-cover"
@@ -28,11 +32,13 @@ export function SimilarApartments({ apartments }: { apartments: any[] }) {
               <div className="mt-4 flex flex-wrap gap-2">
                 <Badge variant="secondary" className="flex items-center gap-1">
                   <Bed className="h-3 w-3" />
-                  {apartment.bedrooms} {apartment.bedrooms === 1 ? 'Bed' : 'Beds'}
+                  {apartment.bedrooms}{" "}
+                  {apartment.bedrooms === 1 ? "Bed" : "Beds"}
                 </Badge>
                 <Badge variant="secondary" className="flex items-center gap-1">
                   <Bath className="h-3 w-3" />
-                  {apartment.bathrooms} {apartment.bathrooms === 1 ? 'Bath' : 'Baths'}
+                  {apartment.bathrooms}{" "}
+                  {apartment.bathrooms === 1 ? "Bath" : "Baths"}
                 </Badge>
                 <Badge variant="secondary" className="flex items-center gap-1">
                   <Expand className="h-3 w-3" />
@@ -51,6 +57,6 @@ export function SimilarApartments({ apartments }: { apartments: any[] }) {
         ))}
       </div>
     </section>
-  )
+  );
 }
 

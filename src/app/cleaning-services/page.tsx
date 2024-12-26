@@ -2,6 +2,8 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import Link from 'next/link'
+// import { auth } from '@/lib/auth'
+// import { headers } from 'next/headers'
 
 const services = [
   {
@@ -43,34 +45,46 @@ const testimonials = [
 ]
 
 
-export default function CleaningServicesPage() {
+export default async function CleaningServicesPage() {
+  // const session = await auth.api.getSession({
+  //   headers: await headers()
+  // })
+  // console.log(session?.user)
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
+    <div className="min-h-screen bg-gradient-to-b from-primary-100 to-gray-50">
+      {" "}
+      {/* Lighter gradient */}
       <div className="container mx-auto py-16 space-y-20">
         {/* Hero Section */}
-        <div className="relative">
-          <div className="absolute inset-0 bg-primary/5 rounded-3xl -z-10" />
-          <div className="grid lg:grid-cols-2 gap-12 items-center p-8 rounded-3xl">
+        <section className="relative">
+          <div className="absolute inset-0 rounded-3xl -z-10" />{" "}
+          <div className="grid lg:grid-cols-2 gap-12 items-center lg:p-8 rounded-3xl">
             <div className="space-y-6">
-              <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-gray-900">
+              <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-200">
                 Transform Your Space with Professional Cleaning
               </h1>
-              <p className="text-lg text-gray-600 leading-relaxed">
-                Experience the difference with our premium cleaning services. We bring expertise, 
-                attention to detail, and eco-friendly solutions to every home we service.
+              <p className="text-lg text-gray-600 leading-relaxed dark:text-gray-500">
+                Experience the difference with our premium cleaning services. We
+                bring expertise, attention to detail, and eco-friendly solutions
+                to every home we service.
               </p>
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
+                {" "}
+                {/* Centered on small screens, aligned left on large screens */}
                 <Button size="lg" className="bg-primary hover:bg-primary/90">
                   Get Free Quote
                 </Button>
-                <Button size="lg" variant="outline">
-                  View Services
-                </Button>
+                <Link href="/services">
+                  {" "}
+                  <Button size="lg" variant="outline">
+                    View Services
+                  </Button>
+                </Link>
               </div>
             </div>
             <div className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl">
               <Image
-                src="https://images.pexels.com/photos/2724749/pexels-photo-2724749.jpeg?auto=compress&cs=tinysrgb&w=600" 
+                src="https://images.pexels.com/photos/2724749/pexels-photo-2724749.jpeg?auto=compress&cs=tinysrgb&w=600"
                 alt="Professional cleaning service"
                 fill
                 priority
@@ -78,20 +92,24 @@ export default function CleaningServicesPage() {
               />
             </div>
           </div>
-        </div>
+        </section>
 
         {/* Services Section */}
         <section className="space-y-12">
           <div className="text-center space-y-4">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">Our Premium Services</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-gray-200">
+              Our Premium Services
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto dark:text-gray-200">
               Comprehensive cleaning solutions tailored to your needs
             </p>
           </div>
-          
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8">
             {services.map((service, index) => (
-              <Card key={index} className="group hover:shadow-lg transition-shadow duration-300">
+              <Card
+                key={index}
+                className="group hover:shadow-lg transition-shadow duration-300"
+              >
                 <CardContent className="p-6 space-y-4">
                   <div className="relative h-48 rounded-lg overflow-hidden">
                     <Image
@@ -101,11 +119,17 @@ export default function CleaningServicesPage() {
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900">{service.title}</h3>
+                  <h3 className="text-xl font-semibold text-gray-900">
+                    {service.title}
+                  </h3>
                   <p className="text-gray-600">{service.description}</p>
-                  <Button variant="link" className="p-0">
-                    Learn more →
-                  </Button>
+                  <Link href={`/services/${service.title.toLowerCase()}`}>
+                    {" "}
+                    {/* Dynamic link to individual service page */}
+                    <Button variant="link" className="p-0">
+                      Learn More →
+                    </Button>
+                  </Link>
                 </CardContent>
               </Card>
             ))}
@@ -115,10 +139,14 @@ export default function CleaningServicesPage() {
         {/* Testimonials Section */}
         <section className="bg-primary/5 rounded-3xl p-8 lg:p-12 space-y-12">
           <div className="text-center space-y-4">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">Customer Stories</h2>
-            <p className="text-xl text-gray-600">Hear what our satisfied clients have to say</p>
+            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-gray-200">
+              Customer Stories
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-gray-200">
+              Hear what our satisfied clients have to say
+            </p>
           </div>
-          
+
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
               <Card key={index} className="bg-white/50 backdrop-blur">
@@ -134,7 +162,9 @@ export default function CleaningServicesPage() {
                     </div>
                     <div>
                       <p className="font-semibold">{testimonial.name}</p>
-                      <p className="text-sm text-gray-600">{testimonial.location}</p>
+                      <p className="text-sm text-gray-600">
+                        {testimonial.location}
+                      </p>
                     </div>
                   </div>
                   <p className="italic text-gray-600">{testimonial.comment}</p>
@@ -147,17 +177,20 @@ export default function CleaningServicesPage() {
         {/* CTA Section */}
         <section className="bg-primary text-primary-foreground rounded-3xl p-8 lg:p-12">
           <div className="max-w-3xl mx-auto text-center space-y-6">
-            <h2 className="text-3xl lg:text-4xl font-bold">Ready for a Cleaner Space?</h2>
+            <h2 className="text-3xl lg:text-4xl font-bold">
+              Ready for a Cleaner Space?
+            </h2>
             <p className="text-xl opacity-90">
-              Book your cleaning service today and enjoy a spotless, healthy living environment.
+              Book your cleaning service today and enjoy a spotless, healthy
+              living environment.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Link href={'/request-cleaning'}>
+              <Link href={"/request-cleaning"}>
                 <Button size="lg" variant="secondary">
                   Schedule Now
                 </Button>
               </Link>
-              <Link href={'#'}>
+              <Link href={"#"}>
                 <Button size="lg" variant="outline" className="bg-transparent">
                   Contact Us
                 </Button>
@@ -167,6 +200,6 @@ export default function CleaningServicesPage() {
         </section>
       </div>
     </div>
-  )
+  );
 }
 

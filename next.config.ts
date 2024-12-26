@@ -32,6 +32,9 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  // experimental: {
+  //   dynamicIO: true,
+  // },
 };
 
 module.exports = nextConfig;

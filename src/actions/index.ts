@@ -1,12 +1,7 @@
-import { sanityFetch } from "@/sanity/lib/live";
-import { createClient } from "next-sanity";
+'use server'
+"use cache";
 
-export const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
-  apiVersion: "2024-12-12",
-  useCdn: process.env.NODE_ENV === "production",
-});
+import { sanityFetch } from "@/sanity/lib/live";
 
 export async function getApartments() {
   const res = await sanityFetch({
@@ -37,7 +32,7 @@ export async function getApartments() {
 }
 
 export async function getApartment(slug: string) {
-  return await sanityFetch({
+  const res = await sanityFetch({
     query: `*[_type == "apartment" && slug.current == $slug][0] {
       _id,
       title,
@@ -69,10 +64,11 @@ export async function getApartment(slug: string) {
     }`,
     params: { slug },
   });
+  return res.data
 }
 
 export async function getSimilarApartments(slug: string, category: string) {
-  return await sanityFetch({
+  const res = await sanityFetch({
     query: `*[_type == "apartment" && slug.current != $slug && category == $category][0...3] {
       _id,
       title,
@@ -90,6 +86,7 @@ export async function getSimilarApartments(slug: string, category: string) {
     }`,
     params: { slug, category },
   });
+  return res.data
 }
 
 export async function getCourts() {
