@@ -4,11 +4,11 @@ import { FeaturedApartments } from '@/components/featured-apartments'
 import { Testimonials } from '@/components/testimonials'
 import { Newsletter } from '@/components/newsletter'
 import { LocationMap } from '@/components/location-map'
-import { getApartments } from '../../sanity/lib/client'
+import { getApartments } from '@/actions'
 
 export default async function Page() { 
   const apartments = await getApartments()
-  // const featuredApartments = await getFeaturedApartments()
+  // const featuredApartments = await getFeaturedApartments() 
 
   return (
     <main className="min-h-screen">
@@ -17,7 +17,7 @@ export default async function Page() {
       <FeaturedApartments apartments={[]} />
       <Testimonials />
       <Newsletter />
-      <LocationMap apartments={apartments} />
+      <LocationMap apartments={apartments.data} />
     </main>
   )
 }

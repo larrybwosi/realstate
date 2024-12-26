@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Navigation } from '@/components/navigation'
 import { SessionProvider } from 'next-auth/react'
+import { SanityLive } from '@/sanity/lib/live'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -23,11 +24,12 @@ export default function RootLayout({
         <SessionProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <Navigation />
+            <SanityLive />
             {children}
           </ThemeProvider>
         </SessionProvider>
       </body>
     </html>
-  )
+  );
 }
 

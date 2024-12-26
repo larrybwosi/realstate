@@ -75,6 +75,7 @@ export default function SubmitApartmentPage() {
         throw new Error('Failed to submit apartment')
       }
     } catch (error) {
+      console.log(error)
       toast({
         title: 'Error',
         description: 'Failed to submit apartment. Please try again.',

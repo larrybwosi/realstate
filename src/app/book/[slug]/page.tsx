@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { use, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -17,16 +17,9 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
-import { getApartment } from '@/sanity/lib/client'
 import { toast } from '@/hooks/use-toast'
+import { getApartment } from '@/actions'
 
 const formSchema = z.object({
   startDate: z.date(),
@@ -41,12 +34,12 @@ export default function BookingPage({ params }: { params: { slug: string } }) {
 
   useState(() => {
     const fetchApartment = async () => {
-      const data = await getApartment(params.slug)
-      setApartment(data)
+      const res = await getApartment(params.slug)
+      setApartment(res.data)
       setIsLoading(false)
     }
     fetchApartment()
-  }, [params.slug])
+  }, [use(params.slug)])
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
