@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import {
   Table,
   TableBody,
@@ -27,7 +26,6 @@ interface Booking {
 
 export default function AdminPage() {
   const [bookings, setBookings] = useState<Booking[]>([])
-  const router = useRouter()
 
   useEffect(() => {
     fetchBookings()
