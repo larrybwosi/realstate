@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Navigation } from '@/components/navigation'
-// import { SanityLive } from '@/sanity/lib/live'
+import { SanityLive } from '@/sanity/lib/live'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -24,7 +24,7 @@ export default function RootLayout({
           <div className='mb-12'>
             <Navigation />
           </div>
-          {/* <SanityLive /> */}
+          <SanityLive />
           {children}
         </ThemeProvider>
       </body>

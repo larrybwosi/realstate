@@ -10,7 +10,7 @@ export async function PATCH(
   const session = await auth.api.getSession({
     headers: await headers()
   })
-  if (req.method !== 'PATCH') {
+  if (!session || session?.user?.role !== 'admin') {
     return NextResponse.json({ message: 'Method not allowed' }, { status: 405 })
   }
 

@@ -8,7 +8,7 @@ export async function POST(req: Request) {
     headers: await headers()
   })
 
-  if (!session) {
+  if (!session || session.user.role !== 'admin') {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

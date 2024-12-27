@@ -103,7 +103,7 @@ export async function getCourts() {
 }
 
 export async function getCourtWithApartments(id: string) {
-  return await sanityFetch({
+  const res = await sanityFetch({
     query: `*[_type == "court" && _id == $id][0] {
       _id,
       name,
@@ -131,4 +131,5 @@ export async function getCourtWithApartments(id: string) {
     }`,
     params: { id },
   });
+  return res.data
 }

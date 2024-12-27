@@ -1,4 +1,4 @@
-import { getCourtWithApartments } from '@/sanity/lib/client'
+import { getCourtWithApartments } from '@/actions'
 import { ApartmentGrid } from '@/components/apartment-grid'
 
 export default async function CourtPage({ params }: { params: { id: string } }) {
