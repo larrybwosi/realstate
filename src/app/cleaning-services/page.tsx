@@ -2,27 +2,30 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import Link from 'next/link'
-// import { auth } from '@/lib/auth'
-// import { headers } from 'next/headers'
 
 const services = [
   {
     title: "Deep House Cleaning",
-    description: "Thorough cleaning of every corner, including hard-to-reach areas, baseboards, and windows.",
-    image: "https://images.pexels.com/photos/48889/cleaning-washing-cleanup-the-ilo-48889.jpeg?auto=compress&cs=tinysrgb&w=400"
+    description:
+      "Thorough cleaning of every corner, including hard-to-reach areas, baseboards, and windows.",
+    image:
+      "https://cdn.sanity.io/images/k1f8kx4i/production/852cf7905a54dcbbdfbc333fbff9fa6aaff9a5cc-1026x1026.png?w=400&h=400&fit=crop&fm=webp",
   },
   {
     title: "Premium Laundry Care",
-    description: "Expert handling of delicate fabrics, stain removal, and precise folding techniques.",
-    // image: "https://images.pexels.com/photos/6196238/pexels-photo-6196238.jpeg?auto=compress&cs=tinysrgb&w=400"
-    image: "https://images.pexels.com/photos/8774643/pexels-photo-8774643.jpeg?auto=compress&cs=tinysrgb&w=400"
+    description:
+      "Expert handling of delicate fabrics, stain removal, and precise folding techniques.",
+    image:
+      "https://images.pexels.com/photos/8774643/pexels-photo-8774643.jpeg?auto=compress&cs=tinysrgb&w=400",
   },
   {
     title: "Professional Lawn Care",
-    description: "Complete landscape maintenance including mowing, edging, and garden bed care.",
-    image: "https://images.pexels.com/photos/4162011/pexels-photo-4162011.jpeg?auto=compress&cs=tinysrgb&w=400"
-  }
-]
+    description:
+      "Complete landscape maintenance including mowing, edging, and garden bed care.",
+    image:
+      "https://images.pexels.com/photos/4162011/pexels-photo-4162011.jpeg?auto=compress&cs=tinysrgb&w=400",
+  },
+];
 
 const testimonials = [
   {
@@ -47,14 +50,9 @@ const testimonials = [
 
 
 export default async function CleaningServicesPage() {
-  // const session = await auth.api.getSession({
-  //   headers: await headers()
-  // })
-  // console.log(session?.user)
   return (
     <div className="min-h-screen bg-gradient-to-b from-primary-100 to-gray-50">
       {" "}
-      {/* Lighter gradient */}
       <div className="container mx-auto py-16 space-y-20">
         {/* Hero Section */}
         <section className="relative">
@@ -85,7 +83,7 @@ export default async function CleaningServicesPage() {
             </div>
             <div className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl">
               <Image
-                src="https://images.pexels.com/photos/2724749/pexels-photo-2724749.jpeg?auto=compress&cs=tinysrgb&w=600"
+                src="https://cdn.sanity.io/images/k1f8kx4i/production/12b6f27050844bccdc50afc58e520175e7fd40a6-1344x899.png?fm=webp"
                 alt="Professional cleaning service"
                 fill
                 priority
@@ -151,7 +149,7 @@ export default async function CleaningServicesPage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
               <Card key={index} className="bg-white/50 backdrop-blur">
-                <CardContent className="p-6 space-y-4">
+                <CardContent className="p-2 space-y-4">
                   <div className="flex items-center gap-4">
                     <div className="relative w-12 h-12 rounded-full overflow-hidden">
                       <Image

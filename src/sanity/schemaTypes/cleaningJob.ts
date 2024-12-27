@@ -59,5 +59,35 @@ export const cleaningJob = defineType({
       title: "Notes",
       type: "text",
     }),
+    defineField({
+      name: "cleaningType",
+      title: "Cleaning Type",
+      type: "string",
+      options: {
+        list: [
+          { title: "Standard", value: "standard" },
+          { title: "Deep Clean", value: "deepClean" },
+          { title: "Move-in/Move-out", value: "moveInOut" },
+          { title: "Post-Construction", value: "postConstruction" },
+        ],
+      },
+    }),
+    defineField({
+      name: "specialRequirements",
+      title: "Special Requirements",
+      type: "array",
+      of: [{ type: "string" }],
+    }),
+    defineField({
+      name: "equipmentNeeded",
+      title: "Equipment Needed",
+      type: "array",
+      of: [{ type: "string" }],
+    }),
+    defineField({
+      name: "payRate",
+      title: "Pay Rate",
+      type: "number",
+    }),
   ],
 });

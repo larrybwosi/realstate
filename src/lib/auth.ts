@@ -1,6 +1,12 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { oneTap, admin, bearer, multiSession } from "better-auth/plugins";
+import {
+  oneTap,
+  admin,
+  bearer,
+  multiSession,
+  oidcProvider,
+} from "better-auth/plugins";
 import { sso } from "better-auth/plugins/sso";
 import { nextCookies } from "better-auth/next-js";
 
@@ -31,6 +37,9 @@ export const auth = betterAuth({
     bearer(),
     multiSession({ maximumSessions: 8 }),
     nextCookies(),
+    oidcProvider({
+      loginPage: "/login",
+    }),
   ],
   secret: process.env.BETTER_AUTH_SECRET,
 });
