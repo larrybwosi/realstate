@@ -1,8 +1,10 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { db } from "./db";
+import { oneTap, admin, bearer, multiSession } from "better-auth/plugins";
 import { sso } from "better-auth/plugins/sso";
-import { oneTap, admin, bearer } from "better-auth/plugins";
+import { nextCookies } from "better-auth/next-js";
+
+import { db } from "./db";
 
 export const auth = betterAuth({
   database: prismaAdapter(db, {
@@ -10,6 +12,7 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
+    minPasswordLength: 8,
   },
   socialProviders: {
     github: {
@@ -21,5 +24,13 @@ export const auth = betterAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     },
   },
-  plugins: [sso(), oneTap(), admin(), bearer()],
+  plugins: [
+    sso(),
+    oneTap(),
+    admin(),
+    bearer(),
+    multiSession({ maximumSessions: 8 }),
+    nextCookies(),
+  ],
+  secret: process.env.BETTER_AUTH_SECRET,
 });

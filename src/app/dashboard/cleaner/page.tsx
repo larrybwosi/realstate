@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import {
@@ -12,11 +11,13 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { useSession } from '@/lib/authClient'
 
 export default function CleanerDashboardPage() {
-  const { data: session, status } = useSession()
+  const { data: session } = useSession()
   const router = useRouter()
   const [jobs, setJobs] = useState<any>([])
+  const status = session?.session.id ? "authenticated" : "unauthenticated";
 
   useEffect(() => {
     if (status === 'unauthenticated') {

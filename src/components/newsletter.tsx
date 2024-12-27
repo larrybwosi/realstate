@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
+import { BackgroundBeams } from "./ui/background-beams";
 
 export function Newsletter() {
   const [email, setEmail] = useState("");
@@ -24,6 +25,7 @@ export function Newsletter() {
       {" "}
       {/* Gradient background */}
       <div className="container mx-auto px-4">
+        <BackgroundBeams />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

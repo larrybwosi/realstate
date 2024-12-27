@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { useRouter } from "next/navigation";
 import { Button } from '@/components/ui/button'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { useState, useEffect } from 'react'
@@ -13,6 +14,7 @@ export function Navigation() {
   const { data } = useSession()
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const router = useRouter()
 
   const handleClose = () => {
     setIsOpen(false);
@@ -40,13 +42,19 @@ export function Navigation() {
 
   const navItems = [
     { href: "/apartments", label: "All Apartments" },
-    { href: "/find-a-home", label: "Find a Home" },
+    { href: "/find-home", label: "Find a Home" },
     { href: "/cleaning-services", label: "Cleaning Services" },
     ...(data?.user.id
       ? [
           { href: "/dashboard", label: "Dashboard" },
-          { href: "#", label: "Sign Out", onClick: () => signOut() },
-        ]
+          { href: "#", label: "Sign Out", onClick: () => signOut({
+              fetchOptions: {
+                onSuccess: () => {
+                  router.push("/login");
+                },
+              },
+            }) },
+                    ]
       : [
           { href: "/login", label: "Login" },
           { href: "/signup", label: "Sign Up", isSpecial: true },
@@ -72,7 +80,7 @@ export function Navigation() {
               whileHover={{ scale: 1.05 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
-              ApartmentFinder
+              Chep City
             </motion.span>
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full" />
           </Link>

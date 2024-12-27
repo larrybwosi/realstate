@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import {
@@ -19,16 +18,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { useSession } from '@/lib/authClient'
 
 export default function AdminCleaningJobsPage() {
-  const { data: session, status } = useSession()
+  const { data: session } = useSession()
   const router = useRouter()
   const [jobs, setJobs] = useState([])
   const [cleaners, setCleaners] = useState([])
   const [selectedJob, setSelectedJob] = useState(null)
+  const status = session?.session.id ? 'authenticated' : 'unauthenticated'
 
   useEffect(() => {
     if (status === 'unauthenticated') {

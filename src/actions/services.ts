@@ -1,5 +1,5 @@
 import { createClient, groq } from "next-sanity";
-import { apiVersion, dataset, projectId, } from "@/sanity/env"; // Your Sanity config
+import { apiVersion, dataset, projectId, } from "@/sanity/env";
 
 const client = createClient({
   apiVersion,
