@@ -20,7 +20,8 @@ export function ApartmentDetails({ apartment }: { apartment: any }) {
           />
         </div>
         <div className="grid grid-cols-4 gap-2">
-          {apartment?.images?.slice(1, 5).map((image: any, index: number) => (
+          {apartment?.images?.map((image: any, index: number) => {
+            return(
             <div key={index} className="aspect-square relative">
               <Image
                 src={urlFor(image.asset).width(150).format("webp").url()}
@@ -29,7 +30,7 @@ export function ApartmentDetails({ apartment }: { apartment: any }) {
                 className="object-cover rounded-lg"
               />
             </div>
-          ))}
+          )})}
         </div>
       </div>
       <div>

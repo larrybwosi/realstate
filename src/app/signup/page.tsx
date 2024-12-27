@@ -1,12 +1,7 @@
-"use client"
-
 import { BackgroundImage } from '@/components/BackgroundImage';
 import { SignUpForm } from '@/components/SignUpForm';
-import { Button } from '@/components/ui/button';
-import { useTheme } from 'next-themes';
 
 export default function SignUpPage() {
-  const { theme, setTheme } = useTheme();
 
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
@@ -30,15 +25,6 @@ export default function SignUpPage() {
                 Log in
               </a>
             </p>
-          </div>
-          <div className="mt-4 lg:hidden">
-            <Button 
-              variant="outline" 
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className="w-full"
-            >
-              Toggle {theme === 'dark' ? 'Light' : 'Dark'} Mode
-            </Button>
           </div>
         </div>
       </div>

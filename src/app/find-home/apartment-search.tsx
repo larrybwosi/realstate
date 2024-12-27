@@ -15,10 +15,35 @@ import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Search, DollarSign, PawPrint, } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+// import { getCourts } from "@/lib/utils";
+// import { useEffect,  } from "react";
 
 export function ApartmentSearch() {
   const [priceRange, setPriceRange] = useState([0, 5000]);
   const [petsAllowed, setPetsAllowed] = useState(false);
+    // const [filteredApartments, setFilteredApartments] = useState(apartments)
+    // const [bedrooms, setBedrooms] = useState<string>('all')
+    // const [category, setCategory] = useState<string>('all')
+    // const [searchTerm, setSearchTerm] = useState('')
+    // const [courtFilter, setCourtFilter] = useState<string>('all')
+  
+    // const courts = getCourts()
+  
+    // useEffect(() => {
+    //   const filtered = apartments.filter((apartment) => {
+    //     const matchesPrice = apartment.price >= priceRange[0] && apartment.price <= priceRange[1]
+    //     const matchesBedrooms = bedrooms === 'all' || apartment.bedrooms === Number(bedrooms)
+    //     const matchesCategory = category === 'all' || apartment.category === category
+    //     const matchesCourt = courtFilter === 'all' || apartment.court.name === courtFilter
+    //     const matchesSearch = apartment.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    //       apartment.amenities.some(amenity => amenity.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    //       apartment.court.name.toLowerCase().includes(searchTerm.toLowerCase())
+  
+    //     return matchesPrice && matchesBedrooms && matchesCategory && matchesCourt && matchesSearch
+    //   })
+  
+    //   setFilteredApartments(filtered)
+    // }, [apartments, priceRange, bedrooms, category, courtFilter, searchTerm])
 
   const handleSearch = (event: React.FormEvent) => {
     event.preventDefault();

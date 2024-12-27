@@ -47,6 +47,7 @@ export function Navigation() {
     ...(data?.user.id
       ? [
           { href: "/dashboard", label: "Dashboard" },
+          { href: "/submit", label: "Submit Appartment" },
           { href: "#", label: "Sign Out", onClick: () => signOut({
               fetchOptions: {
                 onSuccess: () => {

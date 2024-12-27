@@ -1,9 +1,7 @@
-'use client'
-
-import { motion } from 'framer-motion'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Shield, Zap, Heart, Map } from 'lucide-react'
 import { Meteors } from './ui/meteors'
+import { MotionDiv } from './motion'
 
 const benefits = [
   {
@@ -36,7 +34,7 @@ export function Benefits() {
         <h2 className="text-3xl font-bold text-center mb-12">Why Choose Us</h2>
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           {benefits.map((benefit, index) => (
-            <motion.div
+            <MotionDiv
               key={index}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -59,7 +57,7 @@ export function Benefits() {
                   <Meteors number={10} />
                 </Card>
               </div>
-            </motion.div>
+            </MotionDiv>
           ))}
         </div>
       </div>

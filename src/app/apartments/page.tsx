@@ -7,8 +7,8 @@ export default async function ApartmentsPage() {
   return (
     <main className="min-h-screen py-24">
       <div className=" mx-auto px-4">
-        <h1 className="text-4xl font-bold mb-12">All Apartments</h1>
-        <ApartmentGrid apartments={apartments.data} />
+        <h1 className="text-4xl font-bold mb-6">All Apartments</h1>
+        <ApartmentGrid apartments={apartments} />
       </div>
     </main>
   );
