@@ -27,27 +27,6 @@ const services = [
   },
 ];
 
-const testimonials = [
-  {
-    name: "Sarah Johnson",
-    location: "New York, NY",
-    comment: "The attention to detail is remarkable. My home has never felt cleaner!",
-    avatar: "https://images.pexels.com/photos/6195106/pexels-photo-6195106.jpeg?auto=compress&cs=tinysrgb&w=400"
-  },
-  {
-    name: "Michael Chen",
-    location: "San Francisco, CA",
-    comment: "Consistent quality and professional service every single time.",
-    avatar: "https://images.pexels.com/photos/4108783/pexels-photo-4108783.jpeg?auto=compress&cs=tinysrgb&w=400"
-  },
-  {
-    name: "Emma Williams",
-    location: "Chicago, IL",
-    comment: "Their eco-friendly approach and excellent results keep me coming back.",
-    avatar: "https://images.pexels.com/photos/6195206/pexels-photo-6195206.jpeg?auto=compress&cs=tinysrgb&w=400"
-  }
-]
-
 
 export default async function CleaningServicesPage() {
   return (
@@ -135,46 +114,8 @@ export default async function CleaningServicesPage() {
           </div>
         </section>
 
-        {/* Testimonials Section */}
-        <section className="bg-primary/5 rounded-3xl p-8 lg:p-12 space-y-12">
-          <div className="text-center space-y-4">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-gray-200">
-              Customer Stories
-            </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-200">
-              Hear what our satisfied clients have to say
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <Card key={index} className="bg-white/50 backdrop-blur">
-                <CardContent className="p-2 space-y-4">
-                  <div className="flex items-center gap-4">
-                    <div className="relative w-12 h-12 rounded-full overflow-hidden">
-                      <Image
-                        src={testimonial.avatar}
-                        alt={testimonial.name}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                    <div>
-                      <p className="font-semibold">{testimonial.name}</p>
-                      <p className="text-sm text-gray-600">
-                        {testimonial.location}
-                      </p>
-                    </div>
-                  </div>
-                  <p className="italic text-gray-600">{testimonial.comment}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </section>
-
         {/* CTA Section */}
-        <section className="bg-primary text-primary-foreground rounded-3xl p-8 lg:p-12">
+        <section className="bg-primary rounded-3xl p-8 dark:bg-primary/5 lg:p-12">
           <div className="max-w-3xl mx-auto text-center space-y-6">
             <h2 className="text-3xl lg:text-4xl font-bold">
               Ready for a Cleaner Space?

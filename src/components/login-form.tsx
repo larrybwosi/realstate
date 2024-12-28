@@ -4,6 +4,31 @@ import { Label } from "@/components/ui/label"
 import LoginButtons from "./login-cl-btns"
 import { cn } from "@/lib/utils";
 
+
+ 
+const BottomGradient = () => {
+  return (
+    <>
+      <span className="group-hover/btn:opacity-100 block transition duration-500 opacity-0 absolute h-px w-full -bottom-px inset-x-0 bg-gradient-to-r from-transparent via-cyan-500 to-transparent" />
+      <span className="group-hover/btn:opacity-100 blur-sm block transition duration-500 opacity-0 absolute h-px w-1/2 mx-auto -bottom-px inset-x-10 bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
+    </>
+  );
+};
+ 
+const LabelInputContainer = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
+  return (
+    <div className={cn("flex flex-col space-y-2 w-full", className)}>
+      {children}
+    </div>
+  );
+};
+
 export function LoginForm({
   className,
   ...props
@@ -18,8 +43,15 @@ export function LoginForm({
       </div>
       <div className="grid gap-6">
         <div className="grid gap-2">
-          <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" placeholder="m@example.com" required />
+          <LabelInputContainer>
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="m@example.com"
+              required
+            />
+          </LabelInputContainer>
         </div>
         <div className="grid gap-2">
           <div className="flex items-center">
@@ -31,7 +63,9 @@ export function LoginForm({
               Forgot your password?
             </a>
           </div>
-          <Input id="password" type="password" required />
+          <LabelInputContainer>
+            <Input id="password" type="password" required />
+          </LabelInputContainer>
         </div>
         <Button type="submit" className="w-full">
           Login
@@ -41,7 +75,7 @@ export function LoginForm({
             Or continue with
           </span>
         </div>
-        <LoginButtons/>
+        <LoginButtons />
       </div>
       <div className="text-center text-sm">
         Don&apos;t have an account?{" "}
@@ -50,5 +84,5 @@ export function LoginForm({
         </a>
       </div>
     </form>
-  )
+  );
 }

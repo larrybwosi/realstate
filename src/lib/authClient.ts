@@ -7,7 +7,7 @@ export const {
   useSession,
   signOut,
 } = createAuthClient({
-  baseURL: "http://localhost:3000", // the base url of your auth server
+  baseURL: process.env.BETTER_AUTH_URL,
   plugins: [
     oneTapClient({
       clientId: process.env.ONE_TAP_CLIENT_ID!,

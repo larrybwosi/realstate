@@ -54,7 +54,7 @@ export function Benefits() {
                   <CardContent>
                     <p className="text-gray-400">{benefit.description}</p>
                   </CardContent>
-                  <Meteors number={10} />
+                  <Meteors number={15} />
                 </Card>
               </div>
             </MotionDiv>

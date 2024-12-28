@@ -1,156 +1,196 @@
-'use client'
-
-import Link from 'next/link'
+"use client";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Button } from '@/components/ui/button'
-import { ThemeToggle } from '@/components/theme-toggle'
-import { useState, useEffect } from 'react'
-import { Menu, X } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { signOut, useSession } from '@/lib/authClient'
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
+import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { useState, useEffect } from "react";
+import {
+  Menu,
+  X,
+  Home,
+  Search,
+  Sparkles,
+  Bath,
+  LayoutDashboard,
+  Upload,
+  LogOut,
+  LogIn,
+  UserPlus,
+} from "lucide-react";
+import { AnimatePresence } from "framer-motion";
+import { signOut, useSession } from "@/lib/authClient";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { MotionButton, MotionDiv, MotionNav } from "./motion";
 
 export function Navigation() {
-  const { data } = useSession()
-  const [isOpen, setIsOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
-  const router = useRouter()
+  const { data } = useSession();
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const router = useRouter();
 
-  const handleClose = () => {
-    setIsOpen(false);
-  };
+  const handleClose = () => setIsOpen(false);
 
-  // Handle closing on outside click (useEffect not needed here)
+  // Effect for handling scroll
   useEffect(() => {
-    const handleOutsideClick = (event) => {
-      if (!event.target.closest(".Navigation")) {
-        handleClose();
-      }
-    };
-    document.addEventListener("click", handleOutsideClick);
-    return () => document.removeEventListener("click", handleOutsideClick);
-  }, [isOpen]);
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-  // Handle scroll effect
+  // Close menu on route change
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20)
-    }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+    handleClose();
+  }, []);
 
+  // Enhanced nav items with icons
   const navItems = [
-    { href: "/apartments", label: "All Apartments" },
-    { href: "/find-home", label: "Find a Home" },
-    { href: "/cleaning-services", label: "Cleaning Services" },
+    { href: "/apartments", label: "All Apartments", icon: Home },
+    { href: "/find-home", label: "Find a Home", icon: Search },
+    { href: "/cleaning-services", label: "Cleaning Services", icon: Sparkles },
+    { href: "/soap", label: "Soap", icon: Bath },
     ...(data?.user.id
       ? [
-          { href: "/dashboard", label: "Dashboard" },
-          { href: "/submit", label: "Submit Appartment" },
-          { href: "#", label: "Sign Out", onClick: () => signOut({
-              fetchOptions: {
-                onSuccess: () => {
-                  router.push("/login");
-                },
-              },
-            }) },
-                    ]
+          { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+          { href: "/submit", label: "Submit Apartment", icon: Upload },
+          {
+            href: "#",
+            label: "Sign Out",
+            icon: LogOut,
+            onClick: () =>
+              signOut({
+                fetchOptions: { onSuccess: () => router.push("/login") },
+              }),
+          },
+        ]
       : [
-          { href: "/login", label: "Login" },
-          { href: "/signup", label: "Sign Up", isSpecial: true },
+          { href: "/login", label: "Login", icon: LogIn },
+          {
+            href: "/signup",
+            label: "Sign Up",
+            icon: UserPlus,
+            isSpecial: true,
+          },
         ]),
   ];
 
-  return (
-    <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      className={`fixed w-full top-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-background/95 backdrop-blur-lg shadow-lg"
-          : "bg-background/50 backdrop-blur-sm"
-      }`}
-    >
-      <div className=" mx-auto px-4">
-        <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="relative group">
-            <motion.span
-              className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent"
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 400, damping: 10 }}
-            >
-              Chep City
-            </motion.span>
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full" />
-          </Link>
+  const navVariants = {
+    hidden: { opacity: 0, y: -100 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { type: "spring", stiffness: 260, damping: 20 },
+    },
+  };
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-2">
+  const menuItemVariants = {
+    hidden: { x: -40, opacity: 0 },
+    visible: (i) => ({
+      x: 0,
+      opacity: 1,
+      transition: {
+        delay: i * 0.1,
+        duration: 0.5,
+        ease: "easeOut",
+      },
+    }),
+  };
+
+  return (
+    <MotionNav
+      variants={navVariants}
+      initial="hidden"
+      animate="visible"
+      className={`fixed w-full top-0 z-50 transition-all duration-500 ${scrolled ? "bg-background/95 backdrop-blur-xl shadow-lg" : "bg-background/50 backdrop-blur-sm"}`}
+    >
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="flex h-16 items-center justify-between">
+          <Link href="/" className="relative group">
+            <MotionDiv
+              whileHover={{ scale: 1.05 }}
+              className="flex items-center gap-2"
+            >
+              <span className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+                Cheap City
+              </span>
+              <MotionDiv
+                className="h-1 w-0 bg-primary absolute bottom-0 left-0"
+                whileHover={{ width: "100%" }}
+                transition={{ duration: 0.3 }}
+              />
+            </MotionDiv>
+          </Link>
+          <div className="hidden md:flex items-center gap-3">
             {navItems.map((item, index) => (
-              <motion.div
+              <MotionDiv
                 key={item.label}
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
+                custom={index}
+                variants={menuItemVariants}
+                initial="hidden"
+                animate="visible"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
                 {item.onClick ? (
                   <Button
                     variant="ghost"
                     onClick={item.onClick}
-                    className="relative overflow-hidden group"
+                    className="flex items-center gap-2 hover:bg-primary/10 transition-colors duration-300"
                   >
-                    <span className="relative z-10">{item.label}</span>
-                    <span className="absolute inset-0 bg-primary/10 transform translate-y-full transition-transform group-hover:translate-y-0" />
+                    <item.icon size={18} />
+                    <span>{item.label}</span>
                   </Button>
                 ) : (
                   <Link href={item.href}>
                     <Button
                       variant={item.isSpecial ? "default" : "ghost"}
-                      className={`relative overflow-hidden group ${
-                        item.isSpecial ? "bg-primary hover:bg-primary/90" : ""
-                      }`}
+                      className={`flex items-center gap-2 ${item.isSpecial ? "bg-primary hover:bg-primary/90 text-primary-foreground" : "hover:bg-primary/10"} transition-all duration-300`}
                     >
-                      <span className="relative z-10">{item.label}</span>
-                      <span className="absolute inset-0 bg-primary/10 transform translate-y-full transition-transform group-hover:translate-y-0" />
+                      <item.icon size={18} />
+                      <span>{item.label}</span>
                     </Button>
                   </Link>
                 )}
-              </motion.div>
+              </MotionDiv>
             ))}
             <ThemeToggle />
           </div>
-
-          {/* Mobile Menu Button */}
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            className="md:hidden"
+          <MotionButton
+            whileTap={{ scale: 0.9 }}
+            className="md:hidden p-2 rounded-lg hover:bg-primary/10 transition-colors"
             onClick={() => setIsOpen(!isOpen)}
           >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
-          </motion.button>
+            <AnimatePresence mode="wait">
+              <MotionDiv
+                key={isOpen ? "close" : "menu"}
+                initial={{ rotate: 0 }}
+                animate={{ rotate: isOpen ? 180 : 0 }}
+                exit={{ rotate: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                {isOpen ? <X size={24} /> : <Menu size={24} />}
+              </MotionDiv>
+            </AnimatePresence>
+          </MotionButton>
         </div>
       </div>
-
       {/* Mobile Navigation */}
-      <AnimatePresence>
         {isOpen && (
-          <motion.nav
-            initial={{ x: "-100%" }} // Slide in from left on mobile
-            animate={{ x: 0 }}
-            exit={{ x: "-100%" }} // Slide out to left on close
-            className={`fixed w-screen h-screen top-0 left-0 overflow-auto z-50 transition-all duration-300 bg-background/95 backdrop-blur-lg`}
+          <MotionDiv
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "100vh" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="fixed inset-0 top-16 bg-background/98 backdrop-blur-xl md:hidden"
           >
-            <div className="container mx-auto px-4 py-4 flex flex-col h-full">
-              {/* Navigation Items */}
-              <div className="flex-grow space-y-2">
+            <div className="container mx-auto px-4 py-6 flex flex-col h-full">
+              <div className="flex-grow space-y-3">
                 {navItems.map((item, index) => (
-                  <motion.div
+                  <MotionDiv
                     key={item.label}
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
+                    custom={index}
+                    variants={menuItemVariants}
+                    initial="hidden"
+                    animate="visible"
                     className="w-full"
                   >
                     {item.onClick ? (
@@ -160,62 +200,60 @@ export function Navigation() {
                           item.onClick();
                           handleClose();
                         }}
-                        className="w-full justify-start text-left"
+                        className="w-full justify-start text-left flex items-center gap-3"
                       >
+                        <item.icon size={20} />
                         {item.label}
                       </Button>
                     ) : (
                       <Link href={item.href} onClick={handleClose}>
                         <Button
                           variant={item.isSpecial ? "default" : "ghost"}
-                          className="w-full justify-start text-left"
+                          className="w-full justify-start text-left flex items-center gap-3"
                         >
+                          <item.icon size={20} />
                           {item.label}
                         </Button>
                       </Link>
                     )}
-                  </motion.div>
+                  </MotionDiv>
                 ))}
               </div>
-
-              {/* User Information (if logged in) */}
+              {/* User Profile Section */}
               {data?.user && (
-                <div className="mt-auto flex items-center justify-between">
-                  <div className="flex-row flex gap-2">
-                    <Avatar>
-                      <AvatarImage
-                        src={data.user.image!}
-                        alt={data.user.name}
-                      />
-                      <AvatarFallback className="rounded-lg bg-primary text-white">
-                        {data.user.name?.charAt(0).toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                    <span className='text-sm+'>{data.user.name}</span>
+                <MotionDiv
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-auto pt-4 border-t"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <Avatar className="h-10 w-10">
+                        <AvatarImage
+                          src={data.user.image!}
+                          alt={data.user.name}
+                        />
+                        <AvatarFallback className="bg-primary text-primary-foreground">
+                          {data.user.name?.charAt(0).toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span className="font-medium">{data.user.name}</span>
+                    </div>
                   </div>
-                  <Button variant="ghost" onClick={() => signOut()}>
-                    Sign Out
-                  </Button>
-                </div>
+                </MotionDiv>
               )}
-
-              {/* Theme Toggle */}
-              <div className="pt-2">
+              {/* Mobile Theme Toggle */}
+              <MotionDiv
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="pt-4 flex justify-between items-center"
+              >
+                <span className="text-sm font-medium">Theme</span>
                 <ThemeToggle />
-              </div>
+              </MotionDiv>
             </div>
-
-            {/* Close Button */}
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              className="absolute top-4 right-4 md:hidden"
-              onClick={handleClose}
-            >
-              <X size={24} />
-            </motion.button>
-          </motion.nav>
+          </MotionDiv>
         )}
-      </AnimatePresence>
-    </motion.nav>
+    </MotionNav>
   );
 }

@@ -9,7 +9,6 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Bed, Bath, Expand, Star, Heart } from 'lucide-react'
 import { urlFor } from '@/sanity/lib/image'
-import { BackgroundGradient } from './ui/background-gradient'
 
 interface Apartment {
   _id: string
@@ -56,93 +55,91 @@ export function FeaturedApartments({ apartments }: FeaturedApartmentsProps) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.1 }}
               >
-                <BackgroundGradient className="rounded-[22px] p-1 sm:p-10 bg-white dark:bg-gray-900">
-                  <Card className="overflow-hidden transition-shadow ">
-                    <div className="aspect-[16/9] relative">
-                      <Image
-                        src={urlFor(apartment.mainImage.asset)
-                          .width(300)
-                          .format("webp")
-                          .url()}
-                        alt={apartment.title}
-                        fill
-                        className="object-cover transition-transform hover:scale-105"
+                <Card className="overflow-hidden transition-shadow ">
+                  <div className="aspect-[16/9] relative">
+                    <Image
+                      src={urlFor(apartment.mainImage.asset)
+                        .width(300)
+                        .format("webp")
+                        .url()}
+                      alt={apartment.title}
+                      fill
+                      className="object-cover transition-transform hover:scale-105"
+                    />
+                    <Badge className="absolute top-2 right-2 bg-primary text-primary-foreground">
+                      Featured
+                    </Badge>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="absolute top-2 left-2 bg-white/80 hover:bg-white"
+                      onClick={() => toggleSave(apartment._id)}
+                    >
+                      <Heart
+                        className={`h-5 w-5 ${
+                          savedApartments.includes(apartment._id)
+                            ? "fill-red-500 text-red-500"
+                            : "text-gray-500"
+                        }`}
                       />
-                      <Badge className="absolute top-2 right-2 bg-primary text-primary-foreground">
-                        Featured
-                      </Badge>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="absolute top-2 left-2 bg-white/80 hover:bg-white"
-                        onClick={() => toggleSave(apartment._id)}
-                      >
-                        <Heart
+                    </Button>
+                  </div>
+                  <CardContent className="p-6">
+                    <h3 className="text-xl font-semibold mb-2">
+                      {apartment.title}
+                    </h3>
+                    <div className="flex items-center mb-4">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
                           className={`h-5 w-5 ${
-                            savedApartments.includes(apartment._id)
-                              ? "fill-red-500 text-red-500"
-                              : "text-gray-500"
+                            i < apartment.rating
+                              ? "text-yellow-400 fill-current"
+                              : "text-gray-300"
                           }`}
                         />
-                      </Button>
+                      ))}
+                      <span className="ml-2 text-sm text-muted-foreground">
+                        {/* {apartment?.rating.toFixed(1)} */}
+                      </span>
                     </div>
-                    <CardContent className="p-6">
-                      <h3 className="text-xl font-semibold mb-2">
-                        {apartment.title}
-                      </h3>
-                      <div className="flex items-center mb-4">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`h-5 w-5 ${
-                              i < apartment.rating
-                                ? "text-yellow-400 fill-current"
-                                : "text-gray-300"
-                            }`}
-                          />
-                        ))}
-                        <span className="ml-2 text-sm text-muted-foreground">
-                          {/* {apartment?.rating.toFixed(1)} */}
-                        </span>
-                      </div>
-                      <p className="text-2xl font-bold text-primary mb-4">
-                        ${apartment?.price.toLocaleString()}/mo
-                      </p>
-                      <div className="flex flex-wrap gap-4">
-                        <Badge
-                          variant="secondary"
-                          className="flex items-center gap-1"
-                        >
-                          <Bed className="h-4 w-4" />
-                          {apartment?.bedrooms}{" "}
-                          {apartment?.bedrooms === 1 ? "Bed" : "Beds"}
-                        </Badge>
-                        <Badge
-                          variant="secondary"
-                          className="flex items-center gap-1"
-                        >
-                          <Bath className="h-4 w-4" />
-                          {apartment?.bathrooms}{" "}
-                          {apartment?.bathrooms === 1 ? "Bath" : "Baths"}
-                        </Badge>
-                        <Badge
-                          variant="secondary"
-                          className="flex items-center gap-1"
-                        >
-                          <Expand className="h-4 w-4" />
-                          {apartment?.squareFootage} sqft
-                        </Badge>
-                      </div>
-                    </CardContent>
-                    <CardFooter className="p-6 pt-0">
-                      <Button asChild className="w-full">
-                        <Link href={`/apartments/${apartment.slug.current}`}>
-                          View Details
-                        </Link>
-                      </Button>
-                    </CardFooter>
-                  </Card>
-                </BackgroundGradient>
+                    <p className="text-2xl font-bold text-primary mb-4">
+                      ${apartment?.price.toLocaleString()}/mo
+                    </p>
+                    <div className="flex flex-wrap gap-4">
+                      <Badge
+                        variant="secondary"
+                        className="flex items-center gap-1"
+                      >
+                        <Bed className="h-4 w-4" />
+                        {apartment?.bedrooms}{" "}
+                        {apartment?.bedrooms === 1 ? "Bed" : "Beds"}
+                      </Badge>
+                      <Badge
+                        variant="secondary"
+                        className="flex items-center gap-1"
+                      >
+                        <Bath className="h-4 w-4" />
+                        {apartment?.bathrooms}{" "}
+                        {apartment?.bathrooms === 1 ? "Bath" : "Baths"}
+                      </Badge>
+                      <Badge
+                        variant="secondary"
+                        className="flex items-center gap-1"
+                      >
+                        <Expand className="h-4 w-4" />
+                        {apartment?.squareFootage} sqft
+                      </Badge>
+                    </div>
+                  </CardContent>
+                  <CardFooter className="p-6 pt-0">
+                    <Button asChild className="w-full">
+                      <Link href={`/apartments/${apartment.slug.current}`}>
+                        View Details
+                      </Link>
+                    </Button>
+                  </CardFooter>
+                </Card>
               </motion.div>
             );})}
         </div>

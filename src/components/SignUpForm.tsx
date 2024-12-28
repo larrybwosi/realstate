@@ -11,6 +11,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
 import { signUp } from '@/lib/authClient';
+import { LabelInputContainer } from './signup-form-demo';
 
 const baseSchema = z.object({
   email: z.string().email(),
@@ -92,6 +93,16 @@ export function SignUpForm() {
             <>
               <div className="space-y-4">
                 <div>
+                  <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
+                    <LabelInputContainer>
+                      <Label htmlFor="firstname">First name</Label>
+                      <Input id="firstname" placeholder="Tyler" type="text" />
+                    </LabelInputContainer>
+                    <LabelInputContainer>
+                      <Label htmlFor="lastname">Last name</Label>
+                      <Input id="lastname" placeholder="Durden" type="text" />
+                    </LabelInputContainer>
+                  </div>
                   <Label htmlFor="email">Email</Label>
                   <Input id="email" type="email" {...register('email')} />
                   {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
