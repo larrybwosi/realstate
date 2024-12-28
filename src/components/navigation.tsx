@@ -180,7 +180,7 @@ export function Navigation() {
             animate={{ opacity: 1, height: "100vh" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="fixed inset-0 top-16 bg-background/98 backdrop-blur-xl md:hidden"
+            className="fixed inset-0 top-16 bg-background/50 dark:bg-gray-900 backdrop-blur-xl md:hidden"
           >
             <div className="container mx-auto px-4 py-6 flex flex-col h-full">
               <div className="flex-grow space-y-3">

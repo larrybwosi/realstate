@@ -1,8 +1,10 @@
 import { getCourtWithApartments } from '@/actions'
 import { ApartmentGrid } from '@/components/apartment-grid'
 
-export default async function CourtPage({ params }: { params: { id: string } }) {
-  const court = await getCourtWithApartments(params.id)
+type Params = Promise<{ id: string }>;
+export default async function CourtPage({ params }: { params: Params }) {
+  const { id } = await params;
+  const court = await getCourtWithApartments(id);
 
   return (
     <main className="min-h-screen py-24">
@@ -15,4 +17,4 @@ export default async function CourtPage({ params }: { params: { id: string } }) 
     </main>
   )
 }
-
+ 
