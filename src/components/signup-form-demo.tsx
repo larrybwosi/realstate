@@ -47,8 +47,8 @@ export default function SigninForm() {
     e.preventDefault();
 
     try {
-      const validatedData = await schema.parseAsync(formData);
-      console.log("Validated data:", validatedData);
+      // const validatedData = await schema.parseAsync(formData);
+      // console.log("Validated data:", validatedData);
       // Now you can proceed with form submission or login logic with the validated data
     } catch (error) {
       if (error instanceof z.ZodError) {

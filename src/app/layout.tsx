@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'Cheap City',
   description: 'Find your perfect apartment in your city',
-  keywords:['appartment', 'kaimosi', 'house', 'nestlink', 'kafu', 'apartment kaimosi', 'home', 'location', 'cheap'],
+  keywords:['apartment', 'kaimosi', 'house', 'nestlink', 'kafu', 'apartment kaimosi', 'home', 'location', 'cheap'],
   alternates: {
     canonical: '/',
     languages: {
