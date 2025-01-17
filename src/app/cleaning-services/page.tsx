@@ -49,15 +49,12 @@ export default async function CleaningServicesPage() {
               <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
                 {" "}
                 {/* Centered on small screens, aligned left on large screens */}
-                <Button size="lg" className="bg-primary hover:bg-primary/90">
+                <Button size="lg" className="bg-primary hover:bg-primary/90 cursor-pointer">
                   Get Free Quote
                 </Button>
-                <Link href="/services">
-                  {" "}
-                  <Button size="lg" variant="outline">
-                    View Services
-                  </Button>
-                </Link>
+                <Button size="lg" variant="outline" className="dark:text-white cursor-pointer">
+                  View Services
+                </Button>
               </div>
             </div>
             <div className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl">

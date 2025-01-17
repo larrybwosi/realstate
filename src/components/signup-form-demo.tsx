@@ -52,7 +52,11 @@ export default function SigninForm() {
       // Now you can proceed with form submission or login logic with the validated data
     } catch (error) {
       if (error instanceof z.ZodError) {
-        setValidationErrors(error.format()); // Set validation errors from Zod
+        console.error("Validation error:", error.errors);
+        setValidationErrors(error.errors().reduce((acc, curr) => {
+          acc[curr.path[0]] = curr.message;
+          return acc;
+        }, {} as Record<string, string>));
       } else {
         console.error("Unexpected error:", error);
       }
@@ -65,8 +69,7 @@ export default function SigninForm() {
         Welcome Back
       </h2>
       <p className="text-neutral-600 text-sm max-w-sm mt-2 dark:text-neutral-300">
-        Login to aceternity if you can because we don&apos;t have a login flow
-        yet
+        Login to your account
       </p>
 
       <form className="my-8" onSubmit={handleSubmit}>

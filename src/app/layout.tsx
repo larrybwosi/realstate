@@ -7,8 +7,16 @@ import { Navigation } from '@/components/navigation'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'ApartmentFinder',
-  description: 'Find your perfect apartment',
+  title: 'Cheap City',
+  description: 'Find your perfect apartment in your city',
+  keywords:['appartment', 'kaimosi', 'house', 'nestlink', 'kafu', 'apartment kaimosi', 'home', 'location', 'cheap'],
+  alternates: {
+    canonical: '/',
+    languages: {
+      en: '/en',
+      ki: '/ki',
+    },
+  },
 }
 
 export default function RootLayout({

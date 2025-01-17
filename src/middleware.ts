@@ -14,13 +14,14 @@ export default async function authMiddleware(request: NextRequest) {
       },
     }
   );
-console.log(session)
+  console.log(session)
+  
   if (!session) {
-    return NextResponse.redirect(new URL("/sign-in", request.url));
+    return NextResponse.redirect(new URL("/login", request.url));
   }
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/dashboard"],
+  matcher: ["/dashboard","/book","/admin", '/sbt'],
 };
