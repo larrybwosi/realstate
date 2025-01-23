@@ -1,4 +1,5 @@
 "use client";
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -14,6 +15,7 @@ import {
   LogOut,
   LogIn,
   UserPlus,
+  Hotel,
 } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
 import { signOut, useSession } from "@/lib/authClient";
@@ -37,6 +39,7 @@ export function Navigation() {
   const navItems = [
     { href: "/apartments", label: "All Apartments", icon: Home },
     { href: "/cleaning-services", label: "Cleaning Services", icon: Sparkles },
+    { href: "/courts", label: "Courts", icon: Hotel },
     ...(data?.user.id
       ? [
           { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },

@@ -3,9 +3,7 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import {
   oneTap,
   admin,
-  bearer,
   multiSession,
-  oidcProvider,
   username
 } from "better-auth/plugins";
 import { sso } from "better-auth/plugins/sso";
@@ -20,6 +18,7 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     minPasswordLength: 8,
+    autoSignIn: true,
   },
   socialProviders: {
     github: {
@@ -35,13 +34,10 @@ export const auth = betterAuth({
     sso(),
     oneTap(),
     admin(),
-    bearer(),
     multiSession({ maximumSessions: 8 }),
-    nextCookies(),
     username(),
-    oidcProvider({
-      loginPage: "/login",
-    }),
+    nextCookies(),
   ],
   secret: process.env.BETTER_AUTH_SECRET,
+  appName: "Cheap City"
 });

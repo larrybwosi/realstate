@@ -12,7 +12,7 @@ export default function LoginPage() {
             <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
               <GalleryVerticalEnd className="size-4" />
             </div>
-            Acme Inc.
+            Cheap City.
           </a>
         </div>
         <div className="flex flex-1 items-center justify-center">
@@ -23,10 +23,11 @@ export default function LoginPage() {
       </div>
       <div className="relative hidden bg-muted lg:block">
         <Image
-          src="/placeholder.svg"
+          src="https://cdn.sanity.io/images/k1f8kx4i/production/b545fee9240131b6d4236daa5231a258afd0280a-736x1104.png?fm=webp"
           alt="Image"
-          fill
-          className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+          width={1280}
+          height={1280}
+          className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.5] "
         />
       </div>
     </div>

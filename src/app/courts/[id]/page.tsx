@@ -1,4 +1,4 @@
-import { getCourtWithApartments } from '@/actions'
+import { getCourtWithApartments } from '@/actions/apartments';
 import { ApartmentGrid } from '@/components/apartment-grid'
 
 type Params = Promise<{ id: string }>;

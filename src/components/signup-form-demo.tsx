@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -10,6 +11,12 @@ import {
 } from "@tabler/icons-react";
 import { signIn } from "@/lib/authClient";
 import { z } from "zod";
+import { toast } from "@/hooks/use-toast";
+
+type ValidationErrors = {
+  email?: string;
+  password?: string;
+};
 
 export default function SigninForm() {
   const [formData, setFormData] = useState({
@@ -17,150 +24,221 @@ export default function SigninForm() {
     password: "",
   });
 
-  const [validationErrors, setValidationErrors] = useState({
-    email: "",
-    password: "",
+  const [validationErrors, setValidationErrors] = useState<ValidationErrors>(
+    {}
+  );
+  console.log(validationErrors)
+
+  const schema = z.object({
+    email: z.string().email("Invalid email format"),
+    password: z
+      .string()
+      .min(8, "Password must be at least 8 characters long")
+      .max(100, "Password cannot exceed 100 characters"),
   });
 
-  const schema = z
-    .object({
-      email: z.string().email("Invalid email format"),
-      password: z
-        .string()
-        .min(8, "Password must be at least 8 characters long")
-        .max(100, "Password cannot exceed 100 characters"),
-    })
-    .superRefine((data) => {
-      if (!data.email || !data.password) {
-        setValidationErrors({ email: "Please fill out all fields" });
-        return false; 
-      }
-      return true; 
-    });
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [event.target.name]: event.target.value });
-    setValidationErrors({ ...validationErrors, [event.target.name]: null }); 
+    const { name, value } = event.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setValidationErrors((prev) => ({ ...prev, [name]: undefined }));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      // const validatedData = await schema.parseAsync(formData);
-      // console.log("Validated data:", validatedData);
-      // Now you can proceed with form submission or login logic with the validated data
+      const validatedData = await schema.parseAsync(formData);
+      console.log("Validated data:", validatedData);
+      
+      await signIn.email({
+        email: validatedData.email,
+        password: validatedData.password,
+        rememberMe: true,
+      })
+
+      // Add your submission logic here
     } catch (error) {
       if (error instanceof z.ZodError) {
-        console.error("Validation error:", error.errors);
-        setValidationErrors(error.errors().reduce((acc, curr) => {
-          acc[curr.path[0]] = curr.message;
-          return acc;
-        }, {} as Record<string, string>));
+        const errors = error.errors.reduce((acc, curr) => {
+          const key = curr.path[0];
+          return { ...acc, [key]: curr.message };
+        }, {} as ValidationErrors);
+        setValidationErrors(errors);
       } else {
         console.error("Unexpected error:", error);
+        toast({
+          title: "Error",
+          description: "An unexpected error occurred",
+          variant: "destructive",
+        });
       }
     }
   };
 
   return (
-    <div className="max-w-[480px] w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black">
-      <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200">
-        Welcome Back
-      </h2>
-      <p className="text-neutral-600 text-sm max-w-sm mt-2 dark:text-neutral-300">
-        Login to your account
-      </p>
+    <div className="max-w-md w-full mx-auto rounded-2xl p-8 shadow-xl bg-white dark:bg-neutral-950 border border-neutral-100 dark:border-neutral-800">
+      <header className="text-center mb-8">
+        <h2 className="font-bold text-2xl text-neutral-800 dark:text-neutral-100 mb-2">
+          Welcome Back
+        </h2>
+        <p className="text-neutral-600 dark:text-neutral-400">
+          Login to your account
+        </p>
+      </header>
 
-      <form className="my-8" onSubmit={handleSubmit}>
-        <LabelInputContainer className="mb-4">
-          <Label htmlFor="email">Email Address</Label>
-          <Input
-            id="email"
-            placeholder="projectmayhem@fc.com"
-            type="email"
-            value={formData.email}
-            onChange={handleChange}
-            error={validationErrors?.email}
-          />
-        </LabelInputContainer>
-        <LabelInputContainer className="mb-4">
-          <Label htmlFor="password">Password</Label>
-          <Input
-            id="password"
-            placeholder="••••••••"
-            type="password"
-            value={formData.password}
-            onChange={handleChange}
-            error={validationErrors?.password}
-          />
-        </LabelInputContainer>
+      <form className="space-y-6" onSubmit={handleSubmit}>
+        <div className="space-y-4">
+          <LabelInputContainer>
+            <Label htmlFor="email">Email Address</Label>
+            <Input
+              id="email"
+              name="email"
+              placeholder="user@cheapcity.com"
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+            />
+          </LabelInputContainer>
+
+          <LabelInputContainer>
+            <Label htmlFor="password">Password</Label>
+            <Input
+              id="password"
+              name="password"
+              placeholder="••••••••"
+              type="password"
+              value={formData.password}
+              onChange={handleChange}
+            />
+            <span
+              className={cn(
+                "text-xs text-red-500",
+                validationErrors.password ? "visible" : "invisible"
+              )}
+            >
+              {validationErrors.password}
+            </span>
+          </LabelInputContainer>
+
+          <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-6">
+            <a
+              href="#"
+              className="underline-offset-4 hover:underline text-neutral-800 dark:text-neutral-100"
+            >
+              Forgot password?
+            </a>
+          </p>
+
+          <LabelInputContainer>
+            <p className="text-xs text-neutral-600 dark:text-neutral-400">
+              By continuing, you agree to our{" "}
+              <a
+                href="#"
+                className="underline-offset-4 hover:underline text-neutral-800 dark:text-neutral-100"
+              >
+                Terms of Service
+              </a>{" "}
+              and{" "}
+              <a
+                href="#"
+                className="underline-offset-4 hover:underline text-neutral-800 dark:text-neutral-100"
+              >
+                Privacy Policy
+              </a>
+              .
+            </p>
+            {validationErrors.email && (
+              <span className="text-xs text-red-500">
+                {validationErrors.email}
+              </span>
+            )}
+          </LabelInputContainer>
+        </div>
 
         <button
-          className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
+          className="relative group/btn w-full bg-gradient-to-br from-black to-neutral-600 dark:from-zinc-900 dark:to-zinc-900 rounded-md h-10 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset] transition-all duration-200 hover:scale-[1.02]"
           type="submit"
         >
-          Sign up &rarr;
+          Sign In &rarr;
           <BottomGradient />
         </button>
 
-        <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-neutral-300 dark:border-neutral-700" />
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="px-2 bg-white dark:bg-neutral-950 text-neutral-500 dark:text-neutral-400">
+              Or continue with
+            </span>
+          </div>
+        </div>
 
-        <div className="flex flex-col space-y-4">
-          <button
-            className=" relative group/btn flex space-x-2 items-center justify-start px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
-            type="submit"
-            onClick={async () =>
-              await signIn.social({
-                provider: "github",
+        <div className="grid grid-cols-1 gap-3">
+          <SocialButton
+            icon={IconBrandGithub}
+            text="GitHub"
+            onClick={() => signIn.social({ provider: "github" })}
+          />
+          <SocialButton
+            icon={IconBrandGoogle}
+            text="Google"
+            onClick={() => signIn.social({ provider: "google" })}
+          />
+          <SocialButton
+            icon={IconBrandOnlyfans}
+            text="OnlyFans"
+            onClick={() =>
+              toast({
+                title: "Coming Soon",
+                description: "OnlyFans is currently in development.",
+                variant: "destructive",
               })
             }
-          >
-            <IconBrandGithub className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
-            <span className="text-neutral-700 dark:text-neutral-300 text-sm">
-              GitHub
-            </span>
-            <BottomGradient />
-          </button>
-          <button
-            className=" relative group/btn flex space-x-2 items-center justify-start px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
-            type="submit"
-            onClick={async () =>
-              await signIn.social({
-                provider: "google",
-              })
-            }
-          >
-            <IconBrandGoogle className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
-            <span className="text-neutral-700 dark:text-neutral-300 text-sm">
-              Google
-            </span>
-            <BottomGradient />
-          </button>
-          <button
-            className=" relative group/btn flex space-x-2 items-center justify-start px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
-            type="submit"
-          >
-            <IconBrandOnlyfans className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
-            <span className="text-neutral-700 dark:text-neutral-300 text-sm">
-              OnlyFans
-            </span>
-            <BottomGradient />
-          </button>
+          />
         </div>
       </form>
+
+      <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-6">
+        Don&apos;t have an account?{" "}
+        <a
+          href="/signup"
+          className="underline-offset-4 hover:underline text-neutral-800 dark:text-neutral-100"
+        >
+          Sign Up
+        </a>
+        .
+      </p>
     </div>
   );
 }
 
-export const BottomGradient = () => {
-  return (
-    <>
-      <span className="group-hover/btn:opacity-100 block transition duration-500 opacity-0 absolute h-px w-full -bottom-px inset-x-0 bg-gradient-to-r from-transparent via-cyan-500 to-transparent" />
-      <span className="group-hover/btn:opacity-100 blur-sm block transition duration-500 opacity-0 absolute h-px w-1/2 mx-auto -bottom-px inset-x-10 bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
-    </>
-  );
-};
+const SocialButton = ({
+  icon: Icon,
+  text,
+  onClick,
+}: {
+  icon: React.ComponentType<{ className?: string }>;
+  text: string;
+  onClick: () => void;
+}) => (
+  <button
+    type="button"
+    onClick={onClick}
+    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-md bg-neutral-50 dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 shadow-sm hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors duration-200 border border-neutral-200 dark:border-neutral-800"
+    
+  >
+    <Icon className="h-4 w-4" />
+    <span>{text}</span>
+  </button>
+);
+
+const BottomGradient = () => (
+  <>
+    <span className="group-hover/btn:opacity-100 block transition-opacity duration-500 opacity-0 absolute h-px w-full -bottom-px inset-x-0 bg-gradient-to-r from-transparent via-cyan-500 to-transparent" />
+    <span className="group-hover/btn:opacity-100 blur-sm block transition-opacity duration-500 opacity-0 absolute h-px w-1/2 mx-auto -bottom-px inset-x-10 bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
+  </>
+);
 
 export const LabelInputContainer = ({
   children,
@@ -168,10 +246,8 @@ export const LabelInputContainer = ({
 }: {
   children: React.ReactNode;
   className?: string;
-}) => {
-  return (
-    <div className={cn("flex flex-col space-y-2 w-full", className)}>
-      {children}
-    </div>
-  );
-};
+}) => (
+  <div className={cn("flex flex-col space-y-1.5 w-full", className)}>
+    {children}
+  </div>
+);

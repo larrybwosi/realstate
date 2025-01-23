@@ -21,7 +21,10 @@ import { IconPool } from "@tabler/icons-react";
 
 export function ApartmentDetails({ apartment }: { apartment: Apartment }) {
   // Use the apartment's location if available, otherwise fallback to mock location
-  const location = apartment.location || { lat: 40.7128, lng: -74.006 };
+  const location = apartment.location
+    ? apartment.location
+    : { lat: "40.716452", lng: "-73.781798" };
+
 
   return (
     <div className="grid gap-8 md:grid-cols-2">
@@ -142,14 +145,18 @@ export function ApartmentDetails({ apartment }: { apartment: Apartment }) {
         )}
 
         {/* Court Information */}
-        <h2 className="text-xl font-bold mb-2 text-gray-900 dark:text-gray-100">
-          Court Information
-        </h2>
-        <p className="mb-6 text-gray-700 dark:text-gray-300">
-          This apartment is located in {apartment?.court?.name}. Floor:{" "}
-          {apartment.unit?.floorNumber}, Apartment Number:{" "}
-          {apartment.unit?.unitNumber}
-        </p>
+        {apartment.court && (
+          <>
+            <h2 className="text-xl font-bold mb-2 text-gray-900 dark:text-gray-100">
+              Court Information
+            </h2>
+            <p className="mb-6 text-gray-700 dark:text-gray-300">
+              This apartment is located in {apartment?.court?.name}. Floor:{" "}
+              {apartment.unit?.floorNumber}, Apartment Number:{" "}
+              {apartment.unit?.unitNumber}
+            </p>
+          </>
+        )}
 
         {/* Amenities */}
         <h2 className="text-xl font-bold mb-2 text-gray-900 dark:text-gray-100">
@@ -178,7 +185,8 @@ export function ApartmentDetails({ apartment }: { apartment: Apartment }) {
         </h2>
         <div className="aspect-[16/9] relative mb-6 rounded-lg overflow-hidden shadow-lg">
           <iframe
-            src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.8354345093747!2d${location.lng}!3d${location.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzDCsDUxJzI1LjMiTiA3NMKwMjcnMjkuNyJX!5e0!3m2!1sen!2sus!4v1625690000000!5m2!1sen!2sus`}
+          // 40.678680, -73.947036
+            src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d162936.64871471454!2d-74.09311810728148!3d40.63903948764293!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY!5e0!3m2!1sen!2sus!4v1737635680665!5m2!1sen!2sus`}
             width="100%"
             height="100%"
             style={{ border: 0 }}

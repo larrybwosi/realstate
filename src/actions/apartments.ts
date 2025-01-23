@@ -257,7 +257,11 @@ export async function getSimilarApartments(
 
   return res.data;
 }
-export async function getCourtWithApartments(id: string): Promise<Court> {
+
+interface CourtWithApartments extends Court {
+  apartments: Apartment[]
+}
+export async function getCourtWithApartments(id: string): Promise<CourtWithApartments> {
 
   const res = await sanityFetch({
     query: `*[_type == "court" && _id == $id][0] {
