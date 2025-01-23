@@ -1,18 +1,18 @@
 'use client'
 
-import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Bed, Bath, Expand, Star, Heart } from 'lucide-react'
 import { urlFor } from '@/sanity/lib/image'
+import { MotionDiv } from './motion'
 
 interface Apartment {
   _id: string
   title: string
+  mainImage: { asset: { url: string } }
   slug: { current: string }
   images: { asset: { url: string } }[]
   price: number
@@ -21,6 +21,7 @@ interface Apartment {
   bathrooms: number
   rating: number
   featured: boolean
+  isSaved: boolean
 }
 
 interface FeaturedApartmentsProps {
@@ -28,12 +29,12 @@ interface FeaturedApartmentsProps {
 }
 
 export function FeaturedApartments({ apartments }: FeaturedApartmentsProps) {
-  const [savedApartments, setSavedApartments] = useState<string[]>([])
 
   const toggleSave = (id: string) => {
-    setSavedApartments((prev) =>
-      prev.includes(id) ? prev.filter((apId) => apId !== id) : [...prev, id]
-    )
+    console.log(id)
+    // setSavedApartments((prev) =>
+    //   prev.includes(id) ? prev.filter((apId) => apId !== id) : [...prev, id]
+    // )
   }
 
  
@@ -49,7 +50,7 @@ export function FeaturedApartments({ apartments }: FeaturedApartmentsProps) {
               urlFor(apartment.mainImage.asset).width(300).format("webp").url()
             );
             return (
-              <motion.div
+              <MotionDiv
                 key={apartment._id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -77,7 +78,7 @@ export function FeaturedApartments({ apartments }: FeaturedApartmentsProps) {
                     >
                       <Heart
                         className={`h-5 w-5 ${
-                          savedApartments.includes(apartment._id)
+                          apartment?.isSaved
                             ? "fill-red-500 text-red-500"
                             : "text-gray-500"
                         }`}
@@ -140,7 +141,7 @@ export function FeaturedApartments({ apartments }: FeaturedApartmentsProps) {
                     </Button>
                   </CardFooter>
                 </Card>
-              </motion.div>
+              </MotionDiv>
             );})}
         </div>
       </div>

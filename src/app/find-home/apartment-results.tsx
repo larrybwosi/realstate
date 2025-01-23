@@ -17,8 +17,8 @@ import {
   ParkingCircle,
   PawPrint,
 } from "lucide-react";
-import { getApartments } from "@/actions";
 import { urlFor } from "@/sanity/lib/image";
+import { getApartments } from "@/actions/apartments";
 
 export async function ApartmentResults() {
   const apartments = await getApartments({});
@@ -27,7 +27,7 @@ export async function ApartmentResults() {
     <section className="space-y-6">
       <h2 className="text-2xl md:text-3xl font-bold">Search Results</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {apartments?.map((apartment) => (
+        {apartments?.data?.map((apartment) => (
           <Card key={apartment._id} className="flex flex-col">
             <CardHeader className="p-0">
               <div className="relative aspect-video">
@@ -47,29 +47,29 @@ export async function ApartmentResults() {
               <div className="grid grid-cols-2 gap-2 text-sm text-muted-foreground mb-2">
                 <span className="flex items-center">
                   <DollarSign className="w-4 h-4 mr-1" />
-                  {apartment.price}/month
+                  {apartment.rental.price}/month
                 </span>
                 <span className="flex items-center">
                   <Bed className="w-4 h-4 mr-1" />
-                  {apartment.bedrooms} bed
+                  {apartment.specifications.bedrooms} bed
                 </span>
                 <span className="flex items-center">
                   <Bath className="w-4 h-4 mr-1" />
-                  {apartment.bathrooms} bath
+                  {apartment.specifications.bathrooms} bath
                 </span>
                 <span className="flex items-center">
                   <Square className="w-4 h-4 mr-1" />
-                  {apartment.squareFootage} sqft
+                  {apartment.specifications.squareFootage} sqft
                 </span>
               </div>
               <div className="flex flex-wrap gap-2 mb-4">
-                {apartment.petsAllowed && (
+                {apartment.policies.petsAllowed && (
                   <Badge variant="secondary" className="flex items-center">
                     <PawPrint className="w-3 h-3 mr-1" />
                     Pets Allowed
                   </Badge>
                 )}
-                {apartment.parkingSpaces && apartment.parkingSpaces > 0 && (
+                {apartment.policies.parkingSpaces && apartment.policies.parkingSpaces > 0 && (
                   <Badge variant="secondary" className="flex items-center">
                     <ParkingCircle className="w-3 h-3 mr-1" />
                     Parking

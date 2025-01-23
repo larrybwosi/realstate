@@ -1,45 +1,67 @@
+
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql" 
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id             String   @id @default(uuid()) 
-  name           String?
-  email          String?
-  emailVerified  Boolean?
-  image          String?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  role           String?
-  apartments     Apartment[] @relation("UserApartments")
-  cleaningSkills String[]
-  cleaningJobsRequested CleaningJob[] @relation("RequestedBy")
-  cleaningJobsAssigned CleaningJob[] @relation("AssignedTo")
-  accounts     Account[]
-  sessions     Session[]
+  id                    String               @id @default(cuid())
+  name                  String?
+  email                 String?              @unique
+  emailVerified         DateTime?
+  image                 String?
+  phoneNumber           String?
+  emergencyContact      String?
+  documents             Json?
+  preferredLanguage     String?
+  notificationPrefs     Json?
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @updatedAt
+  role                  String?              @default("tenant")
+  apartments            Apartment[]          @relation("UserApartments")
+  cleaningSkills        String[]
+  cleaningJobsRequested CleaningJob[]        @relation("RequestedBy")
+  cleaningJobsAssigned  CleaningJob[]        @relation("AssignedTo")
+  accounts              Account[]
+  sessions              Session[]
+  reviews               Review[]             @relation("UserReviews")
+  payments              Payment[]
+  maintenanceRequests   MaintenanceRequest[]
+  banned                Boolean?
+  banReason             String?
+  banExpires            DateTime?
+  ssoproviders          SsoProvider[]
+
+  username String?
+
+  @@map("user")
+  @@unique([username])
 }
 
 model Session {
-  id        String   @id @default(uuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  token     String
-  expiresAt DateTime
-  ipAddress String?
-  userAgent String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  token          String   @unique
+  expiresAt      DateTime
+  ipAddress      String?
+  userAgent      String?
+  lastActivity   DateTime @default(now())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  impersonatedBy String?
+
+  @@map("session")
 }
 
 model Account {
-  id                    String   @id @default(uuid())
+  id                    String    @id @default(cuid())
   userId                String
-  user                  User     @relation(fields: [userId], references: [id])
+  user                  User      @relation(fields: [userId], references: [id])
   accountId             String
   providerId            String
   accessToken           String?
@@ -48,110 +70,290 @@ model Account {
   refreshTokenExpiresAt DateTime?
   scope                 String?
   password              String?
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
-}
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
 
-model Verification {
-  id        String   @id @default(uuid())
-  identifier String
-  value     String
-  expiresAt DateTime
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  idToken String?
+
+  @@unique([providerId, accountId])
+  @@map("account")
 }
 
 model Apartment {
-  id              Int      @id @default(autoincrement())
-  title           String
-  slug            String   @unique
-  images          String[]
-  price           Int
-  squareFootage   Int
-  bedrooms        Int
-  bathrooms       Int
-  availableDate   DateTime
-  amenities       String[]
-  description     String?
-  floorPlan       String?
-  virtualTourUrl  String?
-  category        String?
-  featured        Boolean  @default(false)
-  location        Json?
-  parkingSpaces   Int?
-  petsAllowed     Boolean?
-  leaseTerms      String[]
-  nearbyAttractions String[]
-  courtId         Int?
-  court           Court?   @relation(fields: [courtId], references: [id])
-  floorNumber     Int?
-  apartmentNumber String?
-  bookings        Booking[]
-  submissions   ApartmentSubmission[]
-  cleaningJobs    CleaningJob[]
-  users           User[] @relation("UserApartments")
+  id                  Int                   @id @default(autoincrement())
+  title               String
+  slug                String                @unique
+  images              String[]
+  floorPlanImages     String[]
+  price               Int
+  squareFootage       Int
+  bedrooms            Int
+  bathrooms           Int
+  availableDate       DateTime
+  amenities           String[]
+  description         String?               @db.Text
+  floorPlan           String?
+  virtualTourUrl      String?
+  category            String?
+  featured            Boolean               @default(false)
+  location            Json? // Latitude, longitude, and full address
+  parkingSpaces       Int?
+  petsAllowed         Boolean?
+  petPolicy           String?               @db.Text
+  leaseTerms          String[]
+  nearbyAttractions   String[]
+  utilities           Json? // List of included/excluded utilities
+  securityDeposit     Int?
+  maintenanceFee      Int?
+  courtId             Int?
+  court               Court?                @relation(fields: [courtId], references: [id])
+  floorNumber         Int?
+  apartmentNumber     String?
+  status              String                @default("available") // available, occupied, maintenance, reserved
+  lastInspectionDate  DateTime?
+  energyRating        String?
+  furnished           Boolean               @default(false)
+  furnishingDetails   Json?
+  bookings            Booking[]
+  submissions         ApartmentSubmission[]
+  cleaningJobs        CleaningJob[]
+  users               User[]                @relation("UserApartments")
+  maintenanceRequests MaintenanceRequest[]
+  reviews             Review[]              @relation("ApartmentReviews")
 }
 
 model ApartmentSubmission {
-  id            Int      @id @default(autoincrement())
-  title         String
-  landlordName  String
-  landlordEmail String
-  images        String[]
-  price         Int
-  squareFootage Int
-  bedrooms      Int
-  bathrooms     Int
-  availableDate DateTime
-  amenities     String[]
-  description   String
-  address       String
-  status        String   @default("pending")
-  apartmentId   Int?
-  apartment     Apartment? @relation(fields: [apartmentId], references: [id])
+  id             Int        @id @default(autoincrement())
+  title          String
+  landlordName   String
+  landlordEmail  String
+  landlordPhone  String?
+  images         String[]
+  price          Int
+  squareFootage  Int
+  bedrooms       Int
+  bathrooms      Int
+  availableDate  DateTime
+  amenities      String[]
+  description    String     @db.Text
+  address        String
+  documents      String[] // Property documents, certificates
+  status         String     @default("pending")
+  submissionDate DateTime   @default(now())
+  reviewedAt     DateTime?
+  reviewedBy     String?
+  reviewNotes    String?    @db.Text
+  apartmentId    Int?
+  apartment      Apartment? @relation(fields: [apartmentId], references: [id])
 }
 
 model Booking {
-  id            Int      @id @default(autoincrement())
-  apartmentId   Int
-  apartment     Apartment @relation(fields: [apartmentId], references: [id])
-  startDate     DateTime
-  endDate       DateTime
-  depositAmount Int?
-  totalPrice    Int?
-  status        String   @default("pending")
+  id                 Int       @id @default(autoincrement())
+  apartmentId        Int
+  apartment          Apartment @relation(fields: [apartmentId], references: [id])
+  startDate          DateTime
+  endDate            DateTime
+  depositAmount      Int?
+  totalPrice         Int?
+  status             String    @default("pending")
+  bookingReference   String    @unique
+  specialRequests    String?   @db.Text
+  checkInTime        DateTime?
+  checkOutTime       DateTime?
+  numberOfOccupants  Int?
+  payments           Payment[]
+  documents          Json? // Signed agreements, proof of payment
+  cancellationReason String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
 }
 
 model CleaningJob {
-  id            Int      @id @default(autoincrement())
-  apartmentId   Int
-  apartment     Apartment @relation(fields: [apartmentId], references: [id])
-  requestedById String?
-  requestedBy   User?     @relation("RequestedBy", fields: [requestedById], references: [id])
-  assignedToId  String?
-  assignedTo    User?     @relation("AssignedTo", fields: [assignedToId], references: [id])
-  status        String   @default("requested")
-  tasks         String[]
-  scheduledDate DateTime?
-  duration      Int?
-  notes         String?
+  id               Int       @id @default(autoincrement())
+  apartmentId      Int
+  apartment        Apartment @relation(fields: [apartmentId], references: [id])
+  requestedById    String?
+  requestedBy      User?     @relation("RequestedBy", fields: [requestedById], references: [id])
+  assignedToId     String?
+  assignedTo       User?     @relation("AssignedTo", fields: [assignedToId], references: [id])
+  status           String    @default("requested")
+  tasks            String[]
+  scheduledDate    DateTime?
+  completedDate    DateTime?
+  duration         Int? // in minutes
+  notes            String?   @db.Text
+  rating           Int?
+  review           String?   @db.Text
+  price            Int?
+  paymentStatus    String?
+  serviceType      String? // regular, deep cleaning, move-in/out
+  cleaningProducts Boolean   @default(false)
+  priority         String    @default("normal")
+  photos           String[] // Before and after photos
+  payments         Payment[]
 }
 
 model CleaningService {
-  id          Int      @id @default(autoincrement())
-  name        String?
-  description String?
-  price       Int?
-  image       String?
+  id              Int      @id @default(autoincrement())
+  name            String?
+  description     String?  @db.Text
+  price           Int?
+  image           String?
+  duration        Int? // Expected duration in minutes
+  includedTasks   String[]
+  additionalTasks String[]
+  availability    Json? // Working hours, days
+  requirements    String[]
+  supplies        String[]
+  rating          Float?
+  active          Boolean  @default(true)
 }
 
 model Court {
-  id             Int      @id @default(autoincrement())
-  name           String
-  description    String?
-  image          String?
-  address        String?
-  totalFloors    Int?
-  totalApartments Int?
-  apartments     Apartment[]
+  id                 Int         @id @default(autoincrement())
+  name               String
+  description        String?     @db.Text
+  image              String?
+  images             String[]
+  address            String?
+  totalFloors        Int?
+  totalApartments    Int?
+  amenities          String[]
+  maintenanceContact String?
+  securityContact    String?
+  parkingCapacity    Int?
+  buildingRules      String?     @db.Text
+  apartments         Apartment[]
+  emergencyExits     Int?
+  yearBuilt          Int?
+  lastRenovated      DateTime?
+  accessControl      Boolean     @default(false)
+}
+
+model MaintenanceRequest {
+  id            Int       @id @default(autoincrement())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id])
+  apartmentId   Int
+  apartment     Apartment @relation(fields: [apartmentId], references: [id])
+  title         String
+  description   String    @db.Text
+  priority      String    @default("normal")
+  status        String    @default("pending")
+  category      String // plumbing, electrical, etc.
+  images        String[]
+  scheduledDate DateTime?
+  completedDate DateTime?
+  cost          Int?
+  notes         String?   @db.Text
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Review {
+  id          Int       @id @default(autoincrement())
+  userId      String
+  user        User      @relation("UserReviews", fields: [userId], references: [id])
+  apartmentId Int
+  apartment   Apartment @relation("ApartmentReviews", fields: [apartmentId], references: [id])
+  rating      Int
+  review      String    @db.Text
+  images      String[]
+  response    String?   @db.Text
+  status      String    @default("published")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Payment {
+  id            Int          @id @default(autoincrement())
+  userId        String
+  user          User         @relation(fields: [userId], references: [id])
+  amount        Int
+  currency      String       @default("USD")
+  status        String       @default("pending")
+  type          String // rent, deposit, cleaning, maintenance
+  method        String // credit card, bank transfer, etc.
+  bookingId     Int?
+  booking       Booking?     @relation(fields: [bookingId], references: [id])
+  cleaningJobId Int?
+  cleaningJob   CleaningJob? @relation(fields: [cleaningJobId], references: [id])
+  description   String?
+  receiptUrl    String?
+  transactionId String?      @unique
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+}
+
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("verification")
+}
+
+model SsoProvider {
+  id             String  @id
+  issuer         String
+  oidcConfig     String?
+  samlConfig     String?
+  userId         String?
+  user           User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  providerId     String
+  organizationId String?
+  domain         String
+
+  @@unique([providerId])
+  @@map("ssoProvider")
+}
+
+model OauthApplication {
+  id           String    @id
+  name         String?
+  icon         String?
+  metadata     String?
+  clientId     String?
+  clientSecret String?
+  redirectURLs String?
+  type         String?
+  disabled     Boolean?
+  userId       String?
+  createdAt    DateTime?
+  updatedAt    DateTime?
+
+  @@unique([clientId])
+  @@map("oauthApplication")
+}
+
+model OauthAccessToken {
+  id                    String    @id
+  accessToken           String?
+  refreshToken          String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  clientId              String?
+  userId                String?
+  scopes                String?
+  createdAt             DateTime?
+  updatedAt             DateTime?
+
+  @@unique([accessToken])
+  @@unique([refreshToken])
+  @@map("oauthAccessToken")
+}
+
+model OauthConsent {
+  id           String    @id
+  clientId     String?
+  userId       String?
+  scopes       String?
+  createdAt    DateTime?
+  updatedAt    DateTime?
+  consentGiven Boolean?
+
+  @@map("oauthConsent")
 }

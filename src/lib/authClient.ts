@@ -1,5 +1,5 @@
 import { createAuthClient } from "better-auth/react";
-import { oneTapClient } from "better-auth/client/plugins";
+import { oneTapClient, usernameClient, adminClient, multiSessionClient } from "better-auth/client/plugins";
 
 export const {
   signIn,
@@ -9,6 +9,9 @@ export const {
 } = createAuthClient({
   baseURL: process.env.BETTER_AUTH_URL,
   plugins: [
+    usernameClient(),
+    adminClient(),
+    multiSessionClient(),
     oneTapClient({
       clientId: process.env.ONE_TAP_CLIENT_ID!,
     }),

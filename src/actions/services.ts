@@ -1,5 +1,6 @@
 import { createClient, groq } from "next-sanity";
 import { apiVersion, dataset, projectId, } from "@/sanity/env";
+import { Apartment } from "@/types";
 
 const client = createClient({
   apiVersion,
@@ -14,48 +15,13 @@ const handleSanityError = (error: any) => {
   throw new Error("Failed to fetch data from Sanity."); 
 };
 
-export async function getFeaturedApartments() {
+export async function getFeaturedApartments(): Promise<Apartment[] | []> {
   try {
     const query = groq`*[_type == "apartment" && featured == true]`;
     return await client.fetch(query);
   } catch (error) {
     handleSanityError(error);
-  }
-}
-
-export async function getSimilarApartments(apartment: any) {
-  try {
-    if (!apartment?.category) return [];
-    const query = groq`
-      *[_type == "apartment" && category == $category && _id != $id][0...3]
-    `;
-    return await client.fetch(query, {
-      category: apartment.category,
-      id: apartment._id,
-    });
-  } catch (error) {
-    handleSanityError(error);
-  }
-}
-
-export async function getCourtWithApartments(courtId: string) {
-  try {
-    const query = groq`*[_type == "court" && _id == $courtId]{
-      ...,
-      apartments[]->{...}
-    }`;
-    return await client.fetch(query, { courtId });
-  } catch (error) {
-    handleSanityError(error);
-  }
-}
-
-export async function getCourts() {
-  try {
-    const query = groq`*[_type == "court"]`;
-    return await client.fetch(query);
-  } catch (error) {
-    handleSanityError(error);
+    return [];
   }
 }
 

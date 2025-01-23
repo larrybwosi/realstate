@@ -7,6 +7,7 @@ import { getFeaturedApartments } from '@/actions/services'
 
 export default async function Page() { 
   const featuredApartments = await getFeaturedApartments() 
+  console.log(featuredApartments[0]);
   return (
     <main className="min-h-screen">
       <Hero />

@@ -20,7 +20,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
-import { getApartment } from "@/actions";
 import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
 import {
@@ -36,6 +35,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { getApartment } from "@/actions/apartments";
+import { Apartment } from "@/types";
 
 const formSchema = z
   .object({
@@ -84,7 +85,7 @@ export default function BookingPage() {
   const calculateTotalPrice = () => {
     if (!startDate || !endDate || !apartment) return 0;
     const days = differenceInDays(endDate, startDate);
-    return days * apartment.price;
+    return days * apartment.rental?.price;
   };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -170,7 +171,7 @@ export default function BookingPage() {
             </div>
             <h2 className="text-2xl font-semibold mt-4 flex items-center">
               <DollarSign className="w-6 h-6 mr-2 text-green-500" />
-              {apartment.price}/month
+              {apartment.rental?.price}/month
             </h2>
             <p className="text-muted-foreground mt-2">
               {apartment.description}
@@ -224,7 +225,7 @@ export default function BookingPage() {
                             onSelect={field.onChange}
                             disabled={(date) =>
                               date < new Date() ||
-                              date > new Date(apartment.availableDate)
+                              date > new Date(apartment.rental?.availableDate)
                             }
                             initialFocus
                           />

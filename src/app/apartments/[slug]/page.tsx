@@ -1,4 +1,4 @@
-import { getApartment, getSimilarApartments } from '@/actions'
+import { getApartment, getSimilarApartments } from '@/actions/apartments';
 import { ApartmentDetails } from '@/components/apartment-details'
 import { SimilarApartments } from '@/components/similar-apartments'
 
@@ -8,7 +8,7 @@ export default async function ApartmentPage({ params }: { params: Params }) {
   const apartment = await getApartment(slug);
   const similarApartments = await getSimilarApartments(
     slug,
-    apartment.category
+    apartment?.category?.slug.current as string
   );
 
   return (

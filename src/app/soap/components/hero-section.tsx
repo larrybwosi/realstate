@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 export function HeroSection() {
   return (
     <section className="relative h-screen">
-      <video
+      {/* <video
         autoPlay
         loop
         muted
@@ -16,7 +16,7 @@ export function HeroSection() {
           src="https://player.vimeo.com/external/373797931.sd.mp4?s=38b8f6ef7e7e928a1c3d4a28a8b0fb61d4f1b398&profile_id=164&oauth2_token_id=57447761"
           type="video/mp4"
         />
-      </video>
+      </video> */}
 
       <div className="absolute inset-0 bg-black/30" />
 

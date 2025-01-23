@@ -6,27 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Bed, Bath, Expand, Calendar, Building2 } from "lucide-react";
 import { urlFor } from "@/sanity/lib/image";
 import { MotionDiv } from "./motion";
-
-interface Apartment {
-  _id: string;
-  title: string;
-  slug: { current: string };
-  images: { asset: { url: string } }[];
-  price: number;
-  squareFootage: number;
-  bedrooms: number;
-  bathrooms: number;
-  availableDate: string;
-  amenities: string[];
-  category: string;
-  featured: boolean;
-  court: {
-    _id: string;
-    name: string;
-  };
-  floorNumber: number;
-  apartmentNumber: string;
-}
+import { Apartment } from "@/types";
 
 interface ApartmentGridProps {
   apartments: Apartment[];
@@ -64,7 +44,7 @@ export function ApartmentGrid({ apartments }: ApartmentGridProps) {
                 <CardContent className="p-6">
                   <h3 className="text-xl font-semibold">{apartment?.title}</h3>
                   <p className="mt-2 text-2xl font-bold text-primary">
-                    ${apartment?.price.toLocaleString()}/mo
+                    ${apartment?.rental?.price?.toLocaleString()}/mo
                   </p>
                   <div className="mt-4 flex flex-wrap gap-2">
                     <Badge
@@ -72,23 +52,27 @@ export function ApartmentGrid({ apartments }: ApartmentGridProps) {
                       className="flex items-center gap-1"
                     >
                       <Bed className="h-3 w-3" />
-                      {apartment?.bedrooms}{" "}
-                      {apartment?.bedrooms === 1 ? "Bed" : "Beds"}
+                      {apartment?.specifications?.bedrooms}{" "}
+                      {apartment?.specifications?.bedrooms === 1
+                        ? "Bed"
+                        : "Beds"}
                     </Badge>
                     <Badge
                       variant="secondary"
                       className="flex items-center gap-1"
                     >
                       <Bath className="h-3 w-3" />
-                      {apartment?.bathrooms}{" "}
-                      {apartment?.bathrooms === 1 ? "Bath" : "Baths"}
+                      {apartment?.specifications?.bathrooms}{" "}
+                      {apartment?.specifications?.bathrooms === 1
+                        ? "Bath"
+                        : "Baths"}
                     </Badge>
                     <Badge
                       variant="secondary"
                       className="flex items-center gap-1"
                     >
                       <Expand className="h-3 w-3" />
-                      {apartment?.squareFootage} sqft
+                      {apartment?.specifications?.squareFootage} sqft
                     </Badge>
                     <Badge
                       variant="secondary"
@@ -101,7 +85,7 @@ export function ApartmentGrid({ apartments }: ApartmentGridProps) {
                   <div className="mt-4 flex items-center gap-1 text-sm text-muted-foreground">
                     <Calendar className="h-4 w-4" />
                     Available{" "}
-                    {new Date(apartment?.availableDate).toLocaleDateString()}
+                    {new Date(apartment?.rental?.availableDate).toLocaleDateString()}
                   </div>
                 </CardContent>
                 <CardFooter className="p-6 pt-0">

@@ -27,6 +27,7 @@ export const apartment = defineType({
   title: "Apartment",
   type: "document",
   fields: [
+    // Basic Information
     defineField({
       name: "title",
       title: "Title",
@@ -43,32 +44,85 @@ export const apartment = defineType({
       },
       validation: (Rule) => Rule.required(),
     }),
+
+    defineField({
+      name: "category",
+      title: "Category",
+      type: "reference",
+      to: [{ type: "category" }],
+      description: "The category this apartment belongs to.",
+    }),
+    
+    defineField({
+      name: "status",
+      title: "Status",
+      type: "string",
+      options: {
+        list: [
+          { title: "Available", value: "available" },
+          { title: "Rented", value: "rented" },
+          { title: "Under Maintenance", value: "maintenance" },
+          { title: "Reserved", value: "reserved" },
+        ],
+      },
+      validation: (Rule) => Rule.required(),
+    }),
+
+    // Court Reference
+    defineField({
+      name: "court",
+      title: "Court",
+      type: "reference",
+      to: [{ type: "court" }],
+    }),
+
+    // Location in Building
+    defineField({
+      name: "unit",
+      title: "Unit Information",
+      type: "object",
+      fields: [
+        defineField({
+          name: "floorNumber",
+          title: "Floor Number",
+          type: "number",
+          validation: (Rule) => Rule.required(),
+        }),
+        defineField({
+          name: "unitNumber",
+          title: "Unit Number",
+          type: "string",
+          validation: (Rule) => Rule.required(),
+        }),
+        defineField({
+          name: "wing",
+          title: "Wing/Section",
+          type: "string",
+        }),
+      ],
+    }),
+
+    // Media
     defineField({
       name: "mainImage",
       title: "Main Image",
       type: "image",
-      options: {
-        hotspot: true,
-      },
+      options: { hotspot: true },
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "images",
-      title: "Images",
+      title: "Gallery Images",
       type: "array",
       of: [
         {
           type: "image",
-          options: {
-            hotspot: true,
-          },
+          options: { hotspot: true },
           fields: [
-            // Fields for individual images
             defineField({
               name: "alt",
               title: "Alternative Text",
               type: "string",
-              description: "Important for SEO and accessibility",
             }),
             defineField({
               name: "caption",
@@ -81,41 +135,6 @@ export const apartment = defineType({
       validation: (Rule) => Rule.required().min(1),
     }),
     defineField({
-      name: "price",
-      title: "Price per Month",
-      type: "number",
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: "squareFootage",
-      title: "Square Footage",
-      type: "number",
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: "bedrooms",
-      title: "Bedrooms",
-      type: "number",
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: "bathrooms",
-      title: "Bathrooms",
-      type: "number",
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: "availableDate",
-      title: "Available Date",
-      type: "date",
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: "description",
-      title: "Description",
-      type: "text",
-    }),
-    defineField({
       name: "floorPlan",
       title: "Floor Plan",
       type: "image",
@@ -125,22 +144,99 @@ export const apartment = defineType({
       title: "Virtual Tour URL",
       type: "url",
     }),
+
+    // Physical Characteristics
     defineField({
-      name: "category",
-      title: "Category",
-      type: "string",
-      options: {
-        list: [
-          { title: "Family Size", value: "family" },
-          { title: "Single Room", value: "single" },
-          { title: "Luxury", value: "luxury" },
-          { title: "Student Housing", value: "student" },
-        ],
-      },
+      name: "specifications",
+      title: "Specifications",
+      type: "object",
+      fields: [
+        defineField({
+          name: "squareFootage",
+          title: "Square Footage",
+          type: "number",
+          validation: (Rule) => Rule.required().positive(),
+        }),
+        defineField({
+          name: "bedrooms",
+          title: "Bedrooms",
+          type: "number",
+          validation: (Rule) => Rule.required().positive(),
+        }),
+        defineField({
+          name: "bathrooms",
+          title: "Bathrooms",
+          type: "number",
+          validation: (Rule) => Rule.required().positive(),
+        }),
+        defineField({
+          name: "ceilingHeight",
+          title: "Ceiling Height (ft)",
+          type: "number",
+        }),
+        defineField({
+          name: "exposure",
+          title: "Exposure",
+          type: "string",
+          options: {
+            list: ["North", "South", "East", "West"],
+          },
+        }),
+      ],
     }),
+
+    // Rental Information
+    defineField({
+      name: "rental",
+      title: "Rental Information",
+      type: "object",
+      fields: [
+        defineField({
+          name: "price",
+          title: "Price per Month",
+          type: "number",
+          validation: (Rule) => Rule.required().positive(),
+        }),
+        defineField({
+          name: "deposit",
+          title: "Security Deposit",
+          type: "number",
+        }),
+        defineField({
+          name: "availableDate",
+          title: "Available Date",
+          type: "date",
+          validation: (Rule) => Rule.required(),
+        }),
+        defineField({
+          name: "minimumLeaseTerm",
+          title: "Minimum Lease Term (months)",
+          type: "number",
+        }),
+        defineField({
+          name: "utilities",
+          title: "Utilities Included",
+          type: "array",
+          of: [{ type: "string" }],
+          options: {
+            list: [
+              "Water",
+              "Electricity",
+              "Gas",
+              "Internet",
+              "Cable TV",
+              "Trash",
+              "Heat",
+            ].map((utility) => ({ title: utility, value: utility })),
+          },
+        }),
+      ],
+    }),
+
+    // Features and Amenities
     defineField({
       name: "amenities",
-      title: "Amenities",
+      title: "Unit Amenities",
       type: "array",
       of: [{ type: "string" }],
       options: {
@@ -150,54 +246,60 @@ export const apartment = defineType({
         })),
       },
     }),
-    defineField({
-      name: "featured",
-      title: "Featured",
-      type: "boolean",
-      initialValue: false,
-    }),
+
+    // Location
     defineField({
       name: "location",
       title: "Location",
       type: "geopoint",
+      validation: (Rule) => Rule.required(),
+    }),
+
+    defineField({
+      name: 'nearbyAttractions',
+      title: 'Nearby Attractions',
+      type: 'array',
+      of: [{ type: 'reference', to: { type: 'attraction' } }],
+    }),
+
+    // Additional Information
+    defineField({
+      name: "description",
+      title: "Description",
+      type: "text",
     }),
     defineField({
-      name: "parkingSpaces",
-      title: "Parking Spaces",
-      type: "number",
-    }),
-    defineField({
-      name: "petsAllowed",
-      title: "Pets Allowed",
-      type: "boolean",
-    }),
-    defineField({
-      name: "leaseTerms",
-      title: "Lease Terms",
+      name: "features",
+      title: "Special Features",
       type: "array",
       of: [{ type: "string" }],
     }),
     defineField({
-      name: "nearbyAttractions",
-      title: "Nearby Attractions",
-      type: "array",
-      of: [{ type: "string" }],
-    }),
-    defineField({
-      name: "court",
-      title: "Court",
-      type: "reference",
-      to: [{ type: "court" }],
-    }),
-    defineField({
-      name: "floorNumber",
-      title: "Floor Number",
-      type: "number",
-    }),
-    defineField({
-      name: "apartmentNumber",
-      title: "Apartment Number",
-      type: "string",
+      name: "policies",
+      title: "Policies",
+      type: "object",
+      fields: [
+        defineField({
+          name: "petsAllowed",
+          title: "Pets Allowed",
+          type: "boolean",
+        }),
+        defineField({
+          name: "petPolicy",
+          title: "Pet Policy Details",
+          type: "text",
+        }),
+        defineField({
+          name: "smokingAllowed",
+          title: "Smoking Allowed",
+          type: "boolean",
+        }),
+        defineField({
+          name: "parkingSpaces",
+          title: "Parking Spaces",
+          type: "number",
+        }),
+      ],
     }),
   ],
 });

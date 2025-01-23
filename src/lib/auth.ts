@@ -6,6 +6,7 @@ import {
   bearer,
   multiSession,
   oidcProvider,
+  username
 } from "better-auth/plugins";
 import { sso } from "better-auth/plugins/sso";
 import { nextCookies } from "better-auth/next-js";
@@ -37,6 +38,7 @@ export const auth = betterAuth({
     bearer(),
     multiSession({ maximumSessions: 8 }),
     nextCookies(),
+    username(),
     oidcProvider({
       loginPage: "/login",
     }),

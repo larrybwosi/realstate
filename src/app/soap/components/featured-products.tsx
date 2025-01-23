@@ -13,25 +13,29 @@ const products = [
     id: 1,
     name: "Lavender Dreams",
     price: 12.99,
-    image: "https://images.unsplash.com/photo-1600857062241-98e5dba7f214",
+    image:
+      "https://i.pinimg.com/736x/eb/63/3c/eb633c8f82ff13d422d7d39a3030539e.jpg",
   },
   {
     id: 2,
     name: "Citrus Burst",
     price: 11.99,
-    image: "https://images.unsplash.com/photo-1602910344008-22f323cc1817",
+    image:
+      "https://i.pinimg.com/236x/04/1f/b5/041fb5e36d8ea81d3b7676c93ffb5ba7.jpg",
   },
   {
     id: 3,
     name: "Rose Garden",
     price: 13.99,
-    image: "https://images.unsplash.com/photo-1600857454225-9967c3e57a78",
+    image:
+      "https://i.pinimg.com/236x/57/b5/f3/57b5f3ac51ba3066c1da8f7e4e311b2f.jpg",
   },
   {
     id: 4,
     name: "Ocean Breeze",
     price: 12.99,
-    image: "https://images.unsplash.com/photo-1600857454198-75df8df2f678",
+    image:
+      "https://i.pinimg.com/236x/b1/6c/2a/b16c2a78d1592ade5df59196a79b36b9.jpg",
   },
 ];
 
