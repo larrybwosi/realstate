@@ -3,6 +3,7 @@ import { CourtCard } from "@/components/court-card";
 
 export default async function CourtsPage() {
   const courts = await getCourts();
+  
   return (
     <main className="min-h-screen py-12">
       <div className="container mx-auto px-4">

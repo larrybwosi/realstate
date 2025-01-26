@@ -1,4 +1,4 @@
-'use cache';
+'use server';
 
 import { sanityFetch } from "@/sanity/lib/live";
 import { Apartment, Court } from "@/types";
