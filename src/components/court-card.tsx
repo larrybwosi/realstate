@@ -83,7 +83,7 @@ export function CourtCard({ court }: { court: Court }) {
             </span>
           </div>
           <Button asChild variant="outline" size="sm">
-            <Link href={`/courts/${court?._id}`}>View Apartments</Link>
+            <Link href={`/courts/${court?.slug?.current}`}>View Apartments</Link>
           </Button>
         </div>
       </div>

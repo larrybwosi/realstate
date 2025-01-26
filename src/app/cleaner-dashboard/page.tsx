@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { motion } from "framer-motion";
+// import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,12 +12,12 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
+  // CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
+// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+// import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Form,
@@ -37,7 +37,7 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "@/components/ui/use-toast";
-import { fetchAvailableJobs, fetchCleanerData, updateCleanerProfile } from "@/actions/cleaning";
+import { fetchCleanerData, updateCleanerProfile } from "@/actions/cleaning";
 import { useSession } from "@/lib/authClient";
 
 
@@ -60,8 +60,7 @@ const formSchema = z.object({
 });
 
 export default function CleanerDashboard() {
-  const [cleaner, setCleaner] = useState(null);
-  const [availableJobs, setAvailableJobs] = useState([]);
+  const [cleaner, setCleaner] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const {data: session} = useSession()
 
@@ -88,7 +87,7 @@ useEffect(() => {
       success,
       data: cleanerData,
       error,
-    } = await fetchCleanerData(cleanerId||"");
+    } = await fetchCleanerData(cleanerId || "");
     if (success) {
       setCleaner(cleanerData);
       form.reset(cleanerData);
@@ -101,25 +100,10 @@ useEffect(() => {
       });
     }
 
-    const {
-      success: jobsSuccess,
-      data: jobsData,
-      error: jobsError,
-    } = await fetchAvailableJobs();
-    if (jobsSuccess) {
-      setAvailableJobs(jobsData);
-    } else {
-      console.error(jobsError);
-      toast({
-        title: "Error",
-        description: "Failed to fetch available jobs. Please try again.",
-        variant: "destructive",
-      });
-    }
     setIsLoading(false);
   }
   fetchData();
-}, []);
+}, [session?.user.id,form]);
 
 async function onSubmit(values: z.infer<typeof formSchema>) {
   if(!cleaner) return
@@ -162,7 +146,7 @@ async function onSubmit(values: z.infer<typeof formSchema>) {
 
   return (
     <div className="container mx-auto py-10">
-      <motion.div
+      {/* <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -214,7 +198,7 @@ async function onSubmit(values: z.infer<typeof formSchema>) {
             </div>
           </CardContent>
         </Card>
-      </motion.div>
+      </motion.div> */}
 
       <Tabs defaultValue="profile" className="space-y-4">
         <TabsList>
@@ -478,7 +462,7 @@ async function onSubmit(values: z.infer<typeof formSchema>) {
                 Jobs that match your skills and availability
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            {/* <CardContent>
               {availableJobs.length === 0 ? (
                 <p>No jobs available at the moment. Check back later!</p>
               ) : (
@@ -516,7 +500,7 @@ async function onSubmit(values: z.infer<typeof formSchema>) {
                         )}
                       </CardContent>
                       <CardFooter>
-                        <Button onClick={() => applyForJob(job._id)}>
+                        <Button onClick={() => applyForJob(job._id, '')}>
                           Apply for Job
                         </Button>
                       </CardFooter>
@@ -524,7 +508,7 @@ async function onSubmit(values: z.infer<typeof formSchema>) {
                   ))}
                 </div>
               )}
-            </CardContent>
+            </CardContent> */}
           </Card>
         </TabsContent>
       </Tabs>

@@ -1,12 +1,10 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import {
-  oneTap,
   admin,
   multiSession,
   username
 } from "better-auth/plugins";
-import { sso } from "better-auth/plugins/sso";
 import { nextCookies } from "better-auth/next-js";
 
 import { db } from "./db";
@@ -31,8 +29,6 @@ export const auth = betterAuth({
     },
   },
   plugins: [
-    sso(),
-    oneTap(),
     admin(),
     multiSession({ maximumSessions: 8 }),
     username(),

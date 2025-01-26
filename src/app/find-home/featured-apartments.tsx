@@ -41,19 +41,19 @@ export async function FeaturedApartments() {
               <div className="grid grid-cols-2 gap-2 text-sm text-muted-foreground mb-2">
                 <span className="flex items-center">
                   <DollarSign className="w-4 h-4 mr-1" />
-                  {apartment.price}/month
+                  {apartment.rental?.price}/month
                 </span>
                 <span className="flex items-center">
                   <Bed className="w-4 h-4 mr-1" />
-                  {apartment.bedrooms} bed
+                  {apartment.specifications?.bedrooms} bed
                 </span>
                 <span className="flex items-center">
                   <Bath className="w-4 h-4 mr-1" />
-                  {apartment.bathrooms} bath
+                  {apartment.specifications?.bathrooms} bath
                 </span>
                 <span className="flex items-center">
                   <Home className="w-4 h-4 mr-1" />
-                  {apartment.squareFootage} sqft
+                  {apartment.specifications?.squareFootage} sqft
                 </span>
               </div>
               <p className="text-sm text-muted-foreground line-clamp-3">

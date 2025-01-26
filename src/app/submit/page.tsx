@@ -12,6 +12,7 @@ import { BasicInfo } from "./steps/basic-info";
 import { ApartmentDetails } from "./steps/apartment-details";
 import { Amenities } from "./steps/amenities";
 import { Images } from "./steps/images";
+import { Building2 } from "lucide-react";
 
 const steps = [
   {
@@ -60,15 +61,19 @@ export default function SubmitApartmentPage() {
   const CurrentStepComponent = steps[currentStep].component;
 
   return (
-    <div className="container mx-auto py-10 px-4 sm:px-6 lg:px-8 min-h-screen flex flex-col justify-center">
-      <Card className="w-full max-w-6xl mx-auto shadow-lg">
-        <CardHeader className="bg-gradient-to-r from-blue-500 to-purple-600 text-white dark:from-blue-600 dark:to-purple-700">
-          <CardTitle className="text-3xl sm:text-4xl font-bold">
-            Submit Your Apartment
-          </CardTitle>
-          <CardDescription className="text-gray-100 text-lg mt-2">
-            Fill out the form below to list your apartment for rent. Provide as
-            much detail as possible to attract potential tenants.
+    <div className="dark:bg-zinc-900 mx-auto py-10 px-2 lg:px-8 min-h-screen flex flex-col justify-center">
+      <Card className="w-full max-w-6xl mx-auto shadow-lg dark:bg-zinc-900">
+        <CardHeader className="space-y-2">
+          <div className="flex items-center space-x-2">
+            <Building2 className="h-6 w-6 text-blue-500 dark:text-blue-400" />
+            <CardTitle className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
+              Submit Your Apartment for Review
+            </CardTitle>
+          </div>
+          <CardDescription className="text-zinc-600 dark:text-zinc-400">
+            Complete the form below to have your apartment featured on our
+            website. Please provide detailed information and high-quality images
+            to showcase your property.
           </CardDescription>
         </CardHeader>
         <CardContent className="mt-6">

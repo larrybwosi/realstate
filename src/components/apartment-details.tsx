@@ -21,9 +21,9 @@ import { IconPool } from "@tabler/icons-react";
 
 export function ApartmentDetails({ apartment }: { apartment: Apartment }) {
   // Use the apartment's location if available, otherwise fallback to mock location
-  const location = apartment.location
-    ? apartment.location
-    : { lat: "40.716452", lng: "-73.781798" };
+  // const location = apartment.location
+  //   ? apartment.location
+  //   : { lat: "40.716452", lng: "-73.781798" };
 
 
   return (

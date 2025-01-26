@@ -8,21 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Bed, Bath, Expand, Star, Heart } from 'lucide-react'
 import { urlFor } from '@/sanity/lib/image'
 import { MotionDiv } from './motion'
-
-interface Apartment {
-  _id: string
-  title: string
-  mainImage: { asset: { url: string } }
-  slug: { current: string }
-  images: { asset: { url: string } }[]
-  price: number
-  squareFootage: number
-  bedrooms: number
-  bathrooms: number
-  rating: number
-  featured: boolean
-  isSaved: boolean
-}
+import { Apartment } from '@/types'
 
 interface FeaturedApartmentsProps {
   apartments: Apartment[]
@@ -76,13 +62,13 @@ export function FeaturedApartments({ apartments }: FeaturedApartmentsProps) {
                       className="absolute top-2 left-2 bg-white/80 hover:bg-white"
                       onClick={() => toggleSave(apartment._id)}
                     >
-                      <Heart
+                      {/* <Heart
                         className={`h-5 w-5 ${
                           apartment?.isSaved
                             ? "fill-red-500 text-red-500"
                             : "text-gray-500"
                         }`}
-                      />
+                      /> */}
                     </Button>
                   </div>
                   <CardContent className="p-6">
@@ -94,7 +80,7 @@ export function FeaturedApartments({ apartments }: FeaturedApartmentsProps) {
                         <Star
                           key={i}
                           className={`h-5 w-5 ${
-                            i < apartment.rating
+                            i < apartment?.rating
                               ? "text-yellow-400 fill-current"
                               : "text-gray-300"
                           }`}
@@ -105,7 +91,7 @@ export function FeaturedApartments({ apartments }: FeaturedApartmentsProps) {
                       </span>
                     </div>
                     <p className="text-2xl font-bold text-primary mb-4">
-                      ${apartment?.price.toLocaleString()}/mo
+                      ${apartment?.rental?.price.toLocaleString()}/mo
                     </p>
                     <div className="flex flex-wrap gap-4">
                       <Badge
@@ -113,23 +99,27 @@ export function FeaturedApartments({ apartments }: FeaturedApartmentsProps) {
                         className="flex items-center gap-1"
                       >
                         <Bed className="h-4 w-4" />
-                        {apartment?.bedrooms}{" "}
-                        {apartment?.bedrooms === 1 ? "Bed" : "Beds"}
+                        {apartment?.specifications?.bedrooms}{" "}
+                        {apartment?.specifications?.bedrooms === 1
+                          ? "Bed"
+                          : "Beds"}
                       </Badge>
                       <Badge
                         variant="secondary"
                         className="flex items-center gap-1"
                       >
                         <Bath className="h-4 w-4" />
-                        {apartment?.bathrooms}{" "}
-                        {apartment?.bathrooms === 1 ? "Bath" : "Baths"}
+                        {apartment?.specifications?.bathrooms}{" "}
+                        {apartment?.specifications?.bathrooms === 1
+                          ? "Bath"
+                          : "Baths"}
                       </Badge>
                       <Badge
                         variant="secondary"
                         className="flex items-center gap-1"
                       >
                         <Expand className="h-4 w-4" />
-                        {apartment?.squareFootage} sqft
+                        {apartment?.specifications?.squareFootage} sqft
                       </Badge>
                     </div>
                   </CardContent>

@@ -3,10 +3,8 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { format } from "date-fns";
 import { CalendarIcon, MapPin, Home, CheckCircle } from "lucide-react";
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -43,6 +41,8 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "@/components/ui/use-toast";
 import { saveCleaningRequest } from "@/actions/saveCleaningRequest";
+import { MotionDiv } from "@/components/motion";
+import { z } from "zod";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -142,7 +142,7 @@ export default function BookCleaningPage() {
   };
 
   return (
-    <motion.div
+    <MotionDiv
       className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 transition-colors duration-200"
       variants={containerVariants}
       initial="hidden"
@@ -162,7 +162,7 @@ export default function BookCleaningPage() {
         <CardContent className="mt-6">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <motion.div
+              <MotionDiv
                 className="grid grid-cols-1 md:grid-cols-2 gap-6"
                 variants={itemVariants}
               >
@@ -201,9 +201,9 @@ export default function BookCleaningPage() {
                     </FormItem>
                   )}
                 />
-              </motion.div>
+              </MotionDiv>
 
-              <motion.div
+              <MotionDiv
                 className="grid grid-cols-1 md:grid-cols-2 gap-6"
                 variants={itemVariants}
               >
@@ -244,9 +244,9 @@ export default function BookCleaningPage() {
                     </FormItem>
                   )}
                 />
-              </motion.div>
+              </MotionDiv>
 
-              <motion.div variants={itemVariants}>
+              <MotionDiv variants={itemVariants}>
                 <FormField
                   control={form.control}
                   name="locationDescription"
@@ -268,9 +268,9 @@ export default function BookCleaningPage() {
                     </FormItem>
                   )}
                 />
-              </motion.div>
+              </MotionDiv>
 
-              <motion.div
+              <MotionDiv
                 className="grid grid-cols-1 md:grid-cols-2 gap-6"
                 variants={itemVariants}
               >
@@ -350,9 +350,9 @@ export default function BookCleaningPage() {
                     )}
                   />
                 </div>
-              </motion.div>
+              </MotionDiv>
 
-              <motion.div
+              <MotionDiv
                 className="grid grid-cols-1 md:grid-cols-2 gap-6"
                 variants={itemVariants}
               >
@@ -414,9 +414,9 @@ export default function BookCleaningPage() {
                     </FormItem>
                   )}
                 />
-              </motion.div>
+              </MotionDiv>
 
-              <motion.div variants={itemVariants}>
+              <MotionDiv variants={itemVariants}>
                 <FormField
                   control={form.control}
                   name="outsideCleaningServices"
@@ -473,9 +473,9 @@ export default function BookCleaningPage() {
                     </FormItem>
                   )}
                 />
-              </motion.div>
+              </MotionDiv>
 
-              <motion.div
+              <MotionDiv
                 className="grid grid-cols-1 md:grid-cols-2 gap-6"
                 variants={itemVariants}
               >
@@ -555,9 +555,9 @@ export default function BookCleaningPage() {
                     </FormItem>
                   )}
                 />
-              </motion.div>
+              </MotionDiv>
 
-              <motion.div variants={itemVariants}>
+              <MotionDiv variants={itemVariants}>
                 <FormField
                   control={form.control}
                   name="specialInstructions"
@@ -579,9 +579,9 @@ export default function BookCleaningPage() {
                     </FormItem>
                   )}
                 />
-              </motion.div>
+              </MotionDiv>
 
-              <motion.div variants={itemVariants}>
+              <MotionDiv variants={itemVariants}>
                 <Button
                   type="submit"
                   className={cn(
@@ -621,11 +621,11 @@ export default function BookCleaningPage() {
                     </div>
                   )}
                 </Button>
-              </motion.div>
+              </MotionDiv>
             </form>
           </Form>
         </CardContent>
       </Card>
-    </motion.div>
+    </MotionDiv>
   );
 }

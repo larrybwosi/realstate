@@ -1,4 +1,4 @@
-'use server';
+'use cache';
 
 import { sanityFetch } from "@/sanity/lib/live";
 import { Apartment, Court } from "@/types";
@@ -264,7 +264,7 @@ interface CourtWithApartments extends Court {
 export async function getCourtWithApartments(id: string): Promise<CourtWithApartments> {
 
   const res = await sanityFetch({
-    query: `*[_type == "court" && _id == $id][0] {
+    query: `*[_type == "court" && slug.current == $id][0] {
       _id,
       _type,
       name,
@@ -328,6 +328,7 @@ export async function getCourts():Promise<Court[]> {
       name,
       description,
       mainImage,
+      slug,
       images[] {
         asset->,
         alt,
@@ -339,16 +340,8 @@ export async function getCourts():Promise<Court[]> {
       location,
       address,
       buildingAmenities,
-      management {
-        companyName,
-        contactPerson,
-        phone,
-        email,
-        officeHours
-      },
-      "availableApartments": count(*[_type == "apartment" && references(^._id) && !defined(tenant)])
     }`,
   });
 
-  return res.data
+  return res?.data
 }
