@@ -63,13 +63,14 @@ export async function ApartmentResults() {
                 </span>
               </div>
               <div className="flex flex-wrap gap-2 mb-4">
-                {apartment.policies.petsAllowed && (
+                {apartment.policies?.petsAllowed && (
                   <Badge variant="secondary" className="flex items-center">
                     <PawPrint className="w-3 h-3 mr-1" />
                     Pets Allowed
                   </Badge>
                 )}
-                {apartment.policies.parkingSpaces && apartment.policies.parkingSpaces > 0 && (
+                {apartment.policies?.parkingSpaces &&
+                apartment.policies?.parkingSpaces > 0 && (
                   <Badge variant="secondary" className="flex items-center">
                     <ParkingCircle className="w-3 h-3 mr-1" />
                     Parking
