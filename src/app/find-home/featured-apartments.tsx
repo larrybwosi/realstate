@@ -13,8 +13,11 @@ import { Star, DollarSign, Bed, Bath, Home } from "lucide-react";
 import { getFeaturedApartments } from "@/actions/services";
 import { urlFor } from "@/sanity/lib/image";
 
-export async function FeaturedApartments() {
-  const featuredApartments = await getFeaturedApartments();
+export default async function FeaturedApartments({
+  featuredApartments,
+}: {
+  featuredApartments: Awaited<ReturnType<typeof getFeaturedApartments>>;
+}) {
 
   return (
     <section className="space-y-6">

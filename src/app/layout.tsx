@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Navigation } from '@/components/navigation'
 import { ToastProvider } from '@/components/ui/toast'
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -32,7 +33,9 @@ export default function RootLayout({
           <div className="mb-12">
             <Navigation />
           </div>
-          <ToastProvider>{children}</ToastProvider>
+          <ToastProvider>
+            <NuqsAdapter>{children}</NuqsAdapter>
+          </ToastProvider>
         </ThemeProvider>
       </body>
     </html>

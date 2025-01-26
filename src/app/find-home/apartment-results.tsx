@@ -18,16 +18,19 @@ import {
   PawPrint,
 } from "lucide-react";
 import { urlFor } from "@/sanity/lib/image";
-import { getApartments } from "@/actions/apartments";
+import { Apartment } from "@/types";
 
-export async function ApartmentResults() {
-  const apartments = await getApartments({});
+export async function ApartmentResults({
+  apartments,
+}: {
+  apartments: Apartment[] | undefined;
+}) {
 
   return (
     <section className="space-y-6">
       <h2 className="text-2xl md:text-3xl font-bold">Search Results</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {apartments?.data?.map((apartment) => (
+        {apartments?.map((apartment) => (
           <Card key={apartment._id} className="flex flex-col">
             <CardHeader className="p-0">
               <div className="relative aspect-video">

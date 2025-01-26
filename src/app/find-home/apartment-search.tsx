@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useQueryState } from "nuqs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,66 +13,63 @@ import {
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
-import { Search, DollarSign, PawPrint, } from "lucide-react";
+import { Search, DollarSign, PawPrint } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-// import { getCourts } from "@/lib/utils";
-// import { useEffect,  } from "react";
 
 export function ApartmentSearch() {
-  const [priceRange, setPriceRange] = useState([0, 5000]);
-  const [petsAllowed, setPetsAllowed] = useState(false);
-    // const [filteredApartments, setFilteredApartments] = useState(apartments)
-    // const [bedrooms, setBedrooms] = useState<string>('all')
-    // const [category, setCategory] = useState<string>('all')
-    // const [searchTerm, setSearchTerm] = useState('')
-    // const [courtFilter, setCourtFilter] = useState<string>('all')
+  // State for filters with URL synchronization using nuqs
+  const [priceRange, setPriceRange] = useQueryState("priceRange", {
+    defaultValue: [0, 5000],
+    parse: (value) => value.split(",").map(Number),
+    serialize: (value) => value.join(","),
+  });
+  const [petsAllowed, setPetsAllowed] = useQueryState("petsAllowed", {
+    defaultValue: false,
+    parse: (value) => value === "true",
+    serialize: (value) => value.toString(),
+  });
+  const [bedrooms, setBedrooms] = useQueryState("bedrooms", {
+    defaultValue: "all",
+  });
+  const [category, setCategory] = useQueryState("category", {
+    defaultValue: "all",
+  });
+  const [searchTerm, setSearchTerm] = useQueryState("search", {
+    defaultValue: "",
+  });
   
-    // const courts = getCourts()
-  
-    // useEffect(() => {
-    //   const filtered = apartments.filter((apartment) => {
-    //     const matchesPrice = apartment.price >= priceRange[0] && apartment.price <= priceRange[1]
-    //     const matchesBedrooms = bedrooms === 'all' || apartment.bedrooms === Number(bedrooms)
-    //     const matchesCategory = category === 'all' || apartment.category === category
-    //     const matchesCourt = courtFilter === 'all' || apartment.court.name === courtFilter
-    //     const matchesSearch = apartment.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    //       apartment.amenities.some(amenity => amenity.toLowerCase().includes(searchTerm.toLowerCase())) ||
-    //       apartment.court.name.toLowerCase().includes(searchTerm.toLowerCase())
-  
-    //     return matchesPrice && matchesBedrooms && matchesCategory && matchesCourt && matchesSearch
-    //   })
-  
-    //   setFilteredApartments(filtered)
-    // }, [apartments, priceRange, bedrooms, category, courtFilter, searchTerm])
-
-  const handleSearch = (event: React.FormEvent) => {
-    event.preventDefault();
-    // Implement search logic here
-  };
-
   return (
     <Card className="w-full">
       <CardHeader>
         <CardTitle className="text-2xl font-bold">Search Apartments</CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSearch} className="space-y-6">
+        <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Location Search */}
             <div className="space-y-2">
               <Label htmlFor="location">Location</Label>
               <Input
                 id="location"
                 placeholder="Enter city or zip code"
                 className="w-full"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
+
+            {/* Category Filter */}
             <div className="space-y-2">
               <Label htmlFor="category">Category</Label>
-              <Select>
+              <Select
+                value={category}
+                onValueChange={(value) => setCategory(value)}
+              >
                 <SelectTrigger id="category" className="w-full">
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="all">All</SelectItem>
                   <SelectItem value="family">Family</SelectItem>
                   <SelectItem value="single">Single</SelectItem>
                   <SelectItem value="luxury">Luxury</SelectItem>
@@ -80,26 +77,19 @@ export function ApartmentSearch() {
                 </SelectContent>
               </Select>
             </div>
+
+            {/* Bedrooms Filter */}
             <div className="space-y-2">
               <Label htmlFor="bedrooms">Bedrooms</Label>
-              <Select>
+              <Select
+                value={bedrooms}
+                onValueChange={(value) => setBedrooms(value)}
+              >
                 <SelectTrigger id="bedrooms" className="w-full">
                   <SelectValue placeholder="Select bedrooms" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="1">1</SelectItem>
-                  <SelectItem value="2">2</SelectItem>
-                  <SelectItem value="3">3+</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="bathrooms">Bathrooms</Label>
-              <Select>
-                <SelectTrigger id="bathrooms" className="w-full">
-                  <SelectValue placeholder="Select bathrooms" />
-                </SelectTrigger>
-                <SelectContent>
+                  <SelectItem value="all">All</SelectItem>
                   <SelectItem value="1">1</SelectItem>
                   <SelectItem value="2">2</SelectItem>
                   <SelectItem value="3">3+</SelectItem>
@@ -107,6 +97,8 @@ export function ApartmentSearch() {
               </Select>
             </div>
           </div>
+
+          {/* Price Range Slider */}
           <div className="space-y-2">
             <Label>Price Range</Label>
             <div className="flex items-center space-x-4">
@@ -116,7 +108,7 @@ export function ApartmentSearch() {
                 max={10000}
                 step={100}
                 value={priceRange}
-                onValueChange={setPriceRange}
+                onValueChange={(value) => setPriceRange(value)}
                 className="flex-grow"
               />
             </div>
@@ -125,11 +117,13 @@ export function ApartmentSearch() {
               <span>${priceRange[1]}</span>
             </div>
           </div>
+
+          {/* Pets Allowed Switch */}
           <div className="flex items-center space-x-2">
             <Switch
               id="pets-allowed"
               checked={petsAllowed}
-              onCheckedChange={setPetsAllowed}
+              onCheckedChange={(value) => setPetsAllowed(value)}
             />
             <Label
               htmlFor="pets-allowed"
@@ -139,11 +133,13 @@ export function ApartmentSearch() {
               <span>Pets Allowed</span>
             </Label>
           </div>
+
+          {/* Search Button */}
           <Button type="submit" className="w-full">
             <Search className="w-4 h-4 mr-2" />
             Search Apartments
           </Button>
-        </form>
+        </div>
       </CardContent>
     </Card>
   );
