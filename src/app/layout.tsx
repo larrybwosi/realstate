@@ -10,17 +10,39 @@ import { SanityLive } from '@/sanity/lib/live'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Cheap City',
-  description: 'Find the perfect apartment in your city',
-  keywords:['apartment', 'kaimosi', 'house', 'nestlink', 'kafu', 'apartment kaimosi', 'home', 'location', 'cheap'],
+  title: "Cheap City",
+  description: "Your Gateway to Global Rentals",
+  keywords: [
+    "apartment",
+    "kaimosi",
+    "house",
+    "nestlink",
+    "kafu",
+    "apartment kaimosi",
+    "home",
+    "location",
+    "cheap home",
+    "cheap houses",
+    "cheap apartment",
+    "cheap rental",
+    "rent",
+    "rental",
+    "rental house",
+    "rental apartment",
+    "rental kaimosi",
+    "rental nestlink",
+    "rental kafu",
+    "cheap city",
+    "rental city",
+  ],
   alternates: {
-    canonical: '/',
+    canonical: "/",
     languages: {
-      en: '/en',
-      ki: '/ki',
+      en: "/en",
+      ki: "/ki",
     },
   },
-}
+};
 
 export default function RootLayout({
   children,
