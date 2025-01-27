@@ -9,74 +9,30 @@ datasource db {
 }
 
 model User {
-  id                    String               @id @default(cuid())
-  name                  String?
-  email                 String?              @unique
-  emailVerified         DateTime?
-  image                 String?
-  phoneNumber           String?
-  emergencyContact      String?
-  documents             Json?
-  preferredLanguage     String?
-  notificationPrefs     Json?
-  createdAt             DateTime             @default(now())
-  updatedAt             DateTime             @updatedAt
-  role                  String?              @default("tenant")
-  apartments            Apartment[]          @relation("UserApartments")
-  cleaningSkills        String[]
-  cleaningJobsRequested CleaningJob[]        @relation("RequestedBy")
-  cleaningJobsAssigned  CleaningJob[]        @relation("AssignedTo")
-  accounts              Account[]
-  sessions              Session[]
-  reviews               Review[]             @relation("UserReviews")
-  payments              Payment[]
-  maintenanceRequests   MaintenanceRequest[]
-  banned                Boolean?
-  banReason             String?
-  banExpires            DateTime?
-  ssoproviders          SsoProvider[]
+  id                String    @id @default(cuid())
+  name              String?
+  email             String?   @unique
+  emailVerified     DateTime?
+  image             String?
+  phoneNumber       String?
+  emergencyContact  String?
+  documents         Json?
+  preferredLanguage String?
+  notificationPrefs Json?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  role              String?   @default("tenant")
 
   username String?
 
+  banned     Boolean?
+  banReason  String?
+  banExpires DateTime?
+  sessions   Session[]
+  accounts   Account[]
+
   @@map("user")
   @@unique([username])
-}
-
-model Session {
-  id             String   @id @default(cuid())
-  userId         String
-  user           User     @relation(fields: [userId], references: [id])
-  token          String   @unique
-  expiresAt      DateTime
-  ipAddress      String?
-  userAgent      String?
-  lastActivity   DateTime @default(now())
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  impersonatedBy String?
-
-  @@map("session")
-}
-
-model Account {
-  id                    String    @id @default(cuid())
-  userId                String
-  user                  User      @relation(fields: [userId], references: [id])
-  accountId             String
-  providerId            String
-  accessToken           String?
-  refreshToken          String?
-  accessTokenExpiresAt  DateTime?
-  refreshTokenExpiresAt DateTime?
-  scope                 String?
-  password              String?
-  createdAt             DateTime  @default(now())
-  updatedAt             DateTime  @updatedAt
-
-  idToken String?
-
-  @@unique([providerId, accountId])
-  @@map("account")
 }
 
 model Apartment {
@@ -117,7 +73,6 @@ model Apartment {
   bookings            Booking[]
   submissions         ApartmentSubmission[]
   cleaningJobs        CleaningJob[]
-  users               User[]                @relation("UserApartments")
   maintenanceRequests MaintenanceRequest[]
   reviews             Review[]              @relation("ApartmentReviews")
 }
@@ -173,9 +128,7 @@ model CleaningJob {
   apartmentId      Int
   apartment        Apartment @relation(fields: [apartmentId], references: [id])
   requestedById    String?
-  requestedBy      User?     @relation("RequestedBy", fields: [requestedById], references: [id])
   assignedToId     String?
-  assignedTo       User?     @relation("AssignedTo", fields: [assignedToId], references: [id])
   status           String    @default("requested")
   tasks            String[]
   scheduledDate    DateTime?
@@ -233,7 +186,6 @@ model Court {
 model MaintenanceRequest {
   id            Int       @id @default(autoincrement())
   userId        String
-  user          User      @relation(fields: [userId], references: [id])
   apartmentId   Int
   apartment     Apartment @relation(fields: [apartmentId], references: [id])
   title         String
@@ -253,7 +205,6 @@ model MaintenanceRequest {
 model Review {
   id          Int       @id @default(autoincrement())
   userId      String
-  user        User      @relation("UserReviews", fields: [userId], references: [id])
   apartmentId Int
   apartment   Apartment @relation("ApartmentReviews", fields: [apartmentId], references: [id])
   rating      Int
@@ -268,7 +219,6 @@ model Review {
 model Payment {
   id            Int          @id @default(autoincrement())
   userId        String
-  user          User         @relation(fields: [userId], references: [id])
   amount        Int
   currency      String       @default("USD")
   status        String       @default("pending")
@@ -285,6 +235,41 @@ model Payment {
   updatedAt     DateTime     @updatedAt
 }
 
+model Session {
+  id             String   @id
+  expiresAt      DateTime
+  token          String
+  createdAt      DateTime
+  updatedAt      DateTime
+  ipAddress      String?
+  userAgent      String?
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  impersonatedBy String?
+
+  @@unique([token])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime
+  updatedAt             DateTime
+
+  @@map("account")
+}
+
 model Verification {
   id         String    @id
   identifier String
@@ -294,66 +279,4 @@ model Verification {
   updatedAt  DateTime?
 
   @@map("verification")
-}
-
-model SsoProvider {
-  id             String  @id
-  issuer         String
-  oidcConfig     String?
-  samlConfig     String?
-  userId         String?
-  user           User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  providerId     String
-  organizationId String?
-  domain         String
-
-  @@unique([providerId])
-  @@map("ssoProvider")
-}
-
-model OauthApplication {
-  id           String    @id
-  name         String?
-  icon         String?
-  metadata     String?
-  clientId     String?
-  clientSecret String?
-  redirectURLs String?
-  type         String?
-  disabled     Boolean?
-  userId       String?
-  createdAt    DateTime?
-  updatedAt    DateTime?
-
-  @@unique([clientId])
-  @@map("oauthApplication")
-}
-
-model OauthAccessToken {
-  id                    String    @id
-  accessToken           String?
-  refreshToken          String?
-  accessTokenExpiresAt  DateTime?
-  refreshTokenExpiresAt DateTime?
-  clientId              String?
-  userId                String?
-  scopes                String?
-  createdAt             DateTime?
-  updatedAt             DateTime?
-
-  @@unique([accessToken])
-  @@unique([refreshToken])
-  @@map("oauthAccessToken")
-}
-
-model OauthConsent {
-  id           String    @id
-  clientId     String?
-  userId       String?
-  scopes       String?
-  createdAt    DateTime?
-  updatedAt    DateTime?
-  consentGiven Boolean?
-
-  @@map("oauthConsent")
 }

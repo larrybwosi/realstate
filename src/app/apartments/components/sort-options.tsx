@@ -1,5 +1,4 @@
 "use client";
-import { useRouter } from "next/navigation";
 import {
   Select,
   SelectContent,
@@ -7,18 +6,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useQueryState } from "nuqs";
 
 export function SortOptions({ defaultValue }: { defaultValue?: string }) {
-  const router = useRouter();
-
-  const handleSort = (value: string) => {
-    const params = new URLSearchParams(window.location.search);
-    params.set("sort", value);
-    router.replace(`/apartments?${params.toString()}`);
-  };
+  const [sort, setSort] = useQueryState("sort");
 
   return (
-    <Select defaultValue={defaultValue} onValueChange={handleSort}>
+    <Select value={sort || defaultValue || ""} onValueChange={setSort}>
       <SelectTrigger className="w-[180px]">
         <SelectValue placeholder="Sort By" />
       </SelectTrigger>
@@ -27,6 +21,7 @@ export function SortOptions({ defaultValue }: { defaultValue?: string }) {
         <SelectItem value="price-desc">Price: High to Low</SelectItem>
         <SelectItem value="rating-desc">Rating: High to Low</SelectItem>
         <SelectItem value="newest">Newest</SelectItem>
+        <SelectItem value="featured">Featured First</SelectItem>
       </SelectContent>
     </Select>
   );

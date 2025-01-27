@@ -27,7 +27,6 @@ export default function SigninForm() {
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>(
     {}
   );
-  console.log(validationErrors)
 
   const schema = z.object({
     email: z.string().email("Invalid email format"),

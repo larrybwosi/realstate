@@ -1,5 +1,5 @@
 import { createAuthClient } from "better-auth/react";
-import {  usernameClient, adminClient, multiSessionClient } from "better-auth/client/plugins";
+import {  adminClient, multiSessionClient } from "better-auth/client/plugins";
 
 export const {
   signIn,
@@ -9,7 +9,6 @@ export const {
 } = createAuthClient({
   baseURL: process.env.BETTER_AUTH_URL,
   plugins: [
-    usernameClient(),
     adminClient(),
     multiSessionClient()
   ],

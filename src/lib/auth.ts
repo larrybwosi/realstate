@@ -30,10 +30,23 @@ export const auth = betterAuth({
   },
   plugins: [
     admin(),
-    multiSession({ maximumSessions: 8 }),
-    username(),
-    nextCookies(),
+    multiSession({ maximumSessions: 8 })
   ],
   secret: process.env.BETTER_AUTH_SECRET,
-  appName: "Cheap City"
+  appName: "Cheap City",
+  account: {
+    accountLinking: {
+      enabled: true,
+      providers: ["google", "github"],
+      trustedProviders: ["google", "github"],
+    },
+  },
+  session: {
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+    updateAge: 24 * 60 * 60, // 24 hours
+    cookieCache: {
+      enabled: true,
+      maxAge: 5 * 60, // Cache duration in seconds
+    },
+  },
 });

@@ -3,17 +3,36 @@ import { SearchBar } from "./components/search-bar";
 import { FilterOptions } from "./components/filter-options";
 import { SortOptions } from "./components/sort-options";
 import { Pagination } from "./components/pagination";
-import { getApartments } from "@/actions/apartments";
+import { getApartments, getCategories } from "@/actions/apartments";
+import { connection } from "next/server";
+import { Metadata } from "next";
 
+export const metadata: Metadata ={
+  title:'Cheap City | Apartments',
+  description:'Find the best apartment with your prefrences',
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Cheap City | Apartments',
+    description: 'Find the best apartment with your prefrences',
+    images: [
+      {
+        url: 'https://www.cheapcity.com/images/cheapcity.png',
+        width: 800,
+        height: 600,
+      },
+    ]
+  }
+}
 
 export default async function ApartmentsPage({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const { query, sort, minPrice, maxPrice, bedrooms, bathrooms, page } =
+  const { query, sort, minPrice, maxPrice, bedrooms, bathrooms, page, exposure, categoryType, amenities, features, furnished, petsAllowed, status } =
     await searchParams;
 
+    await connection()
   const apartments = await getApartments({
     query: query as string,
     sort: sort as string,
@@ -22,8 +41,16 @@ export default async function ApartmentsPage({
     bedrooms: bedrooms ? Number(bedrooms) : undefined,
     bathrooms: bathrooms ? Number(bathrooms) : undefined,
     page: page ? Number(page) : 1,
+    exposure: exposure as string,
+    // amenities: amenities as string[],
+    // features: features as string[],
+    // categoryType: categoryType as string,
+    // furnished: furnished === "true",
+    // petsAllowed: petsAllowed === "true",
+    // status: status as string,
   });
 
+  const categories = await getCategories();
   return (
     <main className="min-h-screen py-12">
       <div className="container mx-auto px-4">
@@ -53,6 +80,8 @@ export default async function ApartmentsPage({
                   bedrooms: bedrooms as string,
                   bathrooms: bathrooms as string,
                 }}
+                categories={categories}
+                amenityOptions={[]}
               />
             </div>
           </div>

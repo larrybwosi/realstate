@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/components/theme-provider'
 import { Navigation } from '@/components/navigation'
 import { ToastProvider } from '@/components/ui/toast'
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { SanityLive } from '@/sanity/lib/live'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -34,7 +35,10 @@ export default function RootLayout({
             <Navigation />
           </div>
           <ToastProvider>
-            <NuqsAdapter>{children}</NuqsAdapter>
+            <NuqsAdapter>
+              <SanityLive/>
+              {children}
+            </NuqsAdapter>
           </ToastProvider>
         </ThemeProvider>
       </body>

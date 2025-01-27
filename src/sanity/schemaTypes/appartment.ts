@@ -301,5 +301,16 @@ export const apartment = defineType({
         }),
       ],
     }),
+    defineField({
+      name: "additionalInformation",
+      title: "Additional Information",
+      type: "array",
+      of: [{ type: "string" }],
+    }),
+    defineField({
+      name: "featured",
+      title: "Featured",
+      type: "boolean",
+    })
   ],
 });

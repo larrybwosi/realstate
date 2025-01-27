@@ -1,7 +1,9 @@
-'use server';
+'use cache';
 
+import { client } from "@/sanity/lib/client";
 import { sanityFetch } from "@/sanity/lib/live";
-import { Apartment, Court } from "@/types";
+import { Apartment, Category, Court } from "@/types";
+import { groq } from "next-sanity";
 
 export async function getApartment(slug: string):Promise<Apartment> {
   const res = await sanityFetch({
@@ -51,6 +53,23 @@ export async function getApartment(slug: string):Promise<Apartment> {
   return res.data;
 }
 
+export type FilterOptions = {
+  query?: string;
+  sort?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  bedrooms?: number;
+  bathrooms?: number;
+  categoryType?: string;
+  amenities?: string[];
+  exposure?: string;
+  status?: string;
+  features?: string[];
+  page?: number;
+  petsAllowed?: boolean;
+  furnished?: boolean;
+};
+
 export async function getApartments({
   query,
   sort,
@@ -58,44 +77,87 @@ export async function getApartments({
   maxPrice,
   bedrooms,
   bathrooms,
+  categoryType,
+  amenities,
+  exposure,
+  status,
+  features,
+  petsAllowed,
+  furnished,
   page = 1,
-}: {
-  query?: string;
-  sort?: string;
-  minPrice?: number;
-  maxPrice?: number;
-  bedrooms?: number;
-  bathrooms?: number;
-  page?: number;
-}): Promise<{ data: Apartment[]; total: number }> {
-  const itemsPerPage = 12; // Number of items per page
+}: FilterOptions): Promise<{ data: Apartment[]; total: number }> {
+  const itemsPerPage = 12;
   const start = (page - 1) * itemsPerPage;
   const end = start + itemsPerPage;
 
-  // Base query
+  // Base query with category join
   let groqQuery = `*[_type == "apartment"`;
 
-  // Add search query
+  // Add filters
+  const filters = [];
+
   if (query) {
-    groqQuery += ` && (title match "${query}*" || description match "${query}*" || court->name match "${query}*")`;
+    filters.push(`(
+      title match "${query}*" || 
+      description match "${query}*" || 
+      court->name match "${query}*"
+    )`);
   }
 
-  // Add price filter
   if (minPrice !== undefined || maxPrice !== undefined) {
-    groqQuery += ` && rental.price >= ${minPrice || 0} && rental.price <= ${maxPrice || 1000000}`;
+    filters.push(
+      `rental.price >= ${minPrice || 0} && rental.price <= ${maxPrice || 1000000}`
+    );
   }
 
-  // Add bedrooms filter
   if (bedrooms !== undefined) {
-    groqQuery += ` && specifications.bedrooms >= ${bedrooms}`;
+    filters.push(`specifications.bedrooms >= ${bedrooms}`);
   }
 
-  // Add bathrooms filter
   if (bathrooms !== undefined) {
-    groqQuery += ` && specifications.bathrooms >= ${bathrooms}`;
+    filters.push(`specifications.bathrooms >= ${bathrooms}`);
   }
 
-  // Close the query
+  if (categoryType) {
+    filters.push(`category->type == "${categoryType}"`);
+  }
+
+  if (amenities && amenities.length > 0) {
+    const amenityFilters = amenities
+      .map((a) => `"${a}" in amenities`)
+      .join(" && ");
+    filters.push(`(${amenityFilters})`);
+  }
+
+  if (exposure) {
+    filters.push(`specifications.exposure == "${exposure}"`);
+  }
+
+  if (status) {
+    filters.push(`status == "${status}"`);
+  }
+
+  if (features && features.length > 0) {
+    const featureFilters = features
+      .map((f) => `"${f}" in features`)
+      .join(" && ");
+    filters.push(`(${featureFilters})`);
+  }
+
+  if (petsAllowed !== undefined) {
+    filters.push(`policies.petsAllowed == ${petsAllowed}`);
+  }
+
+  if (furnished !== undefined) {
+    filters.push(`"Furnished" in amenities == ${furnished}`);
+  }
+
+  // Add filters to query
+  if (filters.length > 0) {
+    groqQuery += ` && ${filters.join(" && ")}`;
+  }
+
+  // Close the base query
   groqQuery += `] {
     _id,
     _type,
@@ -109,6 +171,13 @@ export async function getApartments({
       totalFloors,
       totalApartments,
       address
+    },
+    category->{
+      _id,
+      name,
+      type,
+      selectOptions,
+      icon
     },
     unit {
       floorNumber,
@@ -143,7 +212,6 @@ export async function getApartments({
       smokingAllowed,
       parkingSpaces
     },
-    category,
     featured,
     rating,
     _createdAt
@@ -164,6 +232,9 @@ export async function getApartments({
       case "newest":
         groqQuery += ` | order(_createdAt desc)`;
         break;
+      case "featured":
+        groqQuery += ` | order(featured desc, _createdAt desc)`;
+        break;
       default:
         groqQuery += ` | order(_createdAt desc)`;
         break;
@@ -172,9 +243,9 @@ export async function getApartments({
 
   // Fetch data
   const res = await sanityFetch({ query: groqQuery });
-
+  
   // Paginate results
-  const paginatedResults = res.data?.slice(start, end);
+  const paginatedResults = res.data;
 
   return {
     data: paginatedResults,
@@ -256,6 +327,22 @@ export async function getSimilarApartments(
   });
 
   return res.data;
+}
+
+export async function getCategories (): Promise<Category[]> {
+  const res = await sanityFetch({
+    query: `*[_type == "category"]`,
+  });
+  return res.data;
+}
+export async function getFeaturedApartments(): Promise<Apartment[] | []> {
+  try {
+    const query = groq`*[_type == "apartment" && featured == true]`;
+    return await client.fetch(query);
+  } catch (error) {
+    console.warn(error);
+    return [];
+  }
 }
 
 interface CourtWithApartments extends Court {
