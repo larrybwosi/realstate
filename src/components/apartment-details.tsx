@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -11,52 +10,51 @@ import {
   Star,
   Wifi,
   Dumbbell,
-  ShoppingCart,
-  School,
-  Hotel,
+  Construction,
+  Home,
+  TreePine,
+  WashingMachine,
+  DoorOpen,
+  Container,
+  ParkingCircle,
+  Square,
+  Globe,
+  ShieldCheck,
+  Package,
+  Wind,
 } from "lucide-react";
-import { urlFor } from "@/sanity/lib/image";
 import { Apartment } from "@/types";
-import { IconPool } from "@tabler/icons-react";
+import { IconElevator, IconPool, IconWheelchair } from "@tabler/icons-react";
+import ApartmentImages from "./apartment-images";
 
+const amenityIcons: Record<string, React.ElementType> = {
+  "Air Conditioning": Wind,
+  Balcony: Expand,
+  Dishwasher: Container,
+  Elevator: IconElevator,
+  "Fitness Center": Dumbbell,
+  Furnished: Home,
+  Garage: ParkingCircle,
+  Garden: TreePine,
+  "Hardwood Floors": Square,
+  "In-unit Laundry": WashingMachine,
+  Internet: Globe,
+  Parking: Car,
+  "Pet-friendly": Paw,
+  Pool: IconPool,
+  "Security System": ShieldCheck,
+  Storage: Package,
+  "Walk-in Closet": DoorOpen,
+  "Washer/Dryer": WashingMachine,
+  "Wheelchair Accessible": IconWheelchair,
+  "Wi-Fi": Wifi,
+};
 export function ApartmentDetails({ apartment }: { apartment: Apartment }) {
-  // Use the apartment's location if available, otherwise fallback to mock location
-  // const location = apartment.location
-  //   ? apartment.location
-  //   : { lat: "40.716452", lng: "-73.781798" };
-
 
   return (
     <div className="grid gap-8 md:grid-cols-2">
       {/* Image Section */}
-      <div>
-        <div className="aspect-[16/9] relative mb-4 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-          <Image
-            src={urlFor(apartment.mainImage.asset)
-              .width(600)
-              .format("webp")
-              .url()}
-            alt={apartment.title}
-            fill
-            className="object-cover"
-          />
-        </div>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          {apartment?.images?.map((image, index: number) => (
-            <div
-              key={index}
-              className="aspect-square relative rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300"
-            >
-              <Image
-                src={urlFor(image.asset).width(300).format("webp").url()}
-                alt={image.asset.caption}
-                fill
-                className="object-cover"
-              />
-            </div>
-          ))}
-        </div>
-      </div>
+      <ApartmentImages apartment={apartment} />
 
       {/* Details Section */}
       <div>
@@ -159,24 +157,22 @@ export function ApartmentDetails({ apartment }: { apartment: Apartment }) {
         )}
 
         {/* Amenities */}
-        <h2 className="text-xl font-bold mb-2 text-gray-900 dark:text-gray-100">
-          Amenities
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-          {apartment.amenities?.map((amenity: string) => (
-            <div
-              key={amenity}
-              className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors duration-200"
-            >
-              {amenity === "Wi-Fi" && <Wifi className="h-4 w-4" />}
-              {amenity === "Pool" && <IconPool className="h-4 w-4" />}
-              {amenity === "Gym" && <Dumbbell className="h-4 w-4" />}
-              {amenity === "Shopping" && <ShoppingCart className="h-4 w-4" />}
-              {amenity === "School" && <School className="h-4 w-4" />}
-              {amenity === "Restaurant" && <Hotel className="h-4 w-4" />}
-              <span>{amenity}</span>
-            </div>
-          ))}
+        <div>
+          <h2 className="text-xl font-bold mb-3 text-gray-900 dark:text-gray-100">Amenities</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {apartment.amenities?.map((amenity: string) => {
+              const IconComponent = amenityIcons[amenity] || Construction;
+              return (
+                <div
+                  key={amenity}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  <IconComponent className="h-5 w-5 text-primary" />
+                  <span className="text-gray-700 dark:text-gray-300 text-sm">{amenity}</span>
+                </div>
+              );
+            })}
+          </div>
         </div>
 
         {/* Location */}
@@ -185,7 +181,7 @@ export function ApartmentDetails({ apartment }: { apartment: Apartment }) {
         </h2>
         <div className="aspect-[16/9] relative mb-6 rounded-lg overflow-hidden shadow-lg">
           <iframe
-          // 40.678680, -73.947036
+            // 40.678680, -73.947036
             src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d162936.64871471454!2d-74.09311810728148!3d40.63903948764293!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY!5e0!3m2!1sen!2sus!4v1737635680665!5m2!1sen!2sus`}
             width="100%"
             height="100%"

@@ -84,11 +84,11 @@ export async function getApartments({
   features,
   petsAllowed,
   furnished,
-  page = 1,
+  // page = 1,
 }: FilterOptions): Promise<{ data: Apartment[]; total: number }> {
-  const itemsPerPage = 12;
-  const start = (page - 1) * itemsPerPage;
-  const end = start + itemsPerPage;
+  // const itemsPerPage = 12;
+  // const start = (page - 1) * itemsPerPage;
+  // const end = start + itemsPerPage;
 
   // Base query with category join
   let groqQuery = `*[_type == "apartment"`;

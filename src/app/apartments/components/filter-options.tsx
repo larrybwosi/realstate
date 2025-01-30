@@ -82,7 +82,7 @@ export function FilterOptions({
   };
 
   return (
-    <form className="space-y-6">
+    <div className="space-y-6">
       <div>
         <Label>Category Type</Label>
         <Select value={categoryType || ""} onValueChange={setCategoryType}>
@@ -220,6 +220,6 @@ export function FilterOptions({
       >
         Reset Filters
       </Button>
-    </form>
+    </div>
   );
 }

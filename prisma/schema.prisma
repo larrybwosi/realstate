@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -17,7 +16,6 @@ model User {
   phoneNumber       String?
   emergencyContact  String?
   documents         Json?
-  preferredLanguage String?
   notificationPrefs Json?
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
@@ -58,7 +56,7 @@ model Apartment {
   petPolicy           String?               @db.Text
   leaseTerms          String[]
   nearbyAttractions   String[]
-  utilities           Json? // List of included/excluded utilities
+  utilities           Json?
   securityDeposit     Int?
   maintenanceFee      Int?
   courtId             Int?
@@ -101,26 +99,77 @@ model ApartmentSubmission {
   apartmentId    Int?
   apartment      Apartment? @relation(fields: [apartmentId], references: [id])
 }
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  FAILED
+  CANCELLED
+}
+
+enum PaymentType {
+  rent
+  deposit
+  fee
+}
+
+enum PaymentStatus {
+  PENDING
+  CONFIRMED
+  FAILED
+  PROCESSING
+}
+
+enum PaymentMethod {
+  mpesa
+  card
+  bank
+}
 
 model Booking {
-  id                 Int       @id @default(autoincrement())
+  id                 Int           @id @default(autoincrement())
   apartmentId        Int
-  apartment          Apartment @relation(fields: [apartmentId], references: [id])
+  apartment          Apartment     @relation(fields: [apartmentId], references: [id])
   startDate          DateTime
   endDate            DateTime
-  depositAmount      Int?
-  totalPrice         Int?
-  status             String    @default("pending")
-  bookingReference   String    @unique
-  specialRequests    String?   @db.Text
-  checkInTime        DateTime?
-  checkOutTime       DateTime?
-  numberOfOccupants  Int?
+  paymentType        PaymentType   @default(rent)
+  isRecurring        Boolean       @default(false)
+  status             BookingStatus @default(PENDING)
+  confirmationCode   String?       @db.VarChar(6)
+  mpesaReceiptNumber String?       @unique
+  phoneNumber        String        @db.VarChar(12) // 2547XXXXXXXX
+  totalAmount        Int
+  checkoutId         String?       @unique
+  nextPaymentDate    DateTime?
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
   payments           Payment[]
-  documents          Json? // Signed agreements, proof of payment
-  cancellationReason String?
-  createdAt          DateTime  @default(now())
-  updatedAt          DateTime  @updatedAt
+
+  @@index([checkoutId])
+  @@index([status])
+  @@map("bookings")
+}
+
+model Payment {
+  id            Int            @id @default(autoincrement())
+  amount        Int
+  currency      String         @default("KES")
+  status        PaymentStatus  @default(PENDING)
+  type          PaymentType
+  method        PaymentMethod  @default(mpesa)
+  checkoutId    String?        @unique
+  mpesaReceipt  String?        @unique
+  description   String?
+  phoneNumber   String         @db.VarChar(12)
+  bookingId     Int
+  booking       Booking        @relation(fields: [bookingId], references: [id])
+  transactionId String?        @unique
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([checkoutId])
+  @@index([status])
+  @@index([transactionId])
+  @@map("payments")
 }
 
 model CleaningJob {
@@ -143,7 +192,6 @@ model CleaningJob {
   cleaningProducts Boolean   @default(false)
   priority         String    @default("normal")
   photos           String[] // Before and after photos
-  payments         Payment[]
 }
 
 model CleaningService {
@@ -214,25 +262,6 @@ model Review {
   status      String    @default("published")
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-}
-
-model Payment {
-  id            Int          @id @default(autoincrement())
-  userId        String
-  amount        Int
-  currency      String       @default("USD")
-  status        String       @default("pending")
-  type          String // rent, deposit, cleaning, maintenance
-  method        String // credit card, bank transfer, etc.
-  bookingId     Int?
-  booking       Booking?     @relation(fields: [bookingId], references: [id])
-  cleaningJobId Int?
-  cleaningJob   CleaningJob? @relation(fields: [cleaningJobId], references: [id])
-  description   String?
-  receiptUrl    String?
-  transactionId String?      @unique
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
 }
 
 model Session {

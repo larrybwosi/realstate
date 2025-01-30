@@ -29,7 +29,9 @@ export default async function ApartmentsPage({
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const { query, sort, minPrice, maxPrice, bedrooms, bathrooms, page, exposure, categoryType, amenities, features, furnished, petsAllowed, status } =
+  const { query, sort, minPrice, maxPrice, bedrooms, bathrooms, page, exposure,
+    //  categoryType, amenities, features, furnished, petsAllowed, status 
+    } =
     await searchParams;
 
     await connection()

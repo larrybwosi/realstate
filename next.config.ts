@@ -27,6 +27,11 @@ const nextConfig = {
         hostname: "cdn.sanity.io",
         port: "",
       },
+      {
+        protocol: "https",
+        hostname: "i.pinimg.com",
+        port: "",
+      },
     ],
   },
   typescript: {

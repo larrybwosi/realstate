@@ -1,11 +1,5 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import {
-  admin,
-  multiSession,
-  username
-} from "better-auth/plugins";
-import { nextCookies } from "better-auth/next-js";
 
 import { db } from "./db";
 
@@ -28,10 +22,6 @@ export const auth = betterAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     },
   },
-  plugins: [
-    admin(),
-    multiSession({ maximumSessions: 8 })
-  ],
   secret: process.env.BETTER_AUTH_SECRET,
   appName: "Cheap City",
   account: {

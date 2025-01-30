@@ -32,11 +32,11 @@ export async function generateMetadata(
 
   const apartment = await getApartment(slug);
   return {
-    title: 'Cheap City | ' + apartment.title,
+    title: "Cheap City | " + apartment.title,
     description: apartment.description,
     twitter: {
-      card: 'summary_large_image',
-      title: 'Cheap City | ' + apartment.title,
+      card: "summary_large_image",
+      title: "Cheap City | " + apartment.title,
       description: apartment.description,
       images: [
         {
@@ -44,11 +44,13 @@ export async function generateMetadata(
           width: 800,
           height: 600,
         },
-      ]
-    }
+      ],
+    },
+    keywords: [apartment.title, apartment.description, apartment.slug, "cheap", 'apartment'],
   };
 }
  
+
 export default async function ApartmentPage({ params }: { params: Params }) {
   const { slug } = await params;
   const apartment = await getApartment(slug);
