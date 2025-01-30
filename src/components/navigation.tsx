@@ -94,7 +94,7 @@ export function Navigation() {
       animate="visible"
       className={`fixed w-full top-0 z-50 transition-all duration-500 ${
         scrolled
-          ? "bg-background/90 dark:bg-background/80 backdrop-blur-lg shadow-sm"
+          ? "bg-background/90 dark:bg-background/80 backdrop-blur-lg shadow-xs"
           : "bg-background/80 dark:bg-background/90 backdrop-blur-md"
       }`}
     >
@@ -106,7 +106,7 @@ export function Navigation() {
               whileTap={{ scale: 0.98 }}
               className="flex items-center gap-2"
             >
-              <span className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+              <span className="text-2xl font-bold bg-linear-to-r from-primary to-primary/70 bg-clip-text text-transparent">
                 Cheap City
               </span>
               <MotionDiv
@@ -144,7 +144,7 @@ export function Navigation() {
                       variant={item.isSpecial ? "default" : "ghost"}
                       className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium ${
                         item.isSpecial
-                          ? "bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-lg shadow-primary/20 hover:shadow-primary/30"
+                          ? "bg-linear-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-lg shadow-primary/20 hover:shadow-primary/30"
                           : "hover:bg-primary/10 dark:hover:bg-primary/20"
                       } transition-all duration-300`}
                     >
@@ -228,7 +228,7 @@ export function Navigation() {
                         variant={item.isSpecial ? "default" : "ghost"}
                         className={`w-full justify-start gap-3 h-12 rounded-lg px-4 ${
                           item.isSpecial
-                            ? "bg-gradient-to-r from-primary to-primary/90"
+                            ? "bg-linear-to-r from-primary to-primary/90"
                             : ""
                         }`}
                       >

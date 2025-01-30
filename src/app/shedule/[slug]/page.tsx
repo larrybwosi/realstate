@@ -10,11 +10,11 @@ export default async function ApartmentTourScheduler({ params }: { params: Param
   const apartmentDetails = await getApartment(slug);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-zinc-50 via-blue-50 to-zinc-100 dark:from-zinc-900 dark:via-blue-900/20 dark:to-zinc-800 p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-linear-to-br from-zinc-50 via-blue-50 to-zinc-100 dark:from-zinc-900 dark:via-blue-900/20 dark:to-zinc-800 p-4 sm:p-6 lg:p-8">
       <div className="max-w-6xl mx-auto">
         <div className="space-y-6">
           {/* Enhanced Header Section */}
-          <div className="text-center space-y-4 p-6 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 dark:from-blue-500/20 dark:via-purple-500/20 dark:to-pink-500/20 rounded-2xl backdrop-blur-sm">
+          <div className="text-center space-y-4 p-6 bg-linear-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 dark:from-blue-500/20 dark:via-purple-500/20 dark:to-pink-500/20 rounded-2xl backdrop-blur-xs">
             <div className="inline-block p-3 bg-white dark:bg-zinc-800 rounded-full shadow-xl">
               <Home className="h-8 w-8 text-blue-500 dark:text-blue-400" />
             </div>

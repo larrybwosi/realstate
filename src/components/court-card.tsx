@@ -9,15 +9,15 @@ import { Court } from "@/types";
 export function CourtCard({ court }: { court: Court }) {
   
   return (
-    <div className="group relative overflow-hidden rounded-xl border bg-card shadow-sm transition-all hover:shadow-md dark:border-gray-800">
-      <div className="aspect-[16/9] relative">
+    <div className="group relative overflow-hidden rounded-xl border bg-card shadow-xs transition-all hover:shadow-md dark:border-gray-800">
+      <div className="aspect-16/9 relative">
         <Image
           src={urlFor(court.mainImage).width(500).format("webp").url()}
           alt={court.name}
           fill
           className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
       </div>
 
       <div className="p-6">

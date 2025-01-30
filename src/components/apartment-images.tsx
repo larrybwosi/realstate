@@ -13,7 +13,7 @@ export default function ApartmentImages({
   const [selectedImage, setSelectedImage] = useState(0);
   return (
     <div className="space-y-4">
-      <div className="aspect-[16/9] relative rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+      <div className="aspect-16/9 relative rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
         <Image
           src={
             selectedImage === 0

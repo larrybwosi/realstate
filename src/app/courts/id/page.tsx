@@ -121,7 +121,7 @@ const ApartmentDetails = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 p-4 md:p-6 lg:p-8">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 p-4 md:p-6 lg:p-8">
       <motion.div
         className="max-w-7xl mx-auto"
         variants={containerVariants}
@@ -163,7 +163,7 @@ const ApartmentDetails = () => {
           variants={itemVariants}
           className="relative rounded-3xl overflow-hidden mb-8 bg-slate-200 dark:bg-slate-700"
         >
-          <div className="aspect-[16/9] relative overflow-hidden">
+          <div className="aspect-16/9 relative overflow-hidden">
             <AnimatePresence mode="wait">
               <motion.img
                 key={selectedImageIndex}
@@ -177,7 +177,7 @@ const ApartmentDetails = () => {
               />
             </AnimatePresence>
           </div>
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 bg-black/50 backdrop-blur-sm rounded-full p-2">
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 bg-black/50 backdrop-blur-xs rounded-full p-2">
             {buildingDetails.images.map((_, index) => (
               <button
                 key={index}

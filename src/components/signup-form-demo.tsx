@@ -155,7 +155,7 @@ export default function SigninForm() {
         </div>
 
         <button
-          className="relative group/btn w-full bg-gradient-to-br from-black to-neutral-600 dark:from-zinc-900 dark:to-zinc-900 rounded-md h-10 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset] transition-all duration-200 hover:scale-[1.02]"
+          className="relative group/btn w-full bg-linear-to-br from-black to-neutral-600 dark:from-zinc-900 dark:to-zinc-900 rounded-md h-10 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset] transition-all duration-200 hover:scale-[1.02]"
           type="submit"
         >
           Sign In &rarr;
@@ -224,7 +224,7 @@ const SocialButton = ({
   <button
     type="button"
     onClick={onClick}
-    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-md bg-neutral-50 dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 shadow-sm hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors duration-200 border border-neutral-200 dark:border-neutral-800"
+    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-md bg-neutral-50 dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 shadow-xs hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors duration-200 border border-neutral-200 dark:border-neutral-800"
     
   >
     <Icon className="h-4 w-4" />
@@ -234,8 +234,8 @@ const SocialButton = ({
 
 const BottomGradient = () => (
   <>
-    <span className="group-hover/btn:opacity-100 block transition-opacity duration-500 opacity-0 absolute h-px w-full -bottom-px inset-x-0 bg-gradient-to-r from-transparent via-cyan-500 to-transparent" />
-    <span className="group-hover/btn:opacity-100 blur-sm block transition-opacity duration-500 opacity-0 absolute h-px w-1/2 mx-auto -bottom-px inset-x-10 bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
+    <span className="group-hover/btn:opacity-100 block transition-opacity duration-500 opacity-0 absolute h-px w-full -bottom-px inset-x-0 bg-linear-to-r from-transparent via-cyan-500 to-transparent" />
+    <span className="group-hover/btn:opacity-100 blur-xs block transition-opacity duration-500 opacity-0 absolute h-px w-1/2 mx-auto -bottom-px inset-x-10 bg-linear-to-r from-transparent via-indigo-500 to-transparent" />
   </>
 );
 

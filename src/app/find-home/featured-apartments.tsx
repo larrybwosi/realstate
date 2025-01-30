@@ -39,7 +39,7 @@ export default async function FeaturedApartments({
                 <Badge className="absolute top-2 right-2">Featured</Badge>
               </div>
             </CardHeader>
-            <CardContent className="p-4 flex-grow">
+            <CardContent className="p-4 grow">
               <CardTitle className="text-xl mb-2">{apartment.title}</CardTitle>
               <div className="grid grid-cols-2 gap-2 text-sm text-muted-foreground mb-2">
                 <span className="flex items-center">

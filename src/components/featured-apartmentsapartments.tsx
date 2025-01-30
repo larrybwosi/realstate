@@ -25,7 +25,7 @@ interface FeaturedApartmentsProps {
 
 export function FeaturedApartments({ apartments }: FeaturedApartmentsProps) {
   return (
-    <section className="bg-gradient-to-b from-background to-muted py-24">
+    <section className="bg-linear-to-b from-background to-muted py-24">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-center mb-12">Featured Apartments</h2>
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -37,7 +37,7 @@ export function FeaturedApartments({ apartments }: FeaturedApartmentsProps) {
               transition={{ duration: 0.3, delay: index * 0.1 }}
             >
               <Card className="overflow-hidden transition-shadow hover:shadow-lg">
-                <div className="aspect-[16/9] relative">
+                <div className="aspect-16/9 relative">
                   <Image
                     src={apartment.images[0].asset.url}
                     alt={apartment.title}

@@ -60,7 +60,7 @@ export function ApartmentDetails({ apartment }: { apartment: Apartment }) {
       <div className="grid gap-8 lg:grid-cols-2">
         {/* Image Section */}
         <div className="space-y-4">
-          <div className="aspect-[16/9] relative rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+          <div className="aspect-16/9 relative rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
             <Image
               src={
                 selectedImage === 0
@@ -156,7 +156,7 @@ export function ApartmentDetails({ apartment }: { apartment: Apartment }) {
           </div>
 
           {/* Description */}
-          <div className="bg-white p-4 rounded-lg shadow-sm">
+          <div className="bg-white p-4 rounded-lg shadow-xs">
             <p className="text-gray-700 leading-relaxed">
               {apartment.description}
             </p>

@@ -109,7 +109,7 @@ export function ApartmentSearch() {
                 step={100}
                 value={priceRange}
                 onValueChange={(value) => setPriceRange(value)}
-                className="flex-grow"
+                className="grow"
               />
             </div>
             <div className="flex justify-between mt-2 text-sm text-muted-foreground">

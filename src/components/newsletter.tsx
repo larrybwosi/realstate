@@ -21,7 +21,7 @@ export function Newsletter() {
   };
 
   return (
-    <section className="newsletter bg-gradient-to-r from-primary-50 to-secondary-50 py-24">
+    <section className="newsletter bg-linear-to-r from-primary-50 to-secondary-50 py-24">
       {" "}
       {/* Gradient background */}
       <div className="container mx-auto px-4">
@@ -48,7 +48,7 @@ export function Newsletter() {
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="flex-grow"
+              className="grow"
               required
             />
             <Button type="submit" variant="ghost">

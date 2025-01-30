@@ -57,7 +57,7 @@ export default function HomePage() {
             className="object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/80 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-r from-background/80 to-transparent" />
         </div>
 
         <div className="relative h-full flex items-center px-4">
@@ -132,7 +132,7 @@ export default function HomePage() {
       </section>
 
       {/* Enhanced Pricing Section */}
-      <section className="bg-gradient-to-br from-primary/10 to-secondary/10 py-16 px-4">
+      <section className="bg-linear-to-br from-primary/10 to-secondary/10 py-16 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold mb-4">Transparent Pricing</h2>
@@ -167,7 +167,7 @@ export default function HomePage() {
 
       {/* Contact Section with Gradient */}
       <section className="py-16 px-4">
-        <div className="max-w-4xl mx-auto bg-gradient-to-br from-primary/10 to-secondary/10 rounded-2xl p-8 shadow-lg">
+        <div className="max-w-4xl mx-auto bg-linear-to-br from-primary/10 to-secondary/10 rounded-2xl p-8 shadow-lg">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Get in Touch</h2>
             <p className="text-muted-foreground">

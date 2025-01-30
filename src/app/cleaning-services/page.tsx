@@ -30,7 +30,7 @@ const services = [
 
 export default async function CleaningServicesPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-primary-100 to-gray-50">
+    <div className="min-h-screen bg-linear-to-b from-primary-100 to-gray-50">
       {" "}
       <div className="container mx-auto py-16 space-y-20">
         {/* Hero Section */}

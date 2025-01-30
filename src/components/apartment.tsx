@@ -13,7 +13,7 @@ export default function ApartmentCard ({apartment}: {apartment: Apartment}) {
       key={apartment._id}
       className="overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-lg"
     >
-      <div className="aspect-[16/9] relative">
+      <div className="aspect-16/9 relative">
         <Image
           src={urlFor(apartment.mainImage).width(500).format("webp").url()}
           alt={apartment.title}

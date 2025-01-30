@@ -183,7 +183,7 @@ export default function BookingForm({ apartment }: { apartment: Apartment }) {
                         className="h-4 w-4"
                       />
                     </FormControl>
-                    <FormLabel className="!mt-0">
+                    <FormLabel className="mt-0!">
                       Set up recurring monthly payments
                     </FormLabel>
                   </FormItem>

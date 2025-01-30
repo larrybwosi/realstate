@@ -10,7 +10,7 @@ interface ApartmentPreviewProps {
 
 export function ApartmentPreview({ details }: ApartmentPreviewProps) {
   return (
-    <Card className="bg-white/50 dark:bg-zinc-800/50 backdrop-blur-sm border border-zinc-200 dark:border-zinc-700">
+    <Card className="bg-white/50 dark:bg-zinc-800/50 backdrop-blur-xs border border-zinc-200 dark:border-zinc-700">
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2">

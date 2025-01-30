@@ -63,9 +63,9 @@ export default function HouseFinder({ onFind }: HouseFinderProps) {
       variants={containerVariants}
       className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"
     >
-      <Card className="bg-gradient-to-br from-background/95 to-background/50 dark:from-background/90 dark:to-background/60 backdrop-blur-lg shadow-2xl border-0 dark:border dark:border-gray-800">
+      <Card className="bg-linear-to-br from-background/95 to-background/50 dark:from-background/90 dark:to-background/60 backdrop-blur-lg shadow-2xl border-0 dark:border dark:border-gray-800">
         <CardHeader className="text-center space-y-4">
-          <CardTitle className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-primary via-purple-500 to-pink-500 dark:from-primary dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
+          <CardTitle className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-linear-to-r from-primary via-purple-500 to-pink-500 dark:from-primary dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
             Find Your Dream Home
           </CardTitle>
           <p className="text-muted-foreground">
@@ -167,7 +167,7 @@ export default function HouseFinder({ onFind }: HouseFinderProps) {
                           : [...preferences.amenities, amenity]
                         setPreferences({ ...preferences, amenities: newAmenities })
                       }}
-                      className="h-auto py-2 px-3 text-xs sm:text-sm bg-gradient-to-r hover:opacity-90"
+                      className="h-auto py-2 px-3 text-xs sm:text-sm bg-linear-to-r hover:opacity-90"
                     >
                       {amenity}
                     </Button>
@@ -209,7 +209,7 @@ export default function HouseFinder({ onFind }: HouseFinderProps) {
             <Button
               type="submit"
               onClick={handleSubmit}
-              className="w-full bg-gradient-to-r from-primary via-purple-500 to-pink-500 dark:from-primary dark:via-purple-400 dark:to-pink-400 hover:opacity-90 text-base sm:text-lg py-6 text-primary-foreground shadow-lg"
+              className="w-full bg-linear-to-r from-primary via-purple-500 to-pink-500 dark:from-primary dark:via-purple-400 dark:to-pink-400 hover:opacity-90 text-base sm:text-lg py-6 text-primary-foreground shadow-lg"
             >
               Find My Dream Home
             </Button>

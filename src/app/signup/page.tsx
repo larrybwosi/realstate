@@ -4,7 +4,7 @@ import { SignUpForm } from '@/components/SignUpForm';
 export default function SignUpPage() {
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 duration-300">
+    <div className="flex h-screen bg-linear-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 duration-300">
       <div className="hidden lg:block lg:w-1/2 relative overflow-hidden">
         <BackgroundImage />
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">

@@ -143,13 +143,13 @@ export default function BookCleaningPage() {
 
   return (
     <MotionDiv
-      className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 transition-colors duration-200"
+      className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-linear-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 transition-colors duration-200"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
     >
       <Card className="max-w-6xl mx-auto bg-white dark:bg-gray-800 shadow-xl">
-        <CardHeader className="rounded-t-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white dark:from-blue-800 dark:to-purple-800">
+        <CardHeader className="rounded-t-lg bg-linear-to-r from-blue-600 to-purple-600 text-white dark:from-blue-800 dark:to-purple-800">
           <div className="flex justify-between items-center">
             <CardTitle className="text-3xl font-bold">
               Book Your Cleaning Service
@@ -586,7 +586,7 @@ export default function BookCleaningPage() {
                   type="submit"
                   className={cn(
                     "w-full",
-                    "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+                    "bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
                   )}
                   disabled={isSubmitting}
                 >

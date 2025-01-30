@@ -25,7 +25,7 @@ export function ApartmentGrid({ apartments }: ApartmentGridProps) {
               transition={{ duration: 0.3 }}
             >
               <Card className="overflow-hidden transition-shadow hover:shadow-lg">
-                <div className="aspect-[16/9] relative">
+                <div className="aspect-16/9 relative">
                   <Image
                     src={urlFor(apartment.mainImage.asset)
                       .width(300)

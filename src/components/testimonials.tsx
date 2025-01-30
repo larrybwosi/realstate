@@ -47,7 +47,7 @@ function AnimatedTestimonialsDemo() {
 export function Testimonials() {
 
   return (
-      <section className="bg-gradient-to-r from-primary-50 to-secondary-50 py-24">
+      <section className="bg-linear-to-r from-primary-50 to-secondary-50 py-24">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">What Our Clients Say</h2>
           <AnimatedTestimonialsDemo/>

@@ -41,7 +41,7 @@ export function Benefits() {
               transition={{ delay: index * 0.2 }}
             >
               <div className="relative w-full">
-                <div className="absolute inset-0 h-full w-full bg-gradient-to-r from-blue-500 to-teal-500 transform scale-[0.80] rounded-full blur-3xl opacity-20" />
+                <div className="absolute inset-0 h-full w-full bg-linear-to-r from-blue-500 to-teal-500 transform scale-[0.80] rounded-full blur-3xl opacity-20" />
                 <Card className="relative shadow-xl bg-gray-900/50 border border-gray-800 overflow-hidden">
                   <CardHeader className="space-y-1">
                     <div className="h-12 w-12 rounded-full border flex items-center justify-center mb-4 border-gray-500">

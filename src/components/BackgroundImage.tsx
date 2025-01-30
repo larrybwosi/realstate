@@ -11,7 +11,7 @@ export function BackgroundImage() {
         priority
         className="transition-opacity duration-300 ease-in-out group-hover:opacity-75"
       />
-      <div className="absolute inset-0 bg-gradient-to-r from-black to-transparent opacity-50" />
+      <div className="absolute inset-0 bg-linear-to-r from-black to-transparent opacity-50" />
     </div>
   );
 }

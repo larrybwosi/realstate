@@ -25,7 +25,7 @@ export function NewsletterSignup() {
             <Input
               type="email"
               placeholder="Enter your email"
-              className="flex-grow bg-white/90 border-0 placeholder:text-brown/60"
+              className="grow bg-white/90 border-0 placeholder:text-brown/60"
             />
             <Button
               type="submit"

@@ -25,7 +25,7 @@ export function FeaturedApartments({ apartments }: FeaturedApartmentsProps) {
 
  
   return (
-    <section className="bg-gradient-to-r from-primary-50 to-secondary-50 py-24">
+    <section className="bg-linear-to-r from-primary-50 to-secondary-50 py-24">
       <div className="container mx-auto px-4">
         <h2 className="text-4xl font-bold text-center mb-12">
           Featured Apartments
@@ -43,7 +43,7 @@ export function FeaturedApartments({ apartments }: FeaturedApartmentsProps) {
                 transition={{ duration: 0.3, delay: index * 0.1 }}
               >
                 <Card className="overflow-hidden transition-shadow ">
-                  <div className="aspect-[16/9] relative">
+                  <div className="aspect-16/9 relative">
                     <Image
                       src={urlFor(apartment.mainImage.asset)
                         .width(300)

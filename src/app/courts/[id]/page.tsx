@@ -25,7 +25,7 @@ export default async function CourtPage({ params }: { params: Params }) {
           fill
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
         <div className="container relative mx-auto flex h-full items-end px-4 pb-12">
           <div className="max-w-3xl">
             <h1 className="text-4xl font-bold text-white sm:text-5xl">
@@ -110,7 +110,7 @@ export default async function CourtPage({ params }: { params: Params }) {
                   </p>
                 </div>
               </div>
-              <div className="mt-4 aspect-[16/9] w-full overflow-hidden rounded-lg">
+              <div className="mt-4 aspect-16/9 w-full overflow-hidden rounded-lg">
                 <iframe
                   src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d162936.64871471454!2d-74.09311810728148!3d40.63903948764293!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY!5e0!3m2!1sen!2sus!4v1737635680665!5m2!1sen!2sus`}
                   width="100%"
@@ -124,7 +124,7 @@ export default async function CourtPage({ params }: { params: Params }) {
           </div>
 
           {/* Right Column - Management Info */}
-          <div className="rounded-lg border bg-card p-6 shadow-sm">
+          <div className="rounded-lg border bg-card p-6 shadow-xs">
             <h3 className="mb-4 text-2xl font-bold">Management</h3>
             <div className="space-y-4">
               <div>

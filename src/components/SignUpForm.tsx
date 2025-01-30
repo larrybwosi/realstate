@@ -122,9 +122,9 @@ export function SignUpForm() {
         className="w-full max-w-2xl space-y-6"
       >
         <Card className="relative overflow-hidden shadow-xl dark:shadow-slate-800/30">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 opacity-10" />
+          <div className="absolute inset-0 bg-linear-to-r from-blue-500 to-purple-600 opacity-10" />
           <CardHeader className="text-center space-y-2">
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <h2 className="text-3xl font-bold bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               Create Account
             </h2>
             <p className="text-muted-foreground">
@@ -251,7 +251,7 @@ export function SignUpForm() {
               <Button
                 type="submit"
                 className={cn(
-                  "ml-auto bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700",
+                  "ml-auto bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700",
                   "text-white shadow-lg hover:shadow-xl transition-all duration-200"
                 )}
               >

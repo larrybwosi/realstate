@@ -41,7 +41,7 @@ export function CourtsGrid({ courts }: CourtsGridProps) {
               onHoverEnd={() => setHoveredIndex(null)}
             >
               <Card className="overflow-hidden transition-shadow hover:shadow-xl">
-                <div className="aspect-[16/9] relative">
+                <div className="aspect-16/9 relative">
                   <Image
                     src={court.image.asset.url}
                     alt={court.name}
