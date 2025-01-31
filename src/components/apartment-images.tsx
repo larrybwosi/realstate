@@ -11,6 +11,7 @@ export default function ApartmentImages({
   apartment: Apartment;
 }) {
   const [selectedImage, setSelectedImage] = useState(0);
+  
   return (
     <div className="space-y-4">
       <div className="aspect-16/9 relative rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
@@ -21,12 +22,12 @@ export default function ApartmentImages({
                   .width(800)
                   .format("webp")
                   .url()
-              : apartment?.images ?
-                urlFor(apartment?.images[selectedImage - 1].asset)
-                  .width(800)
-                  .format("webp")
-                  .url()
-                :''
+              : apartment?.images
+                  ? urlFor(apartment?.images[selectedImage - 1].asset)
+                      .width(800)
+                      .format("webp")
+                      .url()
+                  : ""
           }
           alt={apartment.title}
           fill
@@ -61,7 +62,7 @@ export default function ApartmentImages({
           >
             <Image
               src={urlFor(image.asset).width(200).format("webp").url()}
-              alt={image.asset.caption}
+              alt={image?.caption || `image ${index}`}
               fill
               className="object-cover hover:opacity-90 transition-opacity"
             />

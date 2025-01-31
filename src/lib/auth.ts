@@ -1,5 +1,6 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
+import { admin, multiSession, openAPI, username } from "better-auth/plugins";
 
 import { db } from "./db";
 
@@ -39,4 +40,12 @@ export const auth = betterAuth({
       maxAge: 5 * 60, // Cache duration in seconds
     },
   },
+  plugins: [
+    admin(),
+    username(),
+    openAPI(),
+    multiSession({
+      maximumSessions: 8,
+    }),
+  ],
 });

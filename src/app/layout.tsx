@@ -17,7 +17,6 @@ export const metadata: Metadata = {
     "kaimosi",
     "house",
     "nestlink",
-    "kafu",
     "apartment kaimosi",
     "home",
     "location",
@@ -39,7 +38,6 @@ export const metadata: Metadata = {
     canonical: "/",
     languages: {
       en: "/en",
-      ki: "/ki",
     },
   },
 };

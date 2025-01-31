@@ -4,12 +4,12 @@ import { FilterOptions } from "./components/filter-options";
 import { SortOptions } from "./components/sort-options";
 import { Pagination } from "./components/pagination";
 import { getApartments, getCategories } from "@/actions/apartments";
-import { connection } from "next/server";
 import { Metadata } from "next";
 
 export const metadata: Metadata ={
   title:'Cheap City | Apartments',
   description:'Find the best apartment with your prefrences',
+  keywords:['apartments', 'more apartments'],
   twitter: {
     card: 'summary_large_image',
     title: 'Cheap City | Apartments',
@@ -24,17 +24,43 @@ export const metadata: Metadata ={
   }
 }
 
+type SearchParams = Promise<{
+  query?: string;
+  sort?: string;
+  minPrice?: string;
+  maxPrice?: string;
+  bedrooms?: string;
+  bathrooms?: string;
+  page?: string;
+  exposure?: string;
+  features?: string[];
+  petsAllowed?: string;
+  furnished?: string;
+  status?: string;
+  categoryType?: string;
+  amenities?: string[];
+}>
 export default async function ApartmentsPage({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: SearchParams;
 }) {
-  const { query, sort, minPrice, maxPrice, bedrooms, bathrooms, page, exposure,
-    //  categoryType, amenities, features, furnished, petsAllowed, status 
-    } =
-    await searchParams;
+  const {
+    query,
+    sort,
+    minPrice,
+    maxPrice,
+    bedrooms,
+    bathrooms,
+    page,
+    exposure,
+    // features,
+    // petsAllowed,
+    // furnished,
+    // status,
+    //  categoryType, amenities,
+  } = await searchParams;
 
-    await connection()
   const apartments = await getApartments({
     query: query as string,
     sort: sort as string,
@@ -92,7 +118,8 @@ export default async function ApartmentsPage({
           <div className="lg:col-span-3">
             <div className="flex justify-between items-center mb-6">
               <p className="text-muted-foreground">
-                Showing {apartments?.data.length} of {apartments.total} apartments
+                Showing {apartments?.data.length} of {apartments.total}{" "}
+                apartments
               </p>
               <SortOptions defaultValue={sort as string} />
             </div>

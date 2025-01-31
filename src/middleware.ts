@@ -22,5 +22,8 @@ export default async function authMiddleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard","/book","/admin"],
+  matcher: ["/dashboard", "/admin", 
+    // "/book/:path*",
+    "/payment"
+  ],
 };

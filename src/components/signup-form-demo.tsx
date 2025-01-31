@@ -177,12 +177,12 @@ export default function SigninForm() {
           <SocialButton
             icon={IconBrandGithub}
             text="GitHub"
-            onClick={() => signIn.social({ provider: "github" })}
+            onClick={() => signIn.social({ provider: "github",callbackURL:'/' })}
           />
           <SocialButton
             icon={IconBrandGoogle}
             text="Google"
-            onClick={() => signIn.social({ provider: "google" })}
+            onClick={() => signIn.social({ provider: "google",callbackURL:'/' })}
           />
           <SocialButton
             icon={IconBrandOnlyfans}

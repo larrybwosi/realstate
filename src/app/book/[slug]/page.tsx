@@ -11,6 +11,7 @@ import {
 import { getApartment } from "@/actions/apartments";
 import Link from "next/link";
 import BookingForm from "../components/form";
+// import ApartmentPaymentPage from "@/app/payment/page";
 
 
 type Params = Promise<{ slug: string }>;
@@ -74,5 +75,6 @@ export default async function BookingPage({ params }: { params: Params }) {
         <BookingForm apartment={apartment} />
       </div>
     </div>
+    // <ApartmentPaymentPage apartment={apartment}/>
   );
 }

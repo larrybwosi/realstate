@@ -34,7 +34,7 @@ export function Hero() {
           animate={{ opacity: index === currentImage ? 1 : 0 }}
           transition={{ duration: 1 }}
         >
-          <Image src={src} alt={`Hero ${index + 1}`} width={800} height={800} className="h-full w-full object-cover" />
+          <Image src={src} alt={`Hero image${index + 1}`} width={800} height={800} className="h-full w-full object-cover" />
         </MotionDiv>
       ))}
       <div className="absolute inset-0 bg-black/50" />
@@ -68,7 +68,9 @@ export function Hero() {
             asChild
             className="bg-primary text-primary-foreground hover:bg-primary/90"
           >
-            <Link href="/apartments">Explore Apartments</Link>
+            <Link href="/apartments">
+            Explore Apartments
+            </Link>
           </Button>
           <Button
             size="lg"

@@ -1,3 +1,4 @@
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,18 +9,16 @@ datasource db {
 }
 
 model User {
-  id                String    @id @default(cuid())
-  name              String?
-  email             String?   @unique
-  emailVerified     DateTime?
-  image             String?
-  phoneNumber       String?
-  emergencyContact  String?
-  documents         Json?
-  notificationPrefs Json?
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
-  role              String?   @default("tenant")
+  id            String   @id @default(cuid())
+  name          String
+  email         String?  @unique
+  emailVerified Boolean
+  image         String?
+  phoneNumber   String?
+  documents     Json?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  role          String?  @default("tenant")
 
   username String?
 
@@ -99,6 +98,7 @@ model ApartmentSubmission {
   apartmentId    Int?
   apartment      Apartment? @relation(fields: [apartmentId], references: [id])
 }
+
 enum BookingStatus {
   PENDING
   CONFIRMED
@@ -150,21 +150,21 @@ model Booking {
 }
 
 model Payment {
-  id            Int            @id @default(autoincrement())
+  id            Int           @id @default(autoincrement())
   amount        Int
-  currency      String         @default("KES")
-  status        PaymentStatus  @default(PENDING)
+  currency      String        @default("KES")
+  status        PaymentStatus @default(PENDING)
   type          PaymentType
-  method        PaymentMethod  @default(mpesa)
-  checkoutId    String?        @unique
-  mpesaReceipt  String?        @unique
+  method        PaymentMethod @default(mpesa)
+  checkoutId    String?       @unique
+  mpesaReceipt  String?       @unique
   description   String?
-  phoneNumber   String         @db.VarChar(12)
+  phoneNumber   String        @db.VarChar(12)
   bookingId     Int
-  booking       Booking        @relation(fields: [bookingId], references: [id])
-  transactionId String?        @unique
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  booking       Booking       @relation(fields: [bookingId], references: [id])
+  transactionId String?       @unique
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 
   @@index([checkoutId])
   @@index([status])
