@@ -208,9 +208,11 @@ export function ApartmentDetails({ apartment }: { apartment: Apartment }) {
 
         {/* Buttons */}
         <div className="flex flex-col sm:flex-row gap-4">
+          <a href={`/shedule/${apartment.slug.current}`} className="">
           <Button size="lg" className=" bg-primary hover:bg-primary/90">
             Schedule a Tour
           </Button>
+          </a>
           <a href={`/book/${apartment.slug.current}`} className="flex-1">
             <Button
               size="lg"

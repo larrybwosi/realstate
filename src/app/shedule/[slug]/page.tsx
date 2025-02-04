@@ -1,4 +1,3 @@
-import { Suspense } from 'react';
 import { Home } from 'lucide-react';
 import { ApartmentPreview } from '@/components/schedule/preview';
 import { TourSchedulerForm } from '@/components/schedule/form';
@@ -29,9 +28,7 @@ export default async function ApartmentTourScheduler({ params }: { params: Param
           {/* Main Content */}
           <div className="grid gap-6 lg:grid-cols-2">
             {/* Apartment Preview */}
-            <Suspense fallback={<div>Loading apartment details...</div>}>.
               <ApartmentPreview details={apartmentDetails} />
-            </Suspense>
 
             {/* Tour Scheduler Form */}
             <TourSchedulerForm apartmentTitle={apartmentDetails?.title} />

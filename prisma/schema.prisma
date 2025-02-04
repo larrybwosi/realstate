@@ -99,32 +99,6 @@ model ApartmentSubmission {
   apartment      Apartment? @relation(fields: [apartmentId], references: [id])
 }
 
-enum BookingStatus {
-  PENDING
-  CONFIRMED
-  FAILED
-  CANCELLED
-}
-
-enum PaymentType {
-  rent
-  deposit
-  fee
-}
-
-enum PaymentStatus {
-  PENDING
-  CONFIRMED
-  FAILED
-  PROCESSING
-}
-
-enum PaymentMethod {
-  mpesa
-  card
-  bank
-}
-
 model Booking {
   id                 Int           @id @default(autoincrement())
   apartmentId        Int
@@ -308,4 +282,30 @@ model Verification {
   updatedAt  DateTime?
 
   @@map("verification")
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  FAILED
+  CANCELLED
+}
+
+enum PaymentType {
+  rent
+  deposit
+  fee
+}
+
+enum PaymentStatus {
+  PENDING
+  CONFIRMED
+  FAILED
+  PROCESSING
+}
+
+enum PaymentMethod {
+  mpesa
+  card
+  bank
 }

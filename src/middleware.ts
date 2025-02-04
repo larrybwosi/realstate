@@ -22,7 +22,7 @@ export default async function authMiddleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard", "/admin", 
+  matcher: ["/admin", 
     "/book/:path*",
     "/payment",
     '/shedule'
