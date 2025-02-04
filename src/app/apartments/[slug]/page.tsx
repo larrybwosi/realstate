@@ -18,7 +18,6 @@ export async function generateMetadata(
   const slug = (await params).slug;
 
   async function getApartment(slug: string){
-    'use cache'
     const res = await sanityFetch({
       query: `*[_type == "apartment" && slug.current == $slug][0] {
       title,
