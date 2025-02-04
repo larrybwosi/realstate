@@ -5,10 +5,6 @@ import {
   Wrench,
   User,
   Bell,
-  MapPin,
-  Star,
-  MoveRight,
-  MoveLeft,
   CheckCircle,
   WashingMachine,
 } from "lucide-react";
@@ -27,8 +23,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
-  DialogDescription,
+  DialogTrigger
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -42,42 +37,97 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { IconBrandLoom } from "@tabler/icons-react";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ServiceBookingModal from "@/components/modals/book-cleaning";
+import ApartmentDetails from "@/components/dashboard/apartment";
 
 // Mock data (would be replaced with actual data from backend)
 const mockApartment = {
-  title: "Luxury Urban Apartment",
-  court: {
-    name: "Sunset Residences",
-    address: {
-      street: "123 Urban Avenue",
-      city: "Metropolis",
-      state: "ST",
-      zipCode: "12345",
+  mainImage: {
+    asset: {
+      _ref: "image-4878aa0f2c943c1ec256ee9282571bdabdef3d09-1080x1346-png",
+      _type: "reference",
     },
+    _type: "image",
   },
-  unit: {
-    floorNumber: 5,
-    unitNumber: "502",
-    wing: "A",
-  },
-  specifications: {
-    squareFootage: 1200,
-    bedrooms: 2,
-    bathrooms: 2,
+  featured: true,
+  title: "Down Town",
+  slug: { current: "some-great-walls", _type: "slug" },
+  category: {
+    _id: "40b6fc6f-97fb-4470-a2bc-366f1da1734a",
+    name: "Single room",
+    slug: { current: "single-room", _type: "slug" },
+    selectOptions: null,
   },
   rental: {
-    price: 2500,
-    availableDate: "2023-01-15",
+    price: 1500,
+    deposit: 220,
+    availableDate: "2025-01-23",
+    minimumLeaseTerm: 2,
+    utilities: ["Water", "Electricity", "Internet"],
+  },
+  nearbyAttractions: null,
+  court: null,
+  _id: "6746918a-b842-4bf6-8e9d-8c1a73f54799",
+  images: [
+    {
+      alt: "Master",
+      caption: "none",
+      _key: "493ca5d9ae04",
+      asset: {
+        _ref: "image-d16365b1414c74ae19fa2ea87aa0e6d782f1ba06-1411x893-png",
+        _type: "reference",
+      },
+      _type: "image",
+    },
+    {
+      _type: "image",
+      alt: "Living room",
+      caption: "Living room",
+      _key: "bebc7cca6058",
+      asset: {
+        _ref: "image-3b991a1838c7a66f3bceb6962ac0aca4ef21c964-400x225-png",
+        _type: "reference",
+      },
+    },
+    {
+      caption: "Bed room",
+      _key: "98036423ab0f",
+      asset: {
+        _ref: "image-4d6041361f57e4fadc1f9d335415ed2c37de422b-400x267-png",
+        _type: "reference",
+      },
+      _type: "image",
+      alt: "Bed room",
+    },
+  ],
+  virtualTourUrl: null,
+  location: { lng: 45, _type: "geopoint", alt: 4, lat: 450 },
+  petsAllowed: null,
+  leaseTerms: null,
+  amenities: [
+    "Air Conditioning",
+    "Furnished",
+    "Garden",
+    "Internet",
+    "Parking",
+    "Pet-friendly",
+    "Security System",
+    "Storage",
+    "Walk-in Closet",
+    "Wi-Fi",
+  ],
+  description: "Some great walls",
+  floorNumber: null,
+  apartmentNumber: null,
+  specifications: {
+    squareFootage: 2400,
+    bedrooms: 2,
+    bathrooms: 1,
+    ceilingHeight: 1400,
+    exposure: "North",
   },
   moveInDate: new Date("2022-06-15"),
 };
@@ -100,20 +150,20 @@ const UserDashboard = () => {
   };
 
   // Reviews section
-  const [reviews, setReviews] = useState([
+  const reviews = [
     {
-      id: 1,
+      _id: 1,
       rating: 4,
-      text: "Great apartment with excellent amenities!",
+      comment: "Great apartment with excellent amenities!",
       date: "2023-12-15",
     },
     {
-      id: 2,
+      _id: 2,
       rating: 5,
-      text: "Fantastic location and very responsive management.",
+      comment: "Fantastic location and very responsive management.",
       date: "2024-01-20",
     },
-  ]);
+  ];
 
   // Maintenance Request Modal State
   const [maintenanceRequest, setMaintenanceRequest] = useState({
@@ -128,63 +178,52 @@ const UserDashboard = () => {
     console.log("Maintenance Request:", maintenanceRequest);
   };
 
-const mockServices = [
-  {
-    id: 1,
-    name: "Deep Cleaning",
-    description: "Comprehensive cleaning of entire apartment",
-    price: 150,
-    duration: "3-4 hours",
-    lastOrdered: "2024-01-15",
-    icon: <CheckCircle className="w-6 h-6 text-blue-500" />,
-  },
-  {
-    id: 2,
-    name: "Laundry Service",
-    description: "Wash, dry, and fold of up to 15 items",
-    price: 50,
-    duration: "24-48 hours",
-    lastOrdered: "2024-02-01",
-    icon: <WashingMachine className="w-6 h-6 text-green-500" />,
-  },
-  {
-    id: 3,
-    name: "Maintenance Check",
-    description: "Full apartment systems inspection",
-    price: 100,
-    duration: "1-2 hours",
-    lastOrdered: "2023-12-10",
-    icon: <Wrench className="w-6 h-6 text-orange-500" />,
-  },
-];
+  const mockServices = [
+    {
+      id: 1,
+      name: "Deep Cleaning",
+      description: "Comprehensive cleaning of entire apartment",
+      price: 150,
+      duration: "3-4 hours",
+      lastOrdered: "2024-01-15",
+      icon: <CheckCircle className="w-6 h-6 text-blue-500" />,
+    },
+    {
+      id: 2,
+      name: "Laundry Service",
+      description: "Wash, dry, and fold of up to 15 items",
+      price: 50,
+      duration: "24-48 hours",
+      lastOrdered: "2024-02-01",
+      icon: <WashingMachine className="w-6 h-6 text-green-500" />,
+    },
+    {
+      id: 3,
+      name: "Maintenance Check",
+      description: "Full apartment systems inspection",
+      price: 100,
+      duration: "1-2 hours",
+      lastOrdered: "2023-12-10",
+      icon: <Wrench className="w-6 h-6 text-orange-500" />,
+    },
+  ];
 
-const mockMaintenanceHistory = [
-  {
-    id: 1,
-    type: "Plumbing",
-    date: "2024-01-20",
-    status: "Completed",
-    description: "Fixed leaking bathroom faucet",
-  },
-  {
-    id: 2,
-    type: "Electrical",
-    date: "2023-11-15",
-    status: "Completed",
-    description: "Replaced faulty light switch",
-  },
-];
-
-  const handleCleaningSubmit = () => {
-    // Implement submission logic
-    console.log("Cleaning Request:", cleaningRequest);
-  };
-
-  const [cleaningRequest, setCleaningRequest] = useState({
-    serviceType: "",
-    scheduledDate: "",
-    additionalNotes: "",
-  });
+  const mockMaintenanceHistory = [
+    {
+      id: 1,
+      type: "Plumbing",
+      date: "2024-01-20",
+      status: "Completed",
+      description: "Fixed leaking bathroom faucet",
+    },
+    {
+      id: 2,
+      type: "Electrical",
+      date: "2023-11-15",
+      status: "Completed",
+      description: "Replaced faulty light switch",
+    },
+  ];
 
   // Profile Update State
   const [profileData, setProfileData] = useState({
@@ -232,120 +271,7 @@ const mockMaintenanceHistory = [
 
           {/* Apartment Overview Tab */}
           <TabsContent value="apartment">
-            <Card className="bg-white dark:bg-gray-900 shadow-lg">
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <MapPin className="mr-2" /> {mockApartment.title}
-                </CardTitle>
-                <CardDescription>
-                  Apartment Details and Management
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <h3 className="text-lg font-semibold mb-2">
-                      Apartment Info
-                    </h3>
-                    <p>Court: {mockApartment.court.name}</p>
-                    <p>
-                      Unit: {mockApartment.unit.unitNumber} (Floor{" "}
-                      {mockApartment.unit.floorNumber})
-                    </p>
-                    <p>
-                      Size: {mockApartment.specifications.squareFootage} sq ft
-                    </p>
-                    <p>Bedrooms: {mockApartment.specifications.bedrooms}</p>
-                    <p>Bathrooms: {mockApartment.specifications.bathrooms}</p>
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold mb-2">Tenure</h3>
-                    <p>
-                      You&apos;ve been here for:{" "}
-                      {calculateTenure(mockApartment.moveInDate)}
-                    </p>
-
-                    <div className="mt-4 space-y-2">
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button variant="outline" className="w-full">
-                            <MoveRight className="mr-2" /> Explore Other
-                            Apartments
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle>Apartment Transfer</DialogTitle>
-                            <DialogDescription>
-                              Looking for a change? Explore other apartments in
-                              our courts that might better suit your needs.
-                            </DialogDescription>
-                          </DialogHeader>
-                          {/* Add apartment listing logic here */}
-                          <p>Available apartments will be listed here.</p>
-                        </DialogContent>
-                      </Dialog>
-
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button variant="destructive" className="w-full">
-                            <MoveLeft className="mr-2" /> Move Out
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle>Move Out Request</DialogTitle>
-                            <DialogDescription>
-                              Initiating a move-out process requires 30 days
-                              notice and compliance with lease terms.
-                            </DialogDescription>
-                          </DialogHeader>
-                          {/* Add move-out request form */}
-                          <Button variant="destructive">
-                            Confirm Move Out
-                          </Button>
-                        </DialogContent>
-                      </Dialog>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Reviews Section */}
-                <Accordion type="single" collapsible className="mt-4">
-                  <AccordionItem value="reviews">
-                    <AccordionTrigger>
-                      <div className="flex items-center">
-                        <Star className="mr-2" />
-                        Apartment Reviews ({reviews.length})
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent>
-                      {reviews.map((review) => (
-                        <div
-                          key={review.id}
-                          className="border-b last:border-b-0 py-2 dark:border-gray-700"
-                        >
-                          <div className="flex justify-between">
-                            <div className="flex items-center">
-                              {[...Array(review.rating)].map((_, i) => (
-                                <Star
-                                  key={i}
-                                  className="w-4 h-4 text-yellow-500 fill-current"
-                                />
-                              ))}
-                            </div>
-                            <span className="text-sm text-gray-500">
-                              {review.date}
-                            </span>
-                          </div>
-                          <p className="mt-2">{review.text}</p>
-                        </div>
-                      ))}
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
-              </CardContent>
-            </Card>
+            <ApartmentDetails apartment={mockApartment} reviews={reviews} />
           </TabsContent>
 
           {/* Maintenance Requests Tab */}
@@ -472,15 +398,17 @@ const mockMaintenanceHistory = [
                         </Button>
 
                         {/* Modal placement */}
-                        <ServiceBookingModal
-                          service={selectedService}
-                          isOpen={isBookingModalOpen}
-                          onOpenChange={setIsBookingModalOpen}
-                          onBookService={(bookingDetails) => {
-                            // Implement your booking submission logic
-                            console.log(bookingDetails);
-                          }}
-                        />
+                        {isBookingModalOpen && selectedService && (
+                          <ServiceBookingModal
+                            service={selectedService}
+                            isOpen={isBookingModalOpen}
+                            onOpenChange={setIsBookingModalOpen}
+                            onBookService={(bookingDetails) => {
+                              // Implement your booking submission logic
+                              console.log(bookingDetails);
+                            }}
+                          />
+                        )}
                       </div>
                     </div>
                   ))}

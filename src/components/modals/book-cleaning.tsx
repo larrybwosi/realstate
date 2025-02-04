@@ -1,7 +1,13 @@
-'use client'
+"use client";
 
 import { useState } from "react";
-import { Calendar, CalendarIcon, Clock, DollarSign, Info } from "lucide-react";
+import {
+  Calendar as CalendarIcon,
+  Clock,
+  DollarSign,
+  Info,
+} from "lucide-react";
+import { format } from "date-fns";
 
 import {
   Dialog,
@@ -16,11 +22,31 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { addDays, format } from "date-fns";
 import { cn } from "@/lib/utils";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { Calendar } from "@/components/ui/calendar";
 
-// Mock additional service options
+interface AdditionalService {
+  id: number;
+  name: string;
+  price: string;
+}
+
+interface Service {
+  id: string | number;
+  name: string;
+  price: string;
+  description: string;
+  duration: string;
+  icon?: React.ReactNode;
+}
+
+interface ServiceBookingModalProps {
+  service: Service | undefined;
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+  onBookService: (bookingDetails: any) => void;
+}
+
 const additionalServiceOptions: AdditionalService[] = [
   { id: 1, name: "Extra Detergent", price: "5" },
   { id: 2, name: "Fabric Softener", price: "3" },
@@ -28,19 +54,6 @@ const additionalServiceOptions: AdditionalService[] = [
   { id: 4, name: "Deep Sanitization", price: "25" },
 ];
 
-interface AdditionalService {
-  id:string | number;
-  name:string;
-  price:string;
-}
-
-
-interface ServiceBookingModalProps {
-  service: any;
-  isOpen: boolean;
-  onOpenChange: (open: boolean) => void;
-  onBookService: (bookingDetails: any) => void;
-}
 const ServiceBookingModal = ({
   service,
   isOpen,
@@ -48,42 +61,41 @@ const ServiceBookingModal = ({
   onBookService,
 }: ServiceBookingModalProps) => {
   const [bookingDetails, setBookingDetails] = useState({
-    date: "",
+    date: undefined as Date | undefined,
     time: "",
-    additionalServices: [],
     specialInstructions: "",
   });
 
-  const [selectedAdditionalServices, setSelectedAdditionalServices] =
-    useState<AdditionalService[]>([]);
+  const [selectedAdditionalServices, setSelectedAdditionalServices] = useState<
+    number[]
+  >([]);
 
-  // Calculate total price
   const calculateTotalPrice = () => {
-    const basePrice = service?.price || 0;
-    const additionalServicesCost = selectedAdditionalServices?.reduce(
+    const basePrice = parseFloat(service?.price || "0");
+    const additionalServicesCost = selectedAdditionalServices.reduce(
       (total, serviceId) => {
         const additionalService = additionalServiceOptions.find(
           (opt) => opt.id === serviceId
         );
-        return total + (additionalService?.price || 0);
+        return total + parseFloat(additionalService?.price || "0");
       },
       0
     );
     return basePrice + additionalServicesCost;
   };
 
-  const handleAdditionalServiceToggle = (serviceId:string) => {
+  const handleAdditionalServiceToggle = (serviceId: number) => {
     setSelectedAdditionalServices((prev) =>
-      prev?.includes(serviceId)
-        ? prev?.filter((id) => id !== serviceId)
-        : [...prev!, serviceId]
+      prev.includes(serviceId)
+        ? prev.filter((id) => id !== serviceId)
+        : [...prev, serviceId]
     );
   };
 
   const handleBooking = () => {
     const bookingPayload = {
       ...bookingDetails,
-      serviceId: service.id,
+      serviceId: service?.id,
       additionalServiceIds: selectedAdditionalServices,
       totalPrice: calculateTotalPrice(),
     };
@@ -108,7 +120,6 @@ const ServiceBookingModal = ({
         </DialogHeader>
 
         <div className="grid gap-4 py-4">
-          {/* Service Details */}
           <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
             <div className="flex justify-between items-center">
               <div className="flex items-center space-x-2">
@@ -126,11 +137,10 @@ const ServiceBookingModal = ({
             </p>
           </div>
 
-          {/* Date and Time Selection */}
           <div className="grid md:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="booking-date" className="flex items-center">
-                <Calendar className="w-4 h-4 mr-2" /> Select Date
+                <CalendarIcon className="w-4 h-4 mr-2" /> Select Date
               </Label>
               <Popover>
                 <PopoverTrigger asChild>
@@ -141,7 +151,7 @@ const ServiceBookingModal = ({
                       !bookingDetails.date && "text-muted-foreground"
                     )}
                   >
-                    <CalendarIcon />
+                    <CalendarIcon className="mr-2 h-4 w-4" />
                     {bookingDetails.date ? (
                       format(bookingDetails.date, "PPP")
                     ) : (
@@ -149,38 +159,18 @@ const ServiceBookingModal = ({
                     )}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent
-                  align="start"
-                  className="flex w-auto flex-col space-y-2 p-2"
-                >
-                  <Select
-                    onValueChange={(value) =>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={bookingDetails.date}
+                    initialFocus
+                    onSelect={(date) =>
                       setBookingDetails((prev) => ({
                         ...prev,
-                        date: addDays(new Date(), parseInt(value)),
+                        date,
                       }))
                     }
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                    <SelectContent position="popper">
-                      <SelectItem value="0">Today</SelectItem>
-                      <SelectItem value="1">Tomorrow</SelectItem>
-                      <SelectItem value="3">In 3 days</SelectItem>
-                      <SelectItem value="7">In a week</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <div className="rounded-md border">
-                    <Calendar
-                      mode="single"
-                      selected={bookingDetails.date}
-                      onSelect={()=>setBookingDetails((prev) => ({
-                        ...prev,
-                        date: addDays(new Date(), parseInt(value)),
-                      }))}
-                    />
-                  </div>
+                  />
                 </PopoverContent>
               </Popover>
             </div>
@@ -202,25 +192,20 @@ const ServiceBookingModal = ({
             </div>
           </div>
 
-          {/* Additional Services */}
           <div>
             <Label className="mb-2 block">Additional Services</Label>
             <div className="grid md:grid-cols-2 gap-2">
               {additionalServiceOptions.map((addService) => (
                 <div
                   key={addService.id}
-                  className={`
-                    flex items-center justify-between p-2 rounded-md cursor-pointer
-                    ${
-                      selectedAdditionalServices?.includes(addService.id)
-                        ? "bg-blue-100 dark:bg-blue-900"
-                        : "bg-gray-100 dark:bg-gray-800"
-                    }
-                    hover:bg-blue-50 dark:hover:bg-blue-800 transition-colors
-                  `}
-                  onClick={() =>
-                    handleAdditionalServiceToggle(addService.id.toString())
-                  }
+                  className={cn(
+                    "flex items-center justify-between p-2 rounded-md cursor-pointer transition-colors",
+                    selectedAdditionalServices.includes(addService.id)
+                      ? "bg-blue-100 dark:bg-blue-900"
+                      : "bg-gray-100 dark:bg-gray-800",
+                    "hover:bg-blue-50 dark:hover:bg-blue-800"
+                  )}
+                  onClick={() => handleAdditionalServiceToggle(addService.id)}
                 >
                   <span>{addService.name}</span>
                   <Badge variant="outline">+${addService.price}</Badge>
@@ -229,7 +214,6 @@ const ServiceBookingModal = ({
             </div>
           </div>
 
-          {/* Special Instructions */}
           <div>
             <Label htmlFor="special-instructions">Special Instructions</Label>
             <Textarea
@@ -245,7 +229,6 @@ const ServiceBookingModal = ({
             />
           </div>
 
-          {/* Total Price */}
           <div className="bg-green-50 dark:bg-green-900 p-3 rounded-lg flex justify-between items-center">
             <span className="font-semibold">Total Price</span>
             <Badge variant="default" className="text-lg">
@@ -254,7 +237,6 @@ const ServiceBookingModal = ({
           </div>
         </div>
 
-        {/* Booking Actions */}
         <div className="flex justify-end space-x-2">
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancel
