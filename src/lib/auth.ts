@@ -1,6 +1,6 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { admin, multiSession, openAPI, username } from "better-auth/plugins";
+import { admin, customSession, multiSession, openAPI, username } from "better-auth/plugins";
 
 import { db } from "./db";
 
@@ -41,11 +41,28 @@ export const auth = betterAuth({
     },
   },
   plugins: [
-    admin(),
+    admin({
+      adminRole: ["admin", "superAdmin"],
+      defaultRole: "tenant",
+    }),
     username(),
     openAPI(),
     multiSession({
       maximumSessions: 8,
+    }),
+    customSession(async ({ user, session }) => {
+      const userApartment = await db.apartment.findUnique({
+        where: {
+          ownerId: user.id,
+        },
+      });
+      return {
+        user: {
+          ...user,
+          apartmentId: userApartment?.id,
+        },
+        session,
+      };
     }),
   ],
 });

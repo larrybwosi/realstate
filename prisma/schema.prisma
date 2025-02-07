@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -7,6 +6,7 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
 
 model User {
   id            String   @id @default(cuid())
@@ -19,6 +19,15 @@ model User {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   role          String?  @default("tenant")
+  
+  // Apartment relationships
+  apartment      Apartment? @relation(name: "Residents", fields: [apartmentId], references: [id])
+  apartmentId    String?
+  ownedApartments Apartment[] @relation("ApartmentOwner")
+  
+  // Family relationships
+  familyMembers  FamilyMember[] @relation("FamilyHead")
+  belongsToFamily FamilyMember? @relation("FamilyMember")
 
   username String?
 
@@ -27,13 +36,44 @@ model User {
   banExpires DateTime?
   sessions   Session[]
   accounts   Account[]
+  maintenanceRequests MaintenanceRequest[]
+  notifications       Notification[]     
+  notificationPreferences NotificationPreference?
+
+  // Emergency Contact Info
+  emergencyContactName         String?
+  emergencyContactRelationship String?
+  emergencyContactPhone        String?
 
   @@map("user")
   @@unique([username])
 }
 
+model FamilyMember {
+  id              String   @id @default(cuid())
+  relationshipType String  // spouse, child, parent, etc.
+  
+  // Family head (primary tenant/owner)
+  familyHead      User     @relation("FamilyHead", fields: [familyHeadId], references: [id])
+  familyHeadId    String
+  
+  // The actual user account for this family member
+  user            User?    @relation("FamilyMember", fields: [userId], references: [id])
+  userId          String?  @unique
+  
+  // If the family member doesn't have a user account, store their basic info here
+  name            String?
+  dateOfBirth     DateTime?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([familyHeadId])
+}
+
+
 model Apartment {
-  id                  Int                   @id @default(autoincrement())
+  id                  String                @id @default(cuid())
   title               String
   slug                String                @unique
   images              String[]
@@ -67,15 +107,91 @@ model Apartment {
   energyRating        String?
   furnished           Boolean               @default(false)
   furnishingDetails   Json?
+  
+  // Owner relationship
+  owner               User                  @relation("ApartmentOwner", fields: [ownerId], references: [id])
+  ownerId             String @unique
+  
+  // Residents relationship
+  residents           User[]               @relation("Residents")
+  
+  // Other relationships
   bookings            Booking[]
   submissions         ApartmentSubmission[]
   cleaningJobs        CleaningJob[]
   maintenanceRequests MaintenanceRequest[]
   reviews             Review[]              @relation("ApartmentReviews")
+
+  @@index([ownerId])
+}
+
+
+
+// Updated MaintenanceRequest model
+model MaintenanceRequest {
+  id            Int       @id @default(autoincrement())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id])
+  apartmentId   String
+  apartment     Apartment @relation(fields: [apartmentId], references: [id])
+  title         String
+  description   String    @db.Text
+  priority      String    @default("normal") // low, medium, high
+  status        String    @default("pending") // pending, in-progress, completed
+  category      String    // plumbing, electrical, hvac, appliance, structural
+  images        String[]
+  scheduledDate DateTime?
+  completedDate DateTime?
+  cost          Int?
+  notes         String?   @db.Text
+  assignedTo    String?   // Name of maintenance staff assigned
+  updates       MaintenanceUpdate[] 
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([apartmentId])
+}
+
+// New MaintenanceUpdate model
+model MaintenanceUpdate {
+  id                   Int               @id @default(autoincrement())
+  message              String
+  maintenanceRequest   MaintenanceRequest @relation(fields: [maintenanceRequestId], references: [id], onDelete: Cascade)
+  maintenanceRequestId Int
+  createdAt           DateTime          @default(now())
+
+  @@index([maintenanceRequestId])
+}
+
+// New Notification model
+model Notification {
+  id        Int      @id @default(autoincrement())
+  type      String   // maintenance, payment, announcement
+  title     String
+  message   String
+  status    String   // success, warning, info
+  read      Boolean  @default(false)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+// New NotificationPreference model
+model NotificationPreference {
+  id                  Int     @id @default(autoincrement())
+  userId              String  @unique
+  user                User    @relation(fields: [userId], references: [id])
+  maintenanceUpdates  Boolean @default(true)
+  paymentReminders    Boolean @default(true)
+  communityUpdates    Boolean @default(true)
 }
 
 model ApartmentSubmission {
-  id             Int        @id @default(autoincrement())
+  id             String        @id @default(cuid())
   title          String
   landlordName   String
   landlordEmail  String
@@ -95,13 +211,13 @@ model ApartmentSubmission {
   reviewedAt     DateTime?
   reviewedBy     String?
   reviewNotes    String?    @db.Text
-  apartmentId    Int?
+  apartmentId    String?
   apartment      Apartment? @relation(fields: [apartmentId], references: [id])
 }
 
 model Booking {
   id                 Int           @id @default(autoincrement())
-  apartmentId        Int
+  apartmentId        String
   apartment          Apartment     @relation(fields: [apartmentId], references: [id])
   startDate          DateTime
   endDate            DateTime
@@ -148,7 +264,7 @@ model Payment {
 
 model CleaningJob {
   id               Int       @id @default(autoincrement())
-  apartmentId      Int
+  apartmentId      String
   apartment        Apartment @relation(fields: [apartmentId], references: [id])
   requestedById    String?
   assignedToId     String?
@@ -205,29 +321,11 @@ model Court {
   accessControl      Boolean     @default(false)
 }
 
-model MaintenanceRequest {
-  id            Int       @id @default(autoincrement())
-  userId        String
-  apartmentId   Int
-  apartment     Apartment @relation(fields: [apartmentId], references: [id])
-  title         String
-  description   String    @db.Text
-  priority      String    @default("normal")
-  status        String    @default("pending")
-  category      String // plumbing, electrical, etc.
-  images        String[]
-  scheduledDate DateTime?
-  completedDate DateTime?
-  cost          Int?
-  notes         String?   @db.Text
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-}
 
 model Review {
   id          Int       @id @default(autoincrement())
   userId      String
-  apartmentId Int
+  apartmentId String
   apartment   Apartment @relation("ApartmentReviews", fields: [apartmentId], references: [id])
   rating      Int
   review      String    @db.Text

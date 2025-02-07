@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -6,7 +6,7 @@ import { z } from "zod";
 import { Apartment } from "@/types";
 import { urlFor } from "@/sanity/lib/image";
 import Image from "next/image";
-import { CheckCircle2, CreditCard, Moon, Sun, XCircle } from "lucide-react";
+import { CheckCircle2, CreditCard, XCircle } from "lucide-react";
 import { IconDeviceMobile } from "@tabler/icons-react";
 import { useTheme } from "next-themes";
 
@@ -37,7 +37,6 @@ const paymentSchema = z.discriminatedUnion("method", [
 
 type PaymentFormData = z.infer<typeof paymentSchema>;
 
-
 interface ApartmentPaymentProps {
   apartment: Apartment;
 }
@@ -53,7 +52,7 @@ export default function ApartmentPaymentPage({
   >("idle");
   const [mpesaRequestId, setMpesaRequestId] = useState<string | null>(null);
 
-  const {theme} = useTheme()
+  const { theme } = useTheme();
   const darkMode = theme === "dark";
   const {
     register,
@@ -81,7 +80,6 @@ export default function ApartmentPaymentPage({
     // Handle card payment
     console.log("Card payment data:", data);
   };
-
 
   const handleMpesaConfirmation = async (data: {
     confirmationCode: string;
@@ -506,11 +504,19 @@ export default function ApartmentPaymentPage({
   );
 }
 
-function DetailItem({ label, value }: { label: string; value: string | number }) {
+function DetailItem({
+  label,
+  value,
+}: {
+  label: string;
+  value: string | number;
+}) {
   return (
     <div className="p-3 rounded-lg bg-gray-100 dark:bg-gray-700">
       <dt className="text-sm text-gray-600 dark:text-gray-400">{label}</dt>
-      <dd className="mt-1 font-medium text-slate-900 dark:text-white">{value}</dd>
+      <dd className="mt-1 font-medium text-slate-900 dark:text-white">
+        {value}
+      </dd>
     </div>
   );
 }

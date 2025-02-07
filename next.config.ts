@@ -39,7 +39,10 @@ const nextConfig = {
   },
   eslint: {
     ignoreDuringBuilds: true,
-  }
+  },
+  // experimental: {
+  //   dynamicIO: true,
+  // },
 };
 
 module.exports = nextConfig;

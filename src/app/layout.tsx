@@ -6,12 +6,13 @@ import { Navigation } from '@/components/navigation'
 import { ToastProvider } from '@/components/ui/toast'
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { SanityLive } from '@/sanity/lib/live'
+import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: "Cheap City",
-  description: "Your Gateway to Global Rentals",
+  description: "Find the best apartment with your prefrences, afordable prices and convenient locations",
   keywords: [
     "apartment",
     "kaimosi",
@@ -56,7 +57,23 @@ export default function RootLayout({
           </div>
           <ToastProvider>
             <NuqsAdapter>
-              <SanityLive/>
+              <SanityLive />
+              <Toaster
+                position="bottom-right"
+                toastOptions={{
+                  // Define default options
+                  className: "",
+                  duration: 5000,
+                  style: {
+                    background: "#363636",
+                    color: "#fff",
+                  },
+                  actionButtonStyle: {
+                    background: "#363636",
+                    color: "#fff",
+                  },
+                }}
+              />
               {children}
             </NuqsAdapter>
           </ToastProvider>

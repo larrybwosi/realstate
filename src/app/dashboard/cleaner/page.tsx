@@ -1,7 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import {
   Table,
@@ -11,43 +10,10 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { useSession } from '@/lib/authClient'
 
 export default function CleanerDashboardPage() {
-  const { data: session } = useSession()
-  const router = useRouter()
   const [jobs, setJobs] = useState<any>([])
-  const status = session?.session.id ? "authenticated" : "unauthenticated";
 
-  useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/login')
-    } else if (session?.user?.role !== 'cleaner') {
-      router.push('/')
-    } else {
-      fetchJobs()
-    }
-  }, [status, session, router])
-
-  const fetchJobs = async () => {
-    const response = await fetch('/api/cleaner/jobs')
-    const data = await response.json()
-    setJobs(data)
-  }
-
-  const updateJobStatus = async (jobId, newStatus) => {
-    const response = await fetch(`/api/cleaner/jobs/${jobId}/status`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ status: newStatus }),
-    })
-
-    if (response.ok) {
-      fetchJobs()
-    }
-  }
 
   return (
     <div className="container mx-auto py-10">
@@ -73,12 +39,12 @@ export default function CleanerDashboardPage() {
               <TableCell>{job?.status}</TableCell>
               <TableCell>
                 {job?.status === 'assigned' && (
-                  <Button onClick={() => updateJobStatus(job?._id, 'inProgress')}>
+                  <Button>
                     Start Job
                   </Button>
                 )}
                 {job?.status === 'inProgress' && (
-                  <Button onClick={() => updateJobStatus(job?._id, 'completed')}>
+                  <Button>
                     Complete Job
                   </Button>
                 )}
