@@ -62,7 +62,7 @@ const ApartmentDetails = ({
 
   return (
     <div className="max-w-7xl mx-auto px-2 lg:px-4 py-8">
-      <Card className="bg-white dark:bg-slate-800 shadow-lg rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl">
+      <Card className="bg-white dark:bg-slate-900 shadow-lg rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl">
         <div className="grid lg:grid-cols-2 gap-6">
           {/* Image Section */}
           <div className="relative min-h-[300px] lg:min-h-[500px]">

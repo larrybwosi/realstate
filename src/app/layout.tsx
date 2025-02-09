@@ -7,6 +7,7 @@ import { ToastProvider } from '@/components/ui/toast'
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { SanityLive } from '@/sanity/lib/live'
 import { Toaster } from "sonner";
+import { AlertCircle, AlertTriangle, CheckCircle, InfoIcon, LoaderPinwheel } from 'lucide-react'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -72,6 +73,13 @@ export default function RootLayout({
                     background: "#363636",
                     color: "#fff",
                   },
+                }}
+                icons={{
+                  success: <CheckCircle />,
+                  info: <InfoIcon />,
+                  warning: <AlertCircle />,
+                  error: <AlertTriangle />,
+                  loading: <LoaderPinwheel />,
                 }}
               />
               {children}

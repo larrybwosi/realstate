@@ -19,13 +19,15 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useState } from "react";
 import { Camera } from "lucide-react";
-import type React from "react"; // Added import for React
+import { addFamilyMember } from "@/actions/admin";
+import { uploadImage } from "@/utils/image";
 
 interface FamilyMemberFormProps {
+  familyHeadId: string;
   onClose: () => void;
 }
 
-export function FamilyMemberForm({ onClose }: FamilyMemberFormProps) {
+export function FamilyMemberForm({ familyHeadId, onClose }: FamilyMemberFormProps) {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const form = useForm({
@@ -38,13 +40,27 @@ export function FamilyMemberForm({ onClose }: FamilyMemberFormProps) {
   });
 
   const onSubmit = form.handleSubmit((data) => {
-    toast.promise(new Promise((resolve) => setTimeout(resolve, 1000)), {
+    const handleAddFamilyMember =async()=>{
+      let uploadedImage;
+      if (data?.image) {
+        uploadedImage = await uploadImage(data.image);
+      }
+      await addFamilyMember({
+        familyHeadId,
+        relationshipType: data.relationship,
+        dateOfBirth: data.dateOfBirth,
+        name: data.name,
+        image: uploadedImage
+      })
+    }
+    
+    toast.promise(handleAddFamilyMember(), {
       loading: "Adding family member...",
       success: () => {
         onClose();
-        return "Family member added successfully";
+        return `${data?.name || "Family member"} added successfully`;
       },
-      error: "Failed to add family member",
+      error: `Failed to add ${data?.name || "family member"}`,
     });
   });
 
@@ -67,7 +83,7 @@ export function FamilyMemberForm({ onClose }: FamilyMemberFormProps) {
           <FormField
             control={form.control}
             name="image"
-            render={({ field }) => (
+            render={({  }) => (
               <FormItem>
                 <FormLabel className="cursor-pointer">
                   <div className="relative">

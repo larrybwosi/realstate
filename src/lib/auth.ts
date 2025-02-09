@@ -1,8 +1,11 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { admin, customSession, multiSession, openAPI, username } from "better-auth/plugins";
+import { passkey } from "better-auth/plugins/passkey";
+import { cache } from "react";
 
 import { db } from "./db";
+import redis from "./redis";
 
 export const auth = betterAuth({
   database: prismaAdapter(db, {
@@ -28,7 +31,6 @@ export const auth = betterAuth({
   account: {
     accountLinking: {
       enabled: true,
-      providers: ["google", "github"],
       trustedProviders: ["google", "github"],
     },
   },
@@ -39,6 +41,11 @@ export const auth = betterAuth({
       enabled: true,
       maxAge: 5 * 60, // Cache duration in seconds
     },
+    additionalFields: {
+      apartmentId: {
+        type: "string",
+      },
+    },
   },
   plugins: [
     admin({
@@ -47,22 +54,46 @@ export const auth = betterAuth({
     }),
     username(),
     openAPI(),
+    passkey(),
     multiSession({
       maximumSessions: 8,
     }),
-    customSession(async ({ user, session }) => {
-      const userApartment = await db.apartment.findUnique({
-        where: {
-          ownerId: user.id,
-        },
+    customSession(async ({ user }) => {
+      const getItem = cache(async () => {
+        const userApartment = await db.apartment.findUnique({
+          where: {
+            ownerId: user.id,
+          },
+        });
+
+        return {
+          user: {
+            ...user,
+            apartmentId: userApartment?.id,
+          },
+        };
       });
-      return {
-        user: {
-          ...user,
-          apartmentId: userApartment?.id,
-        },
-        session,
-      };
+
+      return await getItem();
     }),
   ],
+
+  secondaryStorage: {
+    get: async (key) => {
+      const value = (await redis.get(key)) as string | null;
+      return value ? value : null;
+    },
+    set: async (key, value, ttl) => {
+      if (ttl) await redis.set(key, value, { ex: ttl });
+      else await redis.set(key, value);
+    },
+    delete: async (key) => {
+      await redis.del(key);
+    },
+  },
+  rateLimit: {
+    window: 60, // time window in seconds
+    max: 100, // max requests in the window
+    storage: "secondary-storage",
+  },
 });

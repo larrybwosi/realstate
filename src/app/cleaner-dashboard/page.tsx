@@ -1,33 +1,25 @@
-"use client";
-
-import { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-// import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import React from "react";
+import {
+  Calendar,
+  DollarSign,
+  Star,
+  Mail,
+  Phone,
+  Home,
+  Settings,
+  Award,
+  Clock,
+  Briefcase,
+  ThumbsUp,
+  MapPin,
+} from "lucide-react";
 import {
   Card,
   CardContent,
   CardDescription,
-  // CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-// import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import {
   Select,
   SelectContent,
@@ -35,483 +27,367 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
-import { toast } from "@/components/ui/use-toast";
-import { fetchCleanerData, updateCleanerProfile } from "@/actions/cleaning";
-import { useSession } from "@/lib/authClient";
+import { Progress } from "@/components/ui/progress";
 
+const CleanerDashboard = () => {
+  const userProfile = {
+    name: "Sarah Johnson",
+    email: "sarah.j@cleanpro.com",
+    phone: "+1 (555) 123-4567",
+    rating: 4.8,
+    totalReviews: 156,
+    completionRate: 98,
+    memberSince: "2023",
+    servicesOffered: ["Deep Cleaning", "Regular Cleaning", "Window Cleaning"],
+    achievements: ["Top Rated", "Quick Responder", "Perfect Attendance"],
+    location: "San Francisco Bay Area",
+  };
 
-const formSchema = z.object({
-  name: z.string().min(2, { message: "Name must be at least 2 characters." }),
-  email: z.string().email({ message: "Invalid email address." }),
-  phone: z
-    .string()
-    .min(10, { message: "Phone number must be at least 10 digits." }),
-  specialties: z
-    .array(z.string())
-    .min(1, { message: "Select at least one specialty." }),
-  availability: z
-    .array(z.string())
-    .min(1, { message: "Select at least one day of availability." }),
-  preferredHours: z.string(),
-  yearsOfExperience: z.number().min(0),
-  certifications: z.array(z.string()),
-  bio: z.string().max(500, { message: "Bio must not exceed 500 characters." }),
-});
+  const stats = {
+    jobsDone: 45,
+    totalEarnings: 3150,
+    hoursWorked: 140,
+    averageJobTime: 3.1,
+  };
 
-export default function CleanerDashboard() {
-  const [cleaner, setCleaner] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const {data: session} = useSession()
+  const currentJob = {
+    address: "123 Main St",
+    type: "Deep Cleaning",
+    time: "10:00 AM - 12:00 PM",
+    payment: 80,
+  };
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      phone: "",
-      specialties: [],
-      availability: [],
-      preferredHours: "",
-      yearsOfExperience: 0,
-      certifications: [],
-      bio: "",
+  const nextJob = {
+    address: "456 Oak Ave",
+    type: "Regular Cleaning",
+    time: "Tomorrow, 2:00 PM - 4:00 PM",
+    payment: 60,
+  };
+
+  const availableJobs = [
+    {
+      address: "789 Pine St",
+      type: "Window Cleaning",
+      time: "Feb 12, 1:00 PM - 3:00 PM",
+      payment: 70,
     },
-  });
-
-useEffect(() => {
-  async function fetchData() {
-    setIsLoading(true);
-    const cleanerId = session?.user.id;
-    const {
-      success,
-      data: cleanerData,
-      error,
-    } = await fetchCleanerData(cleanerId || "");
-    if (success) {
-      setCleaner(cleanerData);
-      form.reset(cleanerData);
-    } else {
-      console.error(error);
-      toast({
-        title: "Error",
-        description: "Failed to fetch cleaner data. Please try again.",
-        variant: "destructive",
-      });
-    }
-
-    setIsLoading(false);
-  }
-  fetchData();
-}, [session?.user.id,form]);
-
-async function onSubmit(values: z.infer<typeof formSchema>) {
-  if(!cleaner) return
-  try {
-    const { success, error } = await updateCleanerProfile(cleaner?._id, values);
-    if (success) {
-      toast({
-        title: "Profile updated",
-        description: "Your profile has been successfully updated.",
-      });
-    } else {
-      throw new Error(error);
-    }
-  } catch (error) {
-    console.log(error)
-    toast({
-      title: "Error",
-      description: "Failed to update profile. Please try again.",
-      variant: "destructive",
-    });
-  }
-}
-
-
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        Loading...
-      </div>
-    );
-  }
-
-  if(!cleaner) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        No cleaner found
-      </div>
-    );
-  }
+    {
+      address: "321 Elm St",
+      type: "Deep Cleaning",
+      time: "Feb 13, 9:00 AM - 12:00 PM",
+      payment: 100,
+    },
+  ];
 
   return (
-    <div className="container mx-auto py-10">
-      {/* <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <Card className="mb-8">
-          <CardHeader>
-            <div className="flex items-center space-x-4">
-              <Avatar className="w-20 h-20">
-                <AvatarImage src={cleaner.profilePicture} alt={cleaner.name} />
-                <AvatarFallback>{cleaner.name.charAt(0)}</AvatarFallback>
-              </Avatar>
-              <div>
-                <CardTitle className="text-2xl">{cleaner.name}</CardTitle>
-                <CardDescription>{cleaner.email}</CardDescription>
+    <div className="min-h-screen p-4 bg-gray-50 dark:bg-gray-900 dark:text-white">
+      <div className="max-w-7xl mx-auto space-y-6">
+        {/* Header */}
+        <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
+          CleanPro Dashboard
+        </h1>
+
+        {/* Profile Banner */}
+        <div className="relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-400 rounded-lg opacity-10"></div>
+          <Card className="border-0 shadow-lg backdrop-blur-sm bg-white/50 dark:bg-gray-800/50">
+            <CardContent className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Profile Info */}
+                <div className="flex items-center space-x-4">
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-r from-blue-600 to-blue-400 flex items-center justify-center text-white text-2xl font-bold">
+                    {userProfile.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold">{userProfile.name}</h2>
+                    <div className="flex items-center mt-1 text-gray-600 dark:text-gray-300">
+                      <MapPin className="w-4 h-4 mr-1" />
+                      <span className="text-sm">{userProfile.location}</span>
+                    </div>
+                    <div className="flex items-center mt-1 text-gray-600 dark:text-gray-300">
+                      <Clock className="w-4 h-4 mr-1" />
+                      <span className="text-sm">
+                        Member since {userProfile.memberSince}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Contact & Services */}
+                <div className="space-y-2">
+                  <div className="flex items-center text-gray-600 dark:text-gray-300">
+                    <Mail className="w-4 h-4 mr-2" />
+                    <span>{userProfile.email}</span>
+                  </div>
+                  <div className="flex items-center text-gray-600 dark:text-gray-300">
+                    <Phone className="w-4 h-4 mr-2" />
+                    <span>{userProfile.phone}</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {userProfile.servicesOffered.map((service, index) => (
+                      <span
+                        key={index}
+                        className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-200 rounded-full text-sm"
+                      >
+                        {service}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Achievements & Rating */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Award className="w-5 h-5 text-blue-500" />
+                      <span className="font-medium">Recognition</span>
+                    </div>
+                    <div className="flex items-center bg-yellow-100 dark:bg-yellow-900/50 px-3 py-1 rounded-full">
+                      <Star className="w-4 h-4 text-yellow-500 fill-yellow-500 mr-1" />
+                      <span className="font-bold text-yellow-700 dark:text-yellow-400">
+                        {userProfile.rating}
+                      </span>
+                      <span className="text-sm text-yellow-600 dark:text-yellow-500 ml-1">
+                        ({userProfile.totalReviews})
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {userProfile.achievements.map((achievement, index) => (
+                      <span
+                        key={index}
+                        className="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-200 rounded-full text-sm flex items-center gap-1"
+                      >
+                        <ThumbsUp className="w-3 h-3" />
+                        {achievement}
+                      </span>
+                    ))}
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-sm mb-1">
+                      <span>Completion Rate</span>
+                      <span>{userProfile.completionRate}%</span>
+                    </div>
+                    <Progress
+                      value={userProfile.completionRate}
+                      className="h-2"
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Creative Stats Display */}
+        <Card className="dark:bg-gray-800">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Briefcase className="w-5 h-5" />
+              Performance Overview
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-wrap gap-2 mb-4">
-              {cleaner.specialties.map((specialty: string) => (
-                <Badge key={specialty} variant="secondary">
-                  {specialty}
-                </Badge>
-              ))}
-            </div>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
-              Experience: {cleaner.yearsOfExperience} years
-            </p>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-              Completed Jobs: {cleaner.completedJobs}
-            </p>
-            <div className="flex items-center mb-4">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <svg
-                  key={star}
-                  className={`w-5 h-5 ${
-                    star <= cleaner.rating ? "text-yellow-400" : "text-gray-300"
-                  }`}
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-              ))}
-              <span className="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400">
-                {cleaner.rating.toFixed(1)} out of 5
-              </span>
+            <div className="grid grid-cols-3 gap-4">
+              {/* Jobs & Earnings Section */}
+              <div className="col-span-2 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-lg p-6">
+                <div className="flex items-start justify-between mb-6">
+                  <div>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Total Jobs Completed
+                    </p>
+                    <p className="text-4xl font-bold text-blue-600 dark:text-blue-400">
+                      {stats.jobsDone}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Total Earnings
+                    </p>
+                    <p className="text-4xl font-bold text-green-600 dark:text-green-400">
+                      ${stats.totalEarnings}
+                    </p>
+                  </div>
+                </div>
+                <div className="h-2 bg-blue-200 dark:bg-blue-700 rounded-full mb-2">
+                  <div
+                    className="h-full bg-blue-500 rounded-full"
+                    style={{ width: `${(stats.jobsDone / 50) * 100}%` }}
+                  ></div>
+                </div>
+                <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
+                  {50 - stats.jobsDone} jobs until next milestone
+                </p>
+              </div>
+
+              {/* Time Stats Section */}
+              <div className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-lg p-6">
+                <div className="space-y-4">
+                  <div>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Hours Worked
+                    </p>
+                    <p className="text-3xl font-bold text-purple-600 dark:text-purple-400">
+                      {stats.hoursWorked}h
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Avg. Time per Job
+                    </p>
+                    <p className="text-3xl font-bold text-purple-600 dark:text-purple-400">
+                      {stats.averageJobTime}h
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-purple-600 dark:text-purple-400">
+                    <Clock className="w-4 h-4" />
+                    <span>Excellent time management</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
-      </motion.div> */}
 
-      <Tabs defaultValue="profile" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="profile">Edit Profile</TabsTrigger>
-          <TabsTrigger value="jobs">Available Jobs</TabsTrigger>
-        </TabsList>
-        <TabsContent value="profile">
-          <Card>
+        {/* Job Cards */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          {/* Current Job */}
+          <Card className="dark:bg-gray-800">
             <CardHeader>
-              <CardTitle>Edit Profile</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                <Briefcase size={20} />
+                Current Job
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <p>
+                  <Home size={16} className="inline mr-2" />
+                  {currentJob.address}
+                </p>
+                <p>
+                  <Clock size={16} className="inline mr-2" />
+                  {currentJob.time}
+                </p>
+                <p>
+                  <DollarSign size={16} className="inline mr-2" />$
+                  {currentJob.payment}
+                </p>
+                <p className="text-green-500">{currentJob.type}</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Next Job */}
+          <Card className="dark:bg-gray-800">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Calendar size={20} />
+                Next Job
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <p>
+                  <Home size={16} className="inline mr-2" />
+                  {nextJob.address}
+                </p>
+                <p>
+                  <Clock size={16} className="inline mr-2" />
+                  {nextJob.time}
+                </p>
+                <p>
+                  <DollarSign size={16} className="inline mr-2" />$
+                  {nextJob.payment}
+                </p>
+                <p className="text-blue-500">{nextJob.type}</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Profile Settings */}
+          <Card className="dark:bg-gray-800">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Settings size={20} />
+                Quick Settings
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">
+                    Available Times
+                  </label>
+                  <Select defaultValue="morning">
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select availability" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="morning">
+                        Morning (8 AM - 12 PM)
+                      </SelectItem>
+                      <SelectItem value="afternoon">
+                        Afternoon (12 PM - 4 PM)
+                      </SelectItem>
+                      <SelectItem value="evening">
+                        Evening (4 PM - 8 PM)
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <button className="w-full py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors">
+                  Update Availability
+                </button>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Available Jobs */}
+          <Card className="lg:col-span-3 dark:bg-gray-800">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Briefcase size={20} />
+                Available Jobs
+              </CardTitle>
               <CardDescription>
-                Update your personal information and preferences
+                Jobs matching your preferences and availability
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(onSubmit)}
-                  className="space-y-8"
-                >
-                  <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Name</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Email</FormLabel>
-                        <FormControl>
-                          <Input {...field} type="email" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="phone"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Phone</FormLabel>
-                        <FormControl>
-                          <Input {...field} type="tel" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="specialties"
-                    render={() => (
-                      <FormItem>
-                        <div className="mb-4">
-                          <FormLabel className="text-base">
-                            Specialties
-                          </FormLabel>
-                          <FormDescription>
-                            Select your cleaning specialties
-                          </FormDescription>
-                        </div>
-                        {[
-                          "standard",
-                          "deep",
-                          "move-in-out",
-                          "post-construction",
-                          "green",
-                          "commercial",
-                        ].map((item) => (
-                          <FormField
-                            key={item}
-                            control={form.control}
-                            name="specialties"
-                            render={({ field }) => {
-                              return (
-                                <FormItem
-                                  key={item}
-                                  className="flex flex-row items-start space-x-3 space-y-0"
-                                >
-                                  <FormControl>
-                                    <Checkbox
-                                      checked={field.value?.includes(item)}
-                                      onCheckedChange={(checked) => {
-                                        return checked
-                                          ? field.onChange([
-                                              ...field.value,
-                                              item,
-                                            ])
-                                          : field.onChange(
-                                              field.value?.filter(
-                                                (value) => value !== item
-                                              )
-                                            );
-                                      }}
-                                    />
-                                  </FormControl>
-                                  <FormLabel className="font-normal">
-                                    {item.charAt(0).toUpperCase() +
-                                      item.slice(1)}
-                                  </FormLabel>
-                                </FormItem>
-                              );
-                            }}
-                          />
-                        ))}
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="availability"
-                    render={() => (
-                      <FormItem>
-                        <div className="mb-4">
-                          <FormLabel className="text-base">
-                            Availability
-                          </FormLabel>
-                          <FormDescription>
-                            Select your available days
-                          </FormDescription>
-                        </div>
-                        {[
-                          "monday",
-                          "tuesday",
-                          "wednesday",
-                          "thursday",
-                          "friday",
-                          "saturday",
-                          "sunday",
-                        ].map((day) => (
-                          <FormField
-                            key={day}
-                            control={form.control}
-                            name="availability"
-                            render={({ field }) => {
-                              return (
-                                <FormItem
-                                  key={day}
-                                  className="flex flex-row items-start space-x-3 space-y-0"
-                                >
-                                  <FormControl>
-                                    <Checkbox
-                                      checked={field.value?.includes(day)}
-                                      onCheckedChange={(checked) => {
-                                        return checked
-                                          ? field.onChange([
-                                              ...field.value,
-                                              day,
-                                            ])
-                                          : field.onChange(
-                                              field.value?.filter(
-                                                (value) => value !== day
-                                              )
-                                            );
-                                      }}
-                                    />
-                                  </FormControl>
-                                  <FormLabel className="font-normal">
-                                    {day.charAt(0).toUpperCase() + day.slice(1)}
-                                  </FormLabel>
-                                </FormItem>
-                              );
-                            }}
-                          />
-                        ))}
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="preferredHours"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Preferred Hours</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select preferred hours" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="morning">
-                              Morning (6AM - 12PM)
-                            </SelectItem>
-                            <SelectItem value="afternoon">
-                              Afternoon (12PM - 6PM)
-                            </SelectItem>
-                            <SelectItem value="evening">
-                              Evening (6PM - 12AM)
-                            </SelectItem>
-                            <SelectItem value="night">
-                              Night (12AM - 6AM)
-                            </SelectItem>
-                            <SelectItem value="flexible">Flexible</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="yearsOfExperience"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Years of Experience</FormLabel>
-                        <FormControl>
-                          <Input {...field} type="number" min="0" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="bio"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Bio</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder="Tell us about yourself"
-                            className="resize-none"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormDescription>
-                          Write a short bio about yourself (max 500 characters)
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <Button type="submit">Update Profile</Button>
-                </form>
-              </Form>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {availableJobs.map((job, index) => (
+                  <div
+                    key={index}
+                    className="p-4 border rounded-lg dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    <div className="flex justify-between items-start">
+                      <div className="space-y-1">
+                        <p className="font-medium">{job.address}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                          {job.time}
+                        </p>
+                        <p className="text-sm text-blue-500">{job.type}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-bold">${job.payment}</p>
+                        <button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors">
+                          Accept Job
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </CardContent>
           </Card>
-        </TabsContent>
-        <TabsContent value="jobs">
-          <Card>
-            <CardHeader>
-              <CardTitle>Available Jobs</CardTitle>
-              <CardDescription>
-                Jobs that match your skills and availability
-              </CardDescription>
-            </CardHeader>
-            {/* <CardContent>
-              {availableJobs.length === 0 ? (
-                <p>No jobs available at the moment. Check back later!</p>
-              ) : (
-                <div className="space-y-4">
-                  {availableJobs.map((job) => (
-                    <Card key={job._id}>
-                      <CardHeader>
-                        <CardTitle>{job.cleaningType} Cleaning</CardTitle>
-                        <CardDescription>
-                          {new Date(job.scheduledDate).toLocaleDateString()} at{" "}
-                          {new Date(job.scheduledDate).toLocaleTimeString()}
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <p>
-                          <strong>Duration:</strong> {job.duration} hours
-                        </p>
-                        <p>
-                          <strong>Pay Rate:</strong> ${job.payRate}/hour
-                        </p>
-                        <p>
-                          <strong>Tasks:</strong> {job.tasks.join(", ")}
-                        </p>
-                        {job.specialRequirements && (
-                          <p>
-                            <strong>Special Requirements:</strong>{" "}
-                            {job.specialRequirements.join(", ")}
-                          </p>
-                        )}
-                        {job.equipmentNeeded && (
-                          <p>
-                            <strong>Equipment Needed:</strong>{" "}
-                            {job.equipmentNeeded.join(", ")}
-                          </p>
-                        )}
-                      </CardContent>
-                      <CardFooter>
-                        <Button onClick={() => applyForJob(job._id, '')}>
-                          Apply for Job
-                        </Button>
-                      </CardFooter>
-                    </Card>
-                  ))}
-                </div>
-              )}
-            </CardContent> */}
-          </Card>
-        </TabsContent>
-      </Tabs>
+        </div>
+      </div>
     </div>
   );
-}
+};
+
+export default CleanerDashboard;

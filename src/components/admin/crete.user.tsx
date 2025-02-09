@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import { z } from "zod";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,6 +23,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useState } from "react";
 import { Camera } from "lucide-react";
 import { admin } from "@/lib/authClient";
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
 
 const userSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -70,21 +72,56 @@ export function UserCreateForm({ onClose }: UserCreateFormProps) {
         emergencyContactRelationship,
       } = data;
 
-      const newUser = await admin.createUser({
-        ...data,
-        data: {
-          apartmentId: apartment,
-          image,
-          emergencyContactName,
-          emergencyContactPhone,
-          emergencyContactRelationship,
-        },
-      });
+      let uploadedImage 
 
-      toast.success(
-        `${newUser?.data?.user?.name || "User"} created successfully`
+      if (image){
+        //Upload image 
+        const uploadImage =async()=>{
+          const formData = new FormData();
+          formData.append("file", image);
+
+          const response = await fetch("/api/upload", {
+            method: "POST",
+            body: formData,
+            credentials: "include", // Crucial for session cookies
+          });
+
+          const data = await response.json();
+          if (data?.url) uploadedImage = data.url;
+          if (!response.ok) {
+            throw new Error(data.error || "Failed to upload");
+          }
+          return data.url
+        }
+        toast.promise(uploadImage(),{
+          loading: "Uploading image...",
+          success: () => {
+            return `Image uploaded successfully`;
+          },
+          error: "Failed to upload image",
+        })
+      };
+
+      await toast.promise(
+        admin.createUser({
+          ...data,
+          data: {
+            apartmentId: apartment,
+            image: uploadedImage,
+            emergencyContactName,
+            emergencyContactPhone,
+            emergencyContactRelationship,
+          },
+        }),
+        {
+          loading: "Adding user...",
+          success: (res) => {
+            return `${res?.data?.user?.name || "User"} created successfully`;
+          },
+          error: "Failed to create user",
+        }
       );
-      onClose();
+
     } catch (error) {
       toast.error("Failed to create user");
       console.error("Error creating user:", error);
@@ -272,6 +309,11 @@ export function UserCreateForm({ onClose }: UserCreateFormProps) {
                 <FormItem>
                   <FormControl>
                     <Input placeholder="Phone Number" {...field} />
+                    <PhoneInput
+                      placeholder="Enter phone number"
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

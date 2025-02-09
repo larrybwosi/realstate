@@ -4,12 +4,10 @@ import {
   Home,
   Wrench,
   User,
-  Bell,
   CheckCircle,
   WashingMachine,
 } from "lucide-react";
 
-// Shadcn UI Components
 import {
   Card,
   CardContent,
@@ -26,7 +24,6 @@ import ApartmentDetails from "@/components/dashboard/apartment";
 import MaintenanceDashboard from "@/components/dashboard/maintenance";
 import ProfileSettings from "@/components/dashboard/profile";
 import { Button } from "@/components/ui/button";
-import NotificationsCenter from "@/components/dashboard/notifications";
 
 // Mock data (would be replaced with actual data from backend)
 const mockApartment = {
@@ -125,14 +122,16 @@ const UserDashboard = () => {
   // Reviews section
   const reviews = [
     {
-      _id: 1,
+      _id: '1',
       rating: 4,
+      name: "John Doe",
       comment: "Great apartment with excellent amenities!",
       date: "2023-12-15",
     },
     {
-      _id: 2,
+      _id: '2',
       rating: 5,
+      name: "Jane Smith",
       comment: "Fantastic location and very responsive management.",
       date: "2024-01-20",
     },

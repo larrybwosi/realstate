@@ -369,7 +369,7 @@ const AdminUserDashboard = () => {
               Add a family member for {selectedUser?.name}
             </DialogDescription>
           </DialogHeader>
-          <FamilyMemberForm onClose={() => setShowFamilyDialog(false)} />
+          <FamilyMemberForm familyHeadId={selectedUser?.id || ''} onClose={() => setShowFamilyDialog(false)} />
         </DialogContent>
       </Dialog>
 

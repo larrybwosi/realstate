@@ -18,6 +18,7 @@ export async function generateMetadata(
   const slug = (await params).slug;
 
   async function getApartment(slug: string){
+    'use cache'
     const res = await sanityFetch({
       query: `*[_type == "apartment" && slug.current == $slug][0] {
       title,
@@ -54,7 +55,7 @@ export async function generateMetadata(
 export default async function ApartmentPage({ params }: { params: Params }) {
   const { slug } = await params;
   const apartment = await getApartment(slug);
-  console.dir(apartment.images);
+  
   const similarApartments = await getSimilarApartments(
     slug,
     apartment?.category?.slug.current as string
