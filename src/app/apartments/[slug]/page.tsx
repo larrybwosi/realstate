@@ -15,10 +15,8 @@ type Props = {
 export async function generateMetadata(
   { params }: Props
 ): Promise<Metadata> {
-  const slug = (await params).slug;
 
-  async function getApartment(slug: string){
-    'use cache'
+  const slug = (await params).slug;
     const res = await sanityFetch({
       query: `*[_type == "apartment" && slug.current == $slug][0] {
       title,
@@ -28,10 +26,8 @@ export async function generateMetadata(
     }`,
       params: { slug },
     });
-    return res.data;
-  }
 
-  const apartment = await getApartment(slug);
+  const apartment = res.data;
   return {
     title: "Cheap City | " + apartment.title,
     description: apartment.description,

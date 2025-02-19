@@ -5,6 +5,7 @@ export default function Page () {
   return (
     <AppointmentForm
       apartmentId={123}
+      onSubmit={async()=>{}}
     />
   )
 }

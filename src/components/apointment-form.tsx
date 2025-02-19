@@ -27,6 +27,7 @@ interface AppointmentFormProps {
 
 export default function AppointmentForm({
   apartmentId,
+  onSubmit
 }: AppointmentFormProps) {
   const {
     register,

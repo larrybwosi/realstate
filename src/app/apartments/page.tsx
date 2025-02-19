@@ -9,7 +9,7 @@ import { Metadata } from "next";
 export const metadata: Metadata ={
   title:'Cheap City | Apartments',
   description:'Find the best apartment with your prefrences',
-  keywords:['apartments', 'more apartments'],
+  keywords:['apartments', 'more apartments', 'house'],
   twitter: {
     card: 'summary_large_image',
     title: 'Cheap City | Apartments',
